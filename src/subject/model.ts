@@ -2,7 +2,8 @@ export type BaseSubject = "BaseSubject";
 
 export interface Subject<T = BaseSubject> {
   type: T;
-  name?: string;
+  name: string;
+  readonly created: Date;
   description?: string;
   dueDate?: Date;
 }

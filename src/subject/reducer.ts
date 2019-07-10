@@ -8,6 +8,7 @@ const getInitialState = (amount: number): SubjectState => {
     state[i.toString()] = {
       type: "BaseSubject",
       name: `Name${i}`,
+      created: new Date(),
       description: `Description${i}`,
       dueDate: new Date()
     };

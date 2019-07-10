@@ -2,41 +2,28 @@ import * as React from "react";
 import { FocusZone } from "office-ui-fabric-react/lib/FocusZone";
 import { List } from "office-ui-fabric-react/lib/List";
 import { IRectangle } from "office-ui-fabric-react/lib/Utilities";
-import { mergeStyleSets } from "@uifabric/styling";
+import { mergeStyleSets, getTheme } from "@uifabric/styling";
 import { useRef } from "react";
 import { useSelector } from "react-redux";
 import { State } from "../reducer";
 import { Subject } from "./model";
+import SubjectComponent from "./subject";
 
 const ROWS_PER_PAGE = 3;
 const MAX_ROW_HEIGHT = 250;
+const MIN_COL_WIDTH = 400;
 
-const classNames = mergeStyleSets({
+const theme = getTheme();
+const styles = mergeStyleSets({
   list: {
     overflow: "hidden",
     position: "relative"
   },
   tile: {
     textAlign: "center",
-    outline: "none",
+    outline: "2px solid " + theme.palette.neutralLighterAlt,
     position: "relative",
-    float: "left",
-    backgroundColor: "cyan",
-    selectors: {
-      "&:focus": {
-        outline: "none"
-      },
-      "&:focus:after": {
-        content: '""',
-        position: "absolute",
-        right: 4,
-        left: 4,
-        top: 4,
-        bottom: 4,
-        border: "1px solid white",
-        outline: "2px solid black"
-      }
-    }
+    float: "left"
   },
   sizer: {
     paddingBottom: "100%"
@@ -52,7 +39,7 @@ const classNames = mergeStyleSets({
     position: "absolute",
     top: 0,
     left: 0,
-    backgroundColor: "yellow",
+    backgroundColor: theme.palette.white,
     width: "100%",
     height: "100%"
   }
@@ -65,19 +52,18 @@ export default function(): JSX.Element {
 
   const subjects = useSelector((state: State) => state.subjects);
 
-  const renderCell = (item?: Subject, index?: number): JSX.Element => (
+  const renderCell = (subject?: Subject, index?: number): JSX.Element => (
     <div
-      className={classNames.tile}
+      className={styles.tile}
       data-is-focusable={true}
       style={{
         width: 100 / columnCount.current + "%"
       }}
     >
-      <div className={classNames.sizer}>
-        <div className={classNames.padder}>
-          <div className={classNames.contents}>
-            <p>{item!.name}</p>
-            <p>{item!.description}</p>
+      <div className={styles.sizer}>
+        <div className={styles.padder}>
+          <div className={styles.contents}>
+            <SubjectComponent subject={subject!} />
           </div>
         </div>
       </div>
@@ -91,7 +77,7 @@ export default function(): JSX.Element {
     surfaceRect?: IRectangle
   ): number => {
     if (itemIndex === 0 && surfaceRect) {
-      columnCount.current = Math.ceil(surfaceRect.width / MAX_ROW_HEIGHT);
+      columnCount.current = Math.ceil(surfaceRect.width / MIN_COL_WIDTH);
       columnWidth.current = Math.floor(surfaceRect.width / columnCount.current);
       rowHeight.current = columnWidth.current;
     }
@@ -100,15 +86,13 @@ export default function(): JSX.Element {
   };
 
   return (
-    <FocusZone>
-      <List
-        className={classNames.list}
-        items={Object.values(subjects)}
-        getItemCountForPage={getItemCountForPage}
-        getPageHeight={getPageHeight}
-        renderedWindowsAhead={4}
-        onRenderCell={renderCell}
-      />
-    </FocusZone>
+    <List
+      className={styles.list}
+      items={Object.values(subjects)}
+      getItemCountForPage={getItemCountForPage}
+      getPageHeight={getPageHeight}
+      renderedWindowsAhead={4}
+      onRenderCell={renderCell}
+    />
   );
 }
