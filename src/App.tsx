@@ -1,8 +1,12 @@
 import React from "react";
-import logo from "./logo.svg";
+import GridView from "./subject/gridView";
 
 const App: React.FC = () => {
-  return <div>Hello world</div>;
+  return (
+    <div>
+      <GridView />
+    </div>
+  );
 };
 
 export default App;
