@@ -10,7 +10,7 @@ import { Subject } from "./model";
 import SubjectComponent from "./subject";
 
 const ROWS_PER_PAGE = 3;
-const MAX_ROW_HEIGHT = 250;
+const ROW_HEIGHT = 600;
 const MIN_COL_WIDTH = 400;
 
 const theme = getTheme();
@@ -48,7 +48,6 @@ const styles = mergeStyleSets({
 export default function(): JSX.Element {
   const columnCount = useRef(0);
   const columnWidth = useRef(0);
-  const rowHeight = useRef(0);
 
   const subjects = useSelector((state: State) => state.subjects);
 
@@ -57,7 +56,8 @@ export default function(): JSX.Element {
       className={styles.tile}
       data-is-focusable={true}
       style={{
-        width: 100 / columnCount.current + "%"
+        width: 100 / columnCount.current + "%",
+        height: ROW_HEIGHT
       }}
     >
       <div className={styles.sizer}>
@@ -70,7 +70,7 @@ export default function(): JSX.Element {
     </div>
   );
 
-  const getPageHeight = (): number => rowHeight.current * ROWS_PER_PAGE;
+  const getPageHeight = (): number => ROW_HEIGHT * ROWS_PER_PAGE;
 
   const getItemCountForPage = (
     itemIndex?: number,
@@ -79,7 +79,6 @@ export default function(): JSX.Element {
     if (itemIndex === 0 && surfaceRect) {
       columnCount.current = Math.ceil(surfaceRect.width / MIN_COL_WIDTH);
       columnWidth.current = Math.floor(surfaceRect.width / columnCount.current);
-      rowHeight.current = columnWidth.current;
     }
 
     return columnCount.current * ROWS_PER_PAGE;
