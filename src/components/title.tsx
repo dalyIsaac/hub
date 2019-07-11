@@ -10,23 +10,25 @@ interface TitleProps {
 
 const theme = getTheme();
 const styles = mergeStyleSets({
+  titleWrapper: {
+    paddingTop: 16,
+    paddingBottom: 12
+  },
   title: {
     textAlign: "center",
-    border: "1px solid " + theme.palette.neutralTertiary,
     fontSize: FontSizes.size28,
-    paddingTop: 16,
-    paddingBottom: 16,
+    border: "1px solid transparent",
+    outline: "none",
+    borderRadius: 0,
+    paddingBottom: 4,
+    width: "80%",
     selectors: {
       "&:focus": {
-        border: "1px solid " + theme.palette.themePrimary,
-        outline: "none"
-      },
-      "&:focus-within": {
-        border: "1px solid " + theme.palette.themePrimary,
+        borderBottom: "1px solid " + theme.palette.neutralTertiary,
         outline: "none"
       },
       "&:hover": {
-        border: "1px solid " + theme.palette.neutralPrimary,
+        borderBottom: "1px solid " + theme.palette.neutralTertiary,
         outline: "none"
       }
     }
@@ -34,5 +36,14 @@ const styles = mergeStyleSets({
 });
 
 export default function({ value, onChange }: TitleProps): JSX.Element {
-  return <input className={styles.title} onChange={onChange} value={value} />;
+  return (
+    <div className={styles.titleWrapper}>
+      <input
+        className={styles.title}
+        onChange={onChange}
+        value={value}
+        defaultValue={"Untitled"}
+      />
+    </div>
+  );
 }
