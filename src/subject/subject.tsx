@@ -4,6 +4,8 @@ import { Stack } from "office-ui-fabric-react/lib/Stack";
 import { FocusZone } from "office-ui-fabric-react/lib/FocusZone";
 import { Text } from "office-ui-fabric-react/lib/Text";
 import { TextField } from "office-ui-fabric-react/lib/TextField";
+import { Label } from "office-ui-fabric-react/lib/Label";
+import { DatePicker } from "office-ui-fabric-react/lib/DatePicker";
 import { getTheme, mergeStyleSets } from "@uifabric/styling";
 import Title from "../components/title";
 
@@ -23,6 +25,13 @@ const styles = mergeStyleSets({
         border: "none"
       }
     }
+  },
+  description: {
+    paddingBottom: 8
+  },
+  date: {
+    display: "flex",
+    justifyContent: "space-between"
   }
 });
 
@@ -42,7 +51,12 @@ export default function({ subject }: SubjectProps): JSX.Element {
           rows={3}
           value={subject.description}
           onChange={updateDescription}
+          className={styles.description}
         />
+        <div className={styles.date}>
+          <Label>Due date:</Label>
+          <DatePicker value={subject.dueDate} />
+        </div>
       </Stack>
     </FocusZone>
   );
