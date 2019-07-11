@@ -5,10 +5,12 @@ import * as serviceWorker from "./serviceWorker";
 import { createStore } from "redux";
 import { Provider } from "react-redux";
 import { composeWithDevTools } from "redux-devtools-extension";
+import { initializeIcons } from "@uifabric/icons";
 
 import rootReducer from "./reducer";
 
 const store = createStore(rootReducer, composeWithDevTools());
+initializeIcons();
 
 ReactDOM.render(
   <Provider store={store}>

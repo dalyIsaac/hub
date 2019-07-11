@@ -8,9 +8,11 @@ import { Label } from "office-ui-fabric-react/lib/Label";
 import { DatePicker } from "office-ui-fabric-react/lib/DatePicker";
 import { getTheme, mergeStyleSets } from "@uifabric/styling";
 import Title from "../components/title";
+import ListView from "./listView";
 
 interface SubjectProps {
   subject: Subject;
+  id: string;
 }
 
 const theme = getTheme();
@@ -39,7 +41,7 @@ const styles = mergeStyleSets({
   }
 });
 
-export default function({ subject }: SubjectProps): JSX.Element {
+export default function({ subject, id }: SubjectProps): JSX.Element {
   const updateTitle = () => {};
   const updateDescription = () => {};
 
@@ -67,6 +69,7 @@ export default function({ subject }: SubjectProps): JSX.Element {
         <div className={styles.daysLeft}>
           <Label>{`${daysLeft} days left`}</Label>
         </div>
+        <ListView id={id} />
       </Stack>
     </FocusZone>
   );

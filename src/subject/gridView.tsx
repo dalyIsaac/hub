@@ -1,5 +1,4 @@
-import * as React from "react";
-import { FocusZone } from "office-ui-fabric-react/lib/FocusZone";
+import React from "react";
 import { List } from "office-ui-fabric-react/lib/List";
 import { IRectangle } from "office-ui-fabric-react/lib/Utilities";
 import { mergeStyleSets, getTheme } from "@uifabric/styling";
@@ -51,24 +50,31 @@ export default function(): JSX.Element {
 
   const subjects = useSelector((state: State) => state.subjects);
 
-  const renderCell = (subject?: Subject, index?: number): JSX.Element => (
-    <div
-      className={styles.tile}
-      data-is-focusable={true}
-      style={{
-        width: 100 / columnCount.current + "%",
-        height: ROW_HEIGHT
-      }}
-    >
-      <div className={styles.sizer}>
-        <div className={styles.padder}>
-          <div className={styles.contents}>
-            <SubjectComponent subject={subject!} />
+  const renderCell = (props?: [string, Subject]): JSX.Element | undefined => {
+    if (!props) {
+      return;
+    }
+
+    const [id, subject] = props;
+    return (
+      <div
+        className={styles.tile}
+        data-is-focusable={true}
+        style={{
+          width: 100 / columnCount.current + "%",
+          height: ROW_HEIGHT
+        }}
+      >
+        <div className={styles.sizer}>
+          <div className={styles.padder}>
+            <div className={styles.contents}>
+              <SubjectComponent subject={subject} id={id} />
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   const getPageHeight = (): number => ROW_HEIGHT * ROWS_PER_PAGE;
 
@@ -87,7 +93,7 @@ export default function(): JSX.Element {
   return (
     <List
       className={styles.list}
-      items={Object.values(subjects)}
+      items={Object.entries(subjects)}
       getItemCountForPage={getItemCountForPage}
       getPageHeight={getPageHeight}
       renderedWindowsAhead={4}

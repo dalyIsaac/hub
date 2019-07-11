@@ -2,6 +2,20 @@ import produce from "immer";
 import { SubjectState, Subject } from "./model";
 import { Action } from "redux";
 
+const NUM_ITEMS = 23;
+
+function getRandomInt(max: number) {
+  return Math.floor(Math.random() * Math.floor(max));
+}
+
+const getRandomChildren = (): string[] => {
+  const children = [];
+  for (let i = 0; i < getRandomInt(7); i++) {
+    children.push(getRandomInt(NUM_ITEMS).toString());
+  }
+  return children;
+};
+
 const getInitialState = (amount: number): SubjectState => {
   const state: SubjectState = {};
   for (let i = 0; i < amount; i++) {
@@ -10,14 +24,15 @@ const getInitialState = (amount: number): SubjectState => {
       name: `Name${i}`,
       created: new Date(),
       description: `Description${i}`,
-      dueDate: new Date()
+      dueDate: new Date(),
+      children: getRandomChildren()
     };
   }
   return state;
 };
 
 const subjectReducer = (
-  state: SubjectState = getInitialState(23),
+  state: SubjectState = getInitialState(NUM_ITEMS),
   action: Action
 ) =>
   produce(state, draftState => {
