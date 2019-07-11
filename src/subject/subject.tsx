@@ -32,6 +32,10 @@ const styles = mergeStyleSets({
   date: {
     display: "flex",
     justifyContent: "space-between"
+  },
+  daysLeft: {
+    display: "flex",
+    justifyContent: "flex-end"
   }
 });
 
@@ -39,6 +43,9 @@ export default function({ subject }: SubjectProps): JSX.Element {
   const updateTitle = () => {};
   const updateDescription = () => {};
 
+  const daysLeft = subject.dueDate
+    ? new Date().getDate() - subject.dueDate.getDate()
+    : "∞";
   return (
     <FocusZone>
       <Stack verticalAlign={"center"}>
@@ -56,6 +63,9 @@ export default function({ subject }: SubjectProps): JSX.Element {
         <div className={styles.date}>
           <Label>Due date:</Label>
           <DatePicker value={subject.dueDate} />
+        </div>
+        <div className={styles.daysLeft}>
+          <Label>{`${daysLeft} days left`}</Label>
         </div>
       </Stack>
     </FocusZone>
