@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import { Subject } from "./model";
-import { Stack } from "office-ui-fabric-react/lib/Stack";
-import { IconButton } from "office-ui-fabric-react/lib/Button";
 import { Checkbox } from "office-ui-fabric-react/lib/Checkbox";
-import { Label } from "office-ui-fabric-react/lib/Label";
+import { TooltipHost } from "office-ui-fabric-react/lib/Tooltip";
 import { Icon } from "office-ui-fabric-react/lib/Icon";
 import { mergeStyleSets, getTheme } from "@uifabric/styling";
+import { getId } from "office-ui-fabric-react/lib/Utilities";
+import { DirectionalHint } from "office-ui-fabric-react/lib/Callout";
+import { ContextualMenu } from "office-ui-fabric-react/lib/ContextualMenu";
 
 const theme = getTheme();
 
@@ -20,30 +21,24 @@ const styles = mergeStyleSets({
     marginTop: 1,
     marginBottom: 1
   },
-  checkboxWrapper: {
-    display: "flex",
-    flexDirection: "column",
-    paddingLeft: 2,
-    paddingRight: 8,
-    borderRight: border
-  },
   checkbox: {
-    marginLeft: 6
+    margin: 8
   },
   content: {
     display: "flex",
-    alignItems: "center",
     flexGrow: 2,
     paddingLeft: 8,
     paddingRight: 8
   },
-  delete: {
+  open: {
     color: theme.palette.white,
-    background: theme.palette.red,
+    background: theme.palette.themePrimary,
+    fontSize: 18,
     cursor: "pointer",
     border: "none",
     outline: "none",
     margin: -1,
+    height: 40,
     selectors: {
       "&:hover": {
         filter: "brightness(90%)"
@@ -55,26 +50,72 @@ const styles = mergeStyleSets({
   }
 });
 
-export default function(subject?: Subject): JSX.Element | undefined {
-  if (!subject) {
-    return;
+interface ListItemProps {
+  id: string;
+  subject: Subject;
+}
+
+export default function ListItem({ id, subject }: ListItemProps): JSX.Element {
+  const hostId = useRef(getId(id));
+  const listItemRef = useRef(null);
+
+  const [calloutVisible, _setCalloutVisible] = useState(false);
+  function setCalloutVisible(e: React.MouseEvent<HTMLDivElement>) {
+    e.preventDefault();
+    _setCalloutVisible(!calloutVisible);
   }
 
   return (
-    <div className={styles.wrapper}>
-      <div className={styles.checkboxWrapper}>
-        <IconButton iconProps={{ iconName: "ChevronUp" }} />
-        <Checkbox label={"1 item"} className={styles.checkbox} />
-        <IconButton iconProps={{ iconName: "ChevronDown" }} />
+    <div onContextMenu={setCalloutVisible} ref={listItemRef}>
+      <div className={styles.wrapper}>
+        <Checkbox label={subject.name} className={styles.checkbox} />
+
+        <div className={styles.content}>
+          {/* // TODO: include custom content here. It should render below. */}
+        </div>
+
+        <TooltipHost content={"Open " + subject.name} id={hostId.current}>
+          <button className={styles.open} aria-labelledby={hostId.current}>
+            <Icon iconName="OpenFile" />
+          </button>
+        </TooltipHost>
       </div>
 
-      <div className={styles.content}>
-        <Label>{subject.name}</Label>
-      </div>
-
-      <button className={styles.delete}>
-        <Icon iconName="RecycleBin" />
-      </button>
+      {calloutVisible ? (
+        <ContextualMenu
+          isBeakVisible={false}
+          onDismiss={setCalloutVisible}
+          target={listItemRef}
+          directionalHint={DirectionalHint.bottomRightEdge}
+          items={[
+            {
+              key: "complete-1-level",
+              text: "Mark as complete"
+            },
+            {
+              key: "complete-2-level",
+              text: "Mark this and its children as complete"
+            },
+            {
+              key: "complete-insane",
+              text: "Mark this and every descendant as complete"
+            },
+            {
+              key: "delete",
+              text: "Delete this"
+            }
+          ]}
+        />
+      ) : null}
     </div>
   );
+}
+
+export function ListViewItem(props?: ListItemProps): JSX.Element | undefined {
+  if (!props) {
+    return;
+  }
+
+  const { id, subject } = props;
+  return <ListItem id={id} subject={subject} />;
 }
