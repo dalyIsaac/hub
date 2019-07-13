@@ -3,10 +3,18 @@ import { List } from "office-ui-fabric-react/lib/List";
 import { useSelector } from "react-redux";
 import { State } from "../reducer";
 import { ListViewItem } from "./listItem";
+import { mergeStyleSets } from "@uifabric/styling";
 
 interface ListViewProps {
   id: string;
 }
+
+const styles = mergeStyleSets({
+  list: {
+    overflow: "auto",
+    height: 365
+  }
+});
 
 export default function({ id }: ListViewProps): JSX.Element {
   const subjects = useSelector((state: State) => state.subjects);
@@ -18,8 +26,10 @@ export default function({ id }: ListViewProps): JSX.Element {
   }
 
   return (
-    <div data-is-scrollable="true">
-      <List items={children} onRenderCell={ListViewItem} />
-    </div>
+    <List
+      items={children}
+      onRenderCell={ListViewItem}
+      className={styles.list}
+    />
   );
 }

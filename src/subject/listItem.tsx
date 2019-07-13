@@ -66,7 +66,11 @@ export default function ListItem({ id, subject }: ListItemProps): JSX.Element {
   }
 
   return (
-    <div onContextMenu={setCalloutVisible} ref={listItemRef}>
+    <div
+      data-is-scrollable="true"
+      onContextMenu={setCalloutVisible}
+      ref={listItemRef}
+    >
       <div className={styles.wrapper}>
         <Checkbox label={subject.name} className={styles.checkbox} />
 

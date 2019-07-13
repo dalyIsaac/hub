@@ -1,5 +1,5 @@
 import produce from "immer";
-import { SubjectState, Subject } from "./model";
+import { SubjectState } from "./model";
 import { Action } from "redux";
 
 const NUM_ITEMS = 23;
@@ -10,7 +10,7 @@ function getRandomInt(max: number) {
 
 const getRandomChildren = (): string[] => {
   const children = [];
-  for (let i = 0; i < getRandomInt(7); i++) {
+  for (let i = 0; i < 12; i++) {
     children.push(getRandomInt(NUM_ITEMS).toString());
   }
   return children;
