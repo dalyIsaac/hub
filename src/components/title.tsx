@@ -4,16 +4,13 @@ import { getTheme, mergeStyleSets } from "@uifabric/styling";
 import { FontSizes } from "@uifabric/fluent-theme/lib/fluent/FluentType";
 
 interface TitleProps {
+  className: string;
   value: string;
   onChange: ((event: React.FormEvent<HTMLInputElement>) => void) | undefined;
 }
 
 const theme = getTheme();
 const styles = mergeStyleSets({
-  titleWrapper: {
-    paddingTop: 16,
-    paddingBottom: 12
-  },
   title: {
     textAlign: "center",
     fontSize: FontSizes.size28,
@@ -35,9 +32,13 @@ const styles = mergeStyleSets({
   }
 });
 
-export default function({ value, onChange }: TitleProps): JSX.Element {
+export default function({
+  value,
+  onChange,
+  className
+}: TitleProps): JSX.Element {
   return (
-    <div className={styles.titleWrapper}>
+    <div className={className}>
       <input
         className={styles.title}
         onChange={onChange}

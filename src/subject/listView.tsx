@@ -13,7 +13,7 @@ interface ListViewProps {
 const styles = mergeStyleSets({
   list: {
     overflow: "auto",
-    height: 365
+    height: 309
   }
 });
 

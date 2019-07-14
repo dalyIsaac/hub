@@ -9,6 +9,8 @@ import { DatePicker } from "office-ui-fabric-react/lib/DatePicker";
 import { getTheme, mergeStyleSets } from "@uifabric/styling";
 import Title from "../components/title";
 import ListView from "./listView";
+import { DefaultButton } from "office-ui-fabric-react/lib/Button";
+import { DirectionalHint } from "office-ui-fabric-react/lib/Callout";
 
 interface SubjectProps {
   subject: Subject;
@@ -20,7 +22,8 @@ const styles = mergeStyleSets({
   header: {
     backgroundColor: theme.palette.themePrimary,
     color: theme.palette.neutralLight,
-    padding: 4,
+    padding: 5,
+    marginBottom: 10,
     selectors: {
       "&:focus": {
         outline: "none",
@@ -28,8 +31,13 @@ const styles = mergeStyleSets({
       }
     }
   },
+  title: {
+    paddingTop: 10,
+    paddingBottom: 5
+  },
   description: {
-    paddingBottom: 8
+    paddingTop: 10,
+    paddingBottom: 10
   },
   date: {
     display: "flex",
@@ -40,6 +48,25 @@ const styles = mergeStyleSets({
     justifyContent: "flex-end"
   }
 });
+
+export const contextItems = [
+  {
+    key: "complete-1-level",
+    text: "Mark as complete"
+  },
+  {
+    key: "complete-2-level",
+    text: "Mark this and its children as complete"
+  },
+  {
+    key: "complete-insane",
+    text: "Mark this and every descendant as complete"
+  },
+  {
+    key: "delete",
+    text: "Delete this"
+  }
+];
 
 export default function({ subject, id }: SubjectProps): JSX.Element {
   const updateTitle = () => {};
@@ -54,7 +81,11 @@ export default function({ subject, id }: SubjectProps): JSX.Element {
         <Text className={styles.header}>
           Created {subject.created.toLocaleString()}
         </Text>
-        <Title value={subject.name} onChange={updateTitle} />
+        <Title
+          className={styles.title}
+          value={subject.name}
+          onChange={updateTitle}
+        />
         <TextField
           multiline
           rows={3}
@@ -70,6 +101,16 @@ export default function({ subject, id }: SubjectProps): JSX.Element {
           <Label>{`${daysLeft} days left`}</Label>
         </div>
         <ListView id={id} />
+        <DefaultButton
+          primary
+          text="Mark as complete"
+          style={{ marginTop: 10, marginBottom: 10 }}
+          menuProps={{
+            directionalHint: DirectionalHint.bottomRightEdge,
+            isBeakVisible: false,
+            items: contextItems
+          }}
+        />
       </Stack>
     </FocusZone>
   );

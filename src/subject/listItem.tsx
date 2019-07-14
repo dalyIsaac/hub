@@ -7,6 +7,7 @@ import { mergeStyleSets, getTheme } from "@uifabric/styling";
 import { getId } from "office-ui-fabric-react/lib/Utilities";
 import { DirectionalHint } from "office-ui-fabric-react/lib/Callout";
 import { ContextualMenu } from "office-ui-fabric-react/lib/ContextualMenu";
+import { contextItems } from "./subject";
 
 const theme = getTheme();
 
@@ -91,24 +92,7 @@ export default function ListItem({ id, subject }: ListItemProps): JSX.Element {
           onDismiss={setCalloutVisible}
           target={listItemRef}
           directionalHint={DirectionalHint.bottomRightEdge}
-          items={[
-            {
-              key: "complete-1-level",
-              text: "Mark as complete"
-            },
-            {
-              key: "complete-2-level",
-              text: "Mark this and its children as complete"
-            },
-            {
-              key: "complete-insane",
-              text: "Mark this and every descendant as complete"
-            },
-            {
-              key: "delete",
-              text: "Delete this"
-            }
-          ]}
+          items={contextItems}
         />
       ) : null}
     </div>
