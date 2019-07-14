@@ -18,7 +18,8 @@ steps:
 - script: npm install
   displayName: 'npm install'
 
-- script: npm run deploy
+- script: |
+    git config user.email "isaac.daly@outlook.com"
+    git config user.name "dalyIsaac"
+    npm run deploy -- -r https://$(GitHubPAT)@github.com/dalyIsaac/hub.git
   displayName: 'npm deploy'
-  env:
-    gt: $(GitHubPAT)
