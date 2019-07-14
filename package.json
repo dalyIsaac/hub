@@ -1,7 +1,7 @@
 {
   "name": "hub",
   "version": "0.1.0",
-  "homepage": "https://dalyIsaac.github.io",
+  "homepage": "https://dalyIsaac.github.io/hub",
   "private": true,
   "dependencies": {
     "@types/jest": "24.0.15",
