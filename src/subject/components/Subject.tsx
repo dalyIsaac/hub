@@ -81,7 +81,9 @@ export default function({ subject, id }: SubjectProps): JSX.Element {
     updateName(e.target.value);
   };
   const updateTitleRedux = () => {
-    dispatch(updateSubjectNameAction(id, name));
+    if (subject.name !== name) {
+      dispatch(updateSubjectNameAction(id, name));
+    }
   };
   const updateDescription = () => {};
 
