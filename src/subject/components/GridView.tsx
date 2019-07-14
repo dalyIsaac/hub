@@ -4,9 +4,9 @@ import { IRectangle } from "office-ui-fabric-react/lib/Utilities";
 import { mergeStyleSets, getTheme } from "@uifabric/styling";
 import { useRef } from "react";
 import { useSelector } from "react-redux";
-import { State } from "../reducer";
-import { Subject } from "./model";
-import SubjectComponent from "./subject";
+import { State } from "../../Reducer";
+import { Subject } from "../model/Subject";
+import SubjectComponent from "./Subject";
 
 const ROWS_PER_PAGE = 3;
 const ROW_HEIGHT = 600;
@@ -16,29 +16,29 @@ const theme = getTheme();
 const styles = mergeStyleSets({
   list: {
     overflow: "hidden",
-    position: "relative"
+    position: "relative",
   },
   tile: {
     textAlign: "center",
     position: "relative",
-    float: "left"
+    float: "left",
   },
   sizer: {
-    paddingBottom: "100%"
+    paddingBottom: "100%",
   },
   padder: {
     position: "absolute",
     left: 4,
     top: 4,
     right: 4,
-    bottom: 4
+    bottom: 4,
   },
   contents: {
     position: "absolute",
     top: 0,
     left: 0,
-    outline: "1px solid " + theme.palette.neutralTertiary
-  }
+    outline: "1px solid " + theme.palette.neutralTertiary,
+  },
 });
 
 export default function(): JSX.Element {
@@ -59,7 +59,7 @@ export default function(): JSX.Element {
         data-is-focusable={true}
         style={{
           width: 100 / columnCount.current + "%",
-          height: ROW_HEIGHT
+          height: ROW_HEIGHT,
         }}
       >
         <div className={styles.sizer}>
@@ -77,7 +77,7 @@ export default function(): JSX.Element {
 
   const getItemCountForPage = (
     itemIndex?: number,
-    surfaceRect?: IRectangle
+    surfaceRect?: IRectangle,
   ): number => {
     if (itemIndex === 0 && surfaceRect) {
       columnCount.current = Math.ceil(surfaceRect.width / MIN_COL_WIDTH);

@@ -1,5 +1,4 @@
 import React, { useRef, useState } from "react";
-import { Subject } from "./model";
 import { Checkbox } from "office-ui-fabric-react/lib/Checkbox";
 import { TooltipHost } from "office-ui-fabric-react/lib/Tooltip";
 import { Icon } from "office-ui-fabric-react/lib/Icon";
@@ -7,7 +6,8 @@ import { mergeStyleSets, getTheme } from "@uifabric/styling";
 import { getId } from "office-ui-fabric-react/lib/Utilities";
 import { DirectionalHint } from "office-ui-fabric-react/lib/Callout";
 import { ContextualMenu } from "office-ui-fabric-react/lib/ContextualMenu";
-import { contextItems } from "./subject";
+import { Subject } from "../model/Subject";
+import { contextItems } from "./Subject";
 
 const theme = getTheme();
 
@@ -20,16 +20,16 @@ const styles = mergeStyleSets({
     border,
     borderRadius: 2,
     marginTop: 1,
-    marginBottom: 1
+    marginBottom: 1,
   },
   checkbox: {
-    margin: 8
+    margin: 8,
   },
   content: {
     display: "flex",
     flexGrow: 2,
     paddingLeft: 8,
-    paddingRight: 8
+    paddingRight: 8,
   },
   open: {
     color: theme.palette.white,
@@ -42,13 +42,13 @@ const styles = mergeStyleSets({
     height: 40,
     selectors: {
       "&:hover": {
-        filter: "brightness(90%)"
+        filter: "brightness(90%)",
       },
       "&:active": {
-        filter: "brightness(80%)"
-      }
-    }
-  }
+        filter: "brightness(80%)",
+      },
+    },
+  },
 });
 
 interface ListItemProps {

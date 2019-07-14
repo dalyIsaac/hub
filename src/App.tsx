@@ -1,5 +1,5 @@
 import React from "react";
-import GridView from "./subject/gridView";
+import GridView from "./subject/components/GridView";
 
 const App: React.FC = () => {
   return (

@@ -1,6 +1,6 @@
 import produce from "immer";
-import { SubjectState } from "./model";
 import { Action } from "redux";
+import { SubjectState } from "./model/Subject";
 
 const NUM_ITEMS = 23;
 
@@ -25,7 +25,7 @@ const getInitialState = (amount: number): SubjectState => {
       created: new Date(),
       description: `Description${i}`,
       dueDate: new Date(),
-      children: getRandomChildren()
+      children: getRandomChildren(),
     };
   }
   return state;
@@ -33,9 +33,9 @@ const getInitialState = (amount: number): SubjectState => {
 
 const subjectReducer = (
   state: SubjectState = getInitialState(NUM_ITEMS),
-  action: Action
+  action: Action,
 ) =>
-  produce(state, draftState => {
+  produce(state, (draftState) => {
     return draftState;
   });
 
