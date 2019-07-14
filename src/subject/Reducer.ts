@@ -2,14 +2,14 @@ import produce from "immer";
 import { Action } from "redux";
 import { SubjectState } from "./model/Subject";
 import {
-  UPDATE_SUBJECT_NAME,
-  updateSubjectNameReducer,
-  UpdateSubjectNameAction,
+  SET_SUBJECT_NAME,
+  setSubjectNameReducer,
+  SetSubjectNameAction,
 } from "./model/Title";
 import {
-  UPDATE_SUBJECT_DESCRIPTION,
-  updateSubjectDescriptionReducer,
-  UpdateSubjectDescriptionAction,
+  SET_SUBJECT_DESCRIPTION,
+  setSubjectDescriptionReducer,
+  SetSubjectDescriptionAction,
 } from "./model/Description";
 
 const NUM_ITEMS = 23;
@@ -47,13 +47,13 @@ const subjectReducer = (
 ) =>
   produce(state, (draftState) => {
     switch (action.type) {
-      case UPDATE_SUBJECT_NAME:
-        updateSubjectNameReducer(draftState, action as UpdateSubjectNameAction);
+      case SET_SUBJECT_NAME:
+        setSubjectNameReducer(draftState, action as SetSubjectNameAction);
         break;
-      case UPDATE_SUBJECT_DESCRIPTION:
-        updateSubjectDescriptionReducer(
+      case SET_SUBJECT_DESCRIPTION:
+        setSubjectDescriptionReducer(
           draftState,
-          action as UpdateSubjectDescriptionAction,
+          action as SetSubjectDescriptionAction,
         );
         break;
       default:

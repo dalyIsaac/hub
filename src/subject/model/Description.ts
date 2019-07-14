@@ -1,23 +1,23 @@
 import { SubjectState, SubjectBaseAction } from "./Subject";
 
-export const UPDATE_SUBJECT_DESCRIPTION = "UPDATE_SUBJECT_DESCRIPTION";
+export const SET_SUBJECT_DESCRIPTION = "SET_SUBJECT_DESCRIPTION";
 
-export interface UpdateSubjectDescriptionAction extends SubjectBaseAction {
+export interface SetSubjectDescriptionAction extends SubjectBaseAction {
   description: string;
 }
 
-export const updateSubjectDescriptionAction = (
+export const setSubjectDescription = (
   subjectId: string,
   description: string,
-): UpdateSubjectDescriptionAction => ({
+): SetSubjectDescriptionAction => ({
   description,
   subjectId,
-  type: UPDATE_SUBJECT_DESCRIPTION,
+  type: SET_SUBJECT_DESCRIPTION,
 });
 
-export const updateSubjectDescriptionReducer = (
+export const setSubjectDescriptionReducer = (
   state: SubjectState,
-  { subjectId, description }: UpdateSubjectDescriptionAction,
+  { subjectId, description }: SetSubjectDescriptionAction,
 ): void => {
   state[subjectId].description = description;
 };

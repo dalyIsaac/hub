@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Subject } from "../model/Subject";
+import { useDispatch } from "react-redux";
 import { FocusZone } from "office-ui-fabric-react/lib/FocusZone";
 import { Stack } from "office-ui-fabric-react/lib/Stack";
 import { Text } from "office-ui-fabric-react/lib/Text";
@@ -10,11 +10,11 @@ import { getTheme, mergeStyleSets } from "@uifabric/styling";
 import { DefaultButton } from "office-ui-fabric-react/lib/Button";
 import { DirectionalHint } from "office-ui-fabric-react/lib/Callout";
 
+import { Subject } from "../model/Subject";
 import Title from "./Title";
 import ListView from "./ListView";
-import { useDispatch } from "react-redux";
-import { updateSubjectNameAction } from "../model/Title";
-import { updateSubjectDescriptionAction } from "../model/Description";
+import { setSubjectName } from "../model/Title";
+import { setSubjectDescription } from "../model/Description";
 
 interface SubjectProps {
   subject: Subject;
@@ -76,23 +76,23 @@ export const contextItems = [
 
 export default function({ subject, id }: SubjectProps): JSX.Element {
   const dispatch = useDispatch();
-  const [name, updateName] = useState(subject.name);
-  const [description, updateDescription] = useState(subject.description || "");
+  const [name, setName] = useState(subject.name);
+  const [description, setDescription] = useState(subject.description || "");
 
   const updateTitleLocal = (e: React.ChangeEvent<HTMLInputElement>) => {
-    updateName(e.target.value);
+    setName(e.target.value);
   };
   const updateTitleRedux = () => {
     if (subject.name !== name) {
-      dispatch(updateSubjectNameAction(id, name));
+      dispatch(setSubjectName(id, name));
     }
   };
   const updateDescriptionLocal = (e: any, newValue?: string) => {
-    updateDescription(newValue || "");
+    setDescription(newValue || "");
   };
   const updateDescriptionRedux = () => {
     if (subject.description !== description) {
-      dispatch(updateSubjectDescriptionAction(id, description));
+      dispatch(setSubjectDescription(id, description));
     }
   };
 
