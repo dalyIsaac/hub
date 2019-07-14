@@ -14,6 +14,7 @@ import Title from "./Title";
 import ListView from "./ListView";
 import { useDispatch } from "react-redux";
 import { updateSubjectNameAction } from "../model/Title";
+import { updateSubjectDescriptionAction } from "../model/Description";
 
 interface SubjectProps {
   subject: Subject;
@@ -76,6 +77,7 @@ export const contextItems = [
 export default function({ subject, id }: SubjectProps): JSX.Element {
   const dispatch = useDispatch();
   const [name, updateName] = useState(subject.name);
+  const [description, updateDescription] = useState(subject.description || "");
 
   const updateTitleLocal = (e: React.ChangeEvent<HTMLInputElement>) => {
     updateName(e.target.value);
@@ -85,7 +87,14 @@ export default function({ subject, id }: SubjectProps): JSX.Element {
       dispatch(updateSubjectNameAction(id, name));
     }
   };
-  const updateDescription = () => {};
+  const updateDescriptionLocal = (e: any, newValue?: string) => {
+    updateDescription(newValue || "");
+  };
+  const updateDescriptionRedux = () => {
+    if (subject.description !== description) {
+      dispatch(updateSubjectDescriptionAction(id, description));
+    }
+  };
 
   const daysLeft = subject.dueDate
     ? new Date().getDate() - subject.dueDate.getDate()
@@ -107,8 +116,9 @@ export default function({ subject, id }: SubjectProps): JSX.Element {
           <TextField
             multiline
             rows={3}
-            value={subject.description}
-            onChange={updateDescription}
+            value={description}
+            onChange={updateDescriptionLocal}
+            onBlur={updateDescriptionRedux}
             className={styles.description}
           />
           <div className={styles.date}>

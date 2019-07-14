@@ -6,7 +6,7 @@ export interface Subject<T = BaseSubject> {
   type: T;
   name: string;
   readonly created: Date;
-  description?: string;
+  description: string;
   dueDate?: Date;
   children: string[];
 }

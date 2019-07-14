@@ -6,6 +6,11 @@ import {
   updateSubjectNameReducer,
   UpdateSubjectNameAction,
 } from "./model/Title";
+import {
+  UPDATE_SUBJECT_DESCRIPTION,
+  updateSubjectDescriptionReducer,
+  UpdateSubjectDescriptionAction,
+} from "./model/Description";
 
 const NUM_ITEMS = 23;
 
@@ -44,6 +49,12 @@ const subjectReducer = (
     switch (action.type) {
       case UPDATE_SUBJECT_NAME:
         updateSubjectNameReducer(draftState, action as UpdateSubjectNameAction);
+        break;
+      case UPDATE_SUBJECT_DESCRIPTION:
+        updateSubjectDescriptionReducer(
+          draftState,
+          action as UpdateSubjectDescriptionAction,
+        );
         break;
       default:
         break;
