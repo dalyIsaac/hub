@@ -8,6 +8,8 @@ import { DirectionalHint } from "office-ui-fabric-react/lib/Callout";
 import { ContextualMenu } from "office-ui-fabric-react/lib/ContextualMenu";
 import { Subject } from "../model/Subject";
 import { contextItems } from "./Subject";
+import { useDispatch } from "react-redux";
+import { completeSubject, uncompleteSubject } from "../model/Completed";
 
 const theme = getTheme();
 
@@ -57,14 +59,23 @@ interface ListItemProps {
 }
 
 export default function ListItem({ id, subject }: ListItemProps): JSX.Element {
+  const dispatch = useDispatch();
   const hostId = useRef(getId(id));
   const listItemRef = useRef(null);
 
-  const [calloutVisible, _setCalloutVisible] = useState(false);
+  const [menuVisible, _setMenuVisible] = useState(false);
   function setCalloutVisible(e: React.MouseEvent<HTMLDivElement>) {
     e.preventDefault();
-    _setCalloutVisible(!calloutVisible);
+    _setMenuVisible(!menuVisible);
   }
+
+  const onChange = (e: any, checked?: boolean) => {
+    if (checked === true) {
+      dispatch(completeSubject(id));
+    } else {
+      dispatch(uncompleteSubject(id));
+    }
+  };
 
   return (
     <div
@@ -73,7 +84,11 @@ export default function ListItem({ id, subject }: ListItemProps): JSX.Element {
       ref={listItemRef}
     >
       <div className={styles.wrapper}>
-        <Checkbox label={subject.name} className={styles.checkbox} />
+        <Checkbox
+          label={subject.name}
+          className={styles.checkbox}
+          onChange={onChange}
+        />
 
         <div className={styles.content}>
           {/* // TODO: include custom content here. It should render below. */}
@@ -86,7 +101,7 @@ export default function ListItem({ id, subject }: ListItemProps): JSX.Element {
         </TooltipHost>
       </div>
 
-      {calloutVisible ? (
+      {menuVisible ? (
         <ContextualMenu
           isBeakVisible={false}
           onDismiss={setCalloutVisible}

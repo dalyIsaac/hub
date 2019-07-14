@@ -11,6 +11,14 @@ import {
   setSubjectDescriptionReducer,
   SetSubjectDescriptionAction,
 } from "./model/Description";
+import {
+  COMPLETE_SUBJECT,
+  CompleteSubjectAction,
+  UNCOMPLETE_SUBJECT,
+  uncompleteSubjectReducer,
+  completeSubjectReducer,
+  UncompleteSubjectAction,
+} from "./model/Completed";
 
 const NUM_ITEMS = 23;
 
@@ -55,6 +63,12 @@ const subjectReducer = (
           draftState,
           action as SetSubjectDescriptionAction,
         );
+        break;
+      case COMPLETE_SUBJECT:
+        completeSubjectReducer(draftState, action as CompleteSubjectAction);
+        break;
+      case UNCOMPLETE_SUBJECT:
+        uncompleteSubjectReducer(draftState, action as UncompleteSubjectAction);
         break;
       default:
         break;
