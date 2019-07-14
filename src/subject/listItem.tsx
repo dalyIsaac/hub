@@ -67,7 +67,7 @@ export default function ListItem({ id, subject }: ListItemProps): JSX.Element {
 
   return (
     <div
-      data-is-scrollable="true"
+      data-is-focusable={true}
       onContextMenu={setCalloutVisible}
       ref={listItemRef}
     >

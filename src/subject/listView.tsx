@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { State } from "../reducer";
 import { ListViewItem } from "./listItem";
 import { mergeStyleSets } from "@uifabric/styling";
+import { FocusZone } from "office-ui-fabric-react/lib/FocusZone";
 
 interface ListViewProps {
   id: string;
@@ -26,10 +27,12 @@ export default function({ id }: ListViewProps): JSX.Element {
   }
 
   return (
-    <List
-      items={children}
-      onRenderCell={ListViewItem}
-      className={styles.list}
-    />
+    <FocusZone>
+      <List
+        items={children}
+        onRenderCell={ListViewItem}
+        className={styles.list}
+      />
+    </FocusZone>
   );
 }
