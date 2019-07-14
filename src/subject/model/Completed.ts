@@ -3,18 +3,38 @@ import { SubjectBaseAction, SubjectState } from "./Subject";
 // Complete subject
 export const COMPLETE_SUBJECT = "COMPLETE_SUBJECT";
 
-export interface CompleteSubjectAction extends SubjectBaseAction {}
+export interface CompleteSubjectAction extends SubjectBaseAction {
+  level: number;
+}
 
-export const completeSubject = (subjectId: string): CompleteSubjectAction => ({
+export const completeSubject = (
+  subjectId: string,
+  level = 1,
+): CompleteSubjectAction => ({
+  level,
   subjectId,
   type: COMPLETE_SUBJECT,
 });
 
-export const completeSubjectReducer = (
+const markAsComplete = (
   state: SubjectState,
-  { subjectId }: CompleteSubjectAction,
+  subjectId: string,
+  level: number,
+  date = new Date(),
 ): void => {
   state[subjectId].completed = new Date();
+  if (level > 1) {
+    for (const childId of state[subjectId].children) {
+      markAsComplete(state, childId, level - 1, date);
+    }
+  }
+};
+
+export const completeSubjectReducer = (
+  state: SubjectState,
+  { subjectId, level }: CompleteSubjectAction,
+): void => {
+  markAsComplete(state, subjectId, level);
 };
 
 // Remove subject completion

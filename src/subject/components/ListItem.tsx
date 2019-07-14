@@ -5,9 +5,11 @@ import { Icon } from "office-ui-fabric-react/lib/Icon";
 import { mergeStyleSets, getTheme } from "@uifabric/styling";
 import { getId } from "office-ui-fabric-react/lib/Utilities";
 import { DirectionalHint } from "office-ui-fabric-react/lib/Callout";
-import { ContextualMenu } from "office-ui-fabric-react/lib/ContextualMenu";
+import {
+  ContextualMenu,
+  IContextualMenuItem,
+} from "office-ui-fabric-react/lib/ContextualMenu";
 import { Subject } from "../model/Subject";
-import { contextItems } from "./Subject";
 import { useDispatch } from "react-redux";
 import { completeSubject, uncompleteSubject } from "../model/Completed";
 
@@ -69,22 +71,44 @@ export default function ListItem({ id, subject }: ListItemProps): JSX.Element {
     _setMenuVisible(!menuVisible);
   }
 
-  const onChange = (e: any, checked?: boolean) => {
+  const onChange = (e: any, checked?: boolean, level?: number) => {
     if (checked === true) {
-      dispatch(completeSubject(id));
+      dispatch(completeSubject(id, level));
     } else {
       dispatch(uncompleteSubject(id));
     }
   };
+
+  const contextItems: IContextualMenuItem[] = [
+    {
+      key: "complete-1-level",
+      text: "Mark as complete",
+      onClick: (e, item) => {
+        if (item) {
+          onChange(e, !item.checked, 1);
+        }
+      },
+    },
+    {
+      key: "complete-2-level",
+      text: "Mark this and its children as complete",
+    },
+    {
+      key: "delete",
+      text: "Delete this",
+    },
+  ];
 
   return (
     <div
       data-is-focusable={true}
       onContextMenu={setCalloutVisible}
       ref={listItemRef}
+      key={id}
     >
       <div className={styles.wrapper}>
         <Checkbox
+          checked={!!subject.completed}
           label={subject.name}
           className={styles.checkbox}
           onChange={onChange}

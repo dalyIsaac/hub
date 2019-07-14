@@ -22,6 +22,7 @@ const styles = mergeStyleSets({
 });
 
 export default function({ id }: ListViewProps): JSX.Element {
+  console.log("Rendering");
   const subjects = useSelector((state: State) => state.subjects);
 
   const childIds = subjects[id].children;

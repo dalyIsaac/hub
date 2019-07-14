@@ -15,6 +15,7 @@ import Title from "./Title";
 import ListView from "./ListView";
 import { setSubjectName } from "../model/Title";
 import { setSubjectDescription } from "../model/Description";
+import { IContextualMenuItem } from "office-ui-fabric-react/lib/ContextualMenu";
 
 interface SubjectProps {
   subject: Subject;
@@ -55,25 +56,6 @@ const styles = mergeStyleSets({
   },
 });
 
-export const contextItems = [
-  {
-    key: "complete-1-level",
-    text: "Mark as complete",
-  },
-  {
-    key: "complete-2-level",
-    text: "Mark this and its children as complete",
-  },
-  {
-    key: "complete-insane",
-    text: "Mark this and every descendant as complete",
-  },
-  {
-    key: "delete",
-    text: "Delete this",
-  },
-];
-
 export default function({ subject, id }: SubjectProps): JSX.Element {
   const dispatch = useDispatch();
   const [name, setName] = useState(subject.name);
@@ -95,6 +77,17 @@ export default function({ subject, id }: SubjectProps): JSX.Element {
       dispatch(setSubjectDescription(id, description));
     }
   };
+
+  const contextItems: IContextualMenuItem[] = [
+    {
+      key: "complete-2-level",
+      text: "Mark this and its children as complete",
+    },
+    {
+      key: "delete",
+      text: "Delete this",
+    },
+  ];
 
   const daysLeft = subject.dueDate
     ? new Date().getDate() - subject.dueDate.getDate()
