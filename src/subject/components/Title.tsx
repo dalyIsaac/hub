@@ -6,7 +6,8 @@ import { FontSizes } from "@uifabric/fluent-theme/lib/fluent/FluentType";
 interface TitleProps {
   className: string;
   value: string;
-  onChange: ((event: React.FormEvent<HTMLInputElement>) => void) | undefined;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
 }
 
 const theme = getTheme();
@@ -22,26 +23,28 @@ const styles = mergeStyleSets({
     selectors: {
       "&:focus": {
         borderBottom: "1px solid " + theme.palette.neutralTertiary,
-        outline: "none"
+        outline: "none",
       },
       "&:hover": {
         borderBottom: "1px solid " + theme.palette.neutralTertiary,
-        outline: "none"
-      }
-    }
-  }
+        outline: "none",
+      },
+    },
+  },
 });
 
 export default function({
   value,
+  className,
+  onBlur,
   onChange,
-  className
 }: TitleProps): JSX.Element {
   return (
     <div className={className}>
       <input
         className={styles.title}
         onChange={onChange}
+        onBlur={onBlur}
         value={value}
         defaultValue={"Untitled"}
       />

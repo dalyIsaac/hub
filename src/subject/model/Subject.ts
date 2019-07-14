@@ -1,3 +1,5 @@
+import { BaseAction } from "../../Common";
+
 export type BaseSubject = "BaseSubject";
 
 export interface Subject<T = BaseSubject> {
@@ -11,4 +13,8 @@ export interface Subject<T = BaseSubject> {
 
 export interface SubjectState {
   [key: string]: Subject;
+}
+
+export interface SubjectBaseAction extends BaseAction {
+  subjectId: string;
 }

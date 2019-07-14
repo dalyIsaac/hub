@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Subject } from "../model/Subject";
 import { FocusZone } from "office-ui-fabric-react/lib/FocusZone";
 import { Stack } from "office-ui-fabric-react/lib/Stack";
@@ -12,6 +12,8 @@ import { DirectionalHint } from "office-ui-fabric-react/lib/Callout";
 
 import Title from "./Title";
 import ListView from "./ListView";
+import { useDispatch } from "react-redux";
+import { updateSubjectNameAction } from "../model/Title";
 
 interface SubjectProps {
   subject: Subject;
@@ -72,7 +74,15 @@ export const contextItems = [
 ];
 
 export default function({ subject, id }: SubjectProps): JSX.Element {
-  const updateTitle = () => {};
+  const dispatch = useDispatch();
+  const [name, updateName] = useState(subject.name);
+
+  const updateTitleLocal = (e: React.ChangeEvent<HTMLInputElement>) => {
+    updateName(e.target.value);
+  };
+  const updateTitleRedux = () => {
+    dispatch(updateSubjectNameAction(id, name));
+  };
   const updateDescription = () => {};
 
   const daysLeft = subject.dueDate
@@ -88,8 +98,9 @@ export default function({ subject, id }: SubjectProps): JSX.Element {
         <div className={styles.body}>
           <Title
             className={styles.title}
-            value={subject.name}
-            onChange={updateTitle}
+            value={name}
+            onChange={updateTitleLocal}
+            onBlur={updateTitleRedux}
           />
           <TextField
             multiline
