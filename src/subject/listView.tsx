@@ -3,17 +3,21 @@ import { List } from "office-ui-fabric-react/lib/List";
 import { useSelector } from "react-redux";
 import { State } from "../reducer";
 import { ListViewItem } from "./listItem";
-import { mergeStyleSets } from "@uifabric/styling";
+import { mergeStyleSets, getTheme } from "@uifabric/styling";
 import { FocusZone } from "office-ui-fabric-react/lib/FocusZone";
 
 interface ListViewProps {
   id: string;
 }
 
+const theme = getTheme();
+const border = "1px solid " + theme.palette.neutralTertiary;
 const styles = mergeStyleSets({
   list: {
     overflow: "auto",
-    height: 309
+    height: 300,
+    borderTop: border,
+    borderBottom: border
   }
 });
 

@@ -20,7 +20,6 @@ const styles = mergeStyleSets({
   },
   tile: {
     textAlign: "center",
-    outline: "2px solid " + theme.palette.neutralLighterAlt,
     position: "relative",
     float: "left"
   },
@@ -38,9 +37,7 @@ const styles = mergeStyleSets({
     position: "absolute",
     top: 0,
     left: 0,
-    backgroundColor: theme.palette.white,
-    width: "100%",
-    height: "100%"
+    outline: "1px solid " + theme.palette.neutralTertiary
   }
 });
 

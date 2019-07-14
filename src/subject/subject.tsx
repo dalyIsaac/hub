@@ -23,13 +23,15 @@ const styles = mergeStyleSets({
     backgroundColor: theme.palette.themePrimary,
     color: theme.palette.neutralLight,
     padding: 5,
-    marginBottom: 10,
     selectors: {
       "&:focus": {
         outline: "none",
         border: "none"
       }
     }
+  },
+  body: {
+    padding: 10
   },
   title: {
     paddingTop: 10,
@@ -81,36 +83,39 @@ export default function({ subject, id }: SubjectProps): JSX.Element {
         <Text className={styles.header}>
           Created {subject.created.toLocaleString()}
         </Text>
-        <Title
-          className={styles.title}
-          value={subject.name}
-          onChange={updateTitle}
-        />
-        <TextField
-          multiline
-          rows={3}
-          value={subject.description}
-          onChange={updateDescription}
-          className={styles.description}
-        />
-        <div className={styles.date}>
-          <Label>Due date:</Label>
-          <DatePicker value={subject.dueDate} />
+
+        <div className={styles.body}>
+          <Title
+            className={styles.title}
+            value={subject.name}
+            onChange={updateTitle}
+          />
+          <TextField
+            multiline
+            rows={3}
+            value={subject.description}
+            onChange={updateDescription}
+            className={styles.description}
+          />
+          <div className={styles.date}>
+            <Label>Due date:</Label>
+            <DatePicker value={subject.dueDate} />
+          </div>
+          <div className={styles.daysLeft}>
+            <Label>{`${daysLeft} days left`}</Label>
+          </div>
+          <ListView id={id} />
+          <DefaultButton
+            primary
+            text="Mark as complete"
+            style={{ marginTop: 10 }}
+            menuProps={{
+              directionalHint: DirectionalHint.bottomRightEdge,
+              isBeakVisible: false,
+              items: contextItems
+            }}
+          />
         </div>
-        <div className={styles.daysLeft}>
-          <Label>{`${daysLeft} days left`}</Label>
-        </div>
-        <ListView id={id} />
-        <DefaultButton
-          primary
-          text="Mark as complete"
-          style={{ marginTop: 10, marginBottom: 10 }}
-          menuProps={{
-            directionalHint: DirectionalHint.bottomRightEdge,
-            isBeakVisible: false,
-            items: contextItems
-          }}
-        />
       </Stack>
     </FocusZone>
   );
