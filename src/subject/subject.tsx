@@ -110,7 +110,7 @@ export default function({ subject, id }: SubjectProps): JSX.Element {
             text="Mark as complete"
             style={{ marginTop: 10 }}
             menuProps={{
-              directionalHint: DirectionalHint.bottomRightEdge,
+              directionalHint: DirectionalHint.bottomCenter,
               isBeakVisible: false,
               items: contextItems
             }}
