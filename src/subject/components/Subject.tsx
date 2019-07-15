@@ -7,7 +7,7 @@ import { TextField } from "office-ui-fabric-react/lib/TextField";
 import { Label } from "office-ui-fabric-react/lib/Label";
 import { DatePicker } from "office-ui-fabric-react/lib/DatePicker";
 import { getTheme, mergeStyleSets } from "@uifabric/styling";
-import { DefaultButton } from "office-ui-fabric-react/lib/Button";
+import { DefaultButton, IconButton } from "office-ui-fabric-react/lib/Button";
 import { DirectionalHint } from "office-ui-fabric-react/lib/Callout";
 
 import { Subject } from "../model/Subject";
@@ -17,6 +17,7 @@ import { setSubjectName } from "../model/Title";
 import { setSubjectDescription } from "../model/Description";
 import { completeSubject, uncompleteSubject } from "../model/Completed";
 import { deleteSubject } from "../model/Delete";
+import { setSubjectDueDate } from "../model/Date";
 
 interface SubjectProps {
   subject: Subject;
@@ -50,6 +51,10 @@ const styles = mergeStyleSets({
     display: "flex",
     justifyContent: "space-between",
   },
+  datePicker: {
+    display: "flex",
+    flexDirection: "row",
+  },
   daysLeft: {
     display: "flex",
     justifyContent: "flex-end",
@@ -59,6 +64,13 @@ const styles = mergeStyleSets({
   },
 });
 
+function getDaysDifference(first: Date, second: Date) {
+  // Take the difference between the dates and divide by milliseconds per day.
+  // Round to nearest whole number to deal with DST.
+  return Math.ceil(
+    (second.valueOf() - first.valueOf()) / (1000 * 60 * 60 * 24),
+  );
+}
 export default function({ subject, id }: SubjectProps): JSX.Element {
   const dispatch = useDispatch();
   const [name, setName] = useState(subject.name);
@@ -80,9 +92,15 @@ export default function({ subject, id }: SubjectProps): JSX.Element {
       dispatch(setSubjectDescription(id, description));
     }
   };
+  const updateDueDateRedux = (date?: Date | null) => {
+    dispatch(setSubjectDueDate(id, date || undefined));
+  };
 
   const completeOnClick = () => dispatch(completeSubject(id, 1));
   const uncompleteOnClick = () => dispatch(uncompleteSubject(id));
+  const clearDueDateOnClick = () => {
+    updateDueDateRedux();
+  };
 
   const completeItem = {
     key: "complete-2-level",
@@ -100,7 +118,7 @@ export default function({ subject, id }: SubjectProps): JSX.Element {
   };
 
   const daysLeft = subject.dueDate
-    ? new Date().getDate() - subject.dueDate.getDate()
+    ? getDaysDifference(new Date(), subject.dueDate)
     : "∞";
 
   let header;
@@ -174,7 +192,19 @@ export default function({ subject, id }: SubjectProps): JSX.Element {
           />
           <div className={styles.date}>
             <Label>Due date:</Label>
-            <DatePicker value={subject.dueDate} />
+            <div className={styles.datePicker}>
+              <DatePicker
+                value={subject.dueDate}
+                onSelectDate={updateDueDateRedux}
+              />
+              {subject.dueDate ? (
+                <IconButton
+                  iconProps={{ iconName: "cancel" }}
+                  title="Clear date"
+                  onClick={clearDueDateOnClick}
+                />
+              ) : null}
+            </div>
           </div>
           <div className={styles.daysLeft}>
             <Label>{`${daysLeft} days left`}</Label>

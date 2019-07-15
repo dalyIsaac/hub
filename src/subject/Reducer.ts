@@ -24,6 +24,11 @@ import {
   DeleteSubjectAction,
   deleteSubjectReducer,
 } from "./model/Delete";
+import {
+  SET_SUBJECT_DUE_DATE,
+  SetSubjectDueDateAction,
+  setSubjectDueDateReducer,
+} from "./model/Date";
 
 const NUM_ITEMS = 23;
 
@@ -85,6 +90,9 @@ const subjectReducer = (
         break;
       case DELETE_SUBJECT:
         deleteSubjectReducer(draftState, action as DeleteSubjectAction);
+        break;
+      case SET_SUBJECT_DUE_DATE:
+        setSubjectDueDateReducer(draftState, action as SetSubjectDueDateAction);
         break;
       default:
         break;
