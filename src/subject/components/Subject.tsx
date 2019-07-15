@@ -77,7 +77,7 @@ export default function({ subject, id }: SubjectProps): JSX.Element {
   const [description, setDescription] = useState(subject.description || "");
 
   const updateTitleLocal = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setName(e.target.value);
+    setName(e.target.value || "Untitled");
   };
   const updateTitleRedux = () => {
     if (subject.name !== name) {

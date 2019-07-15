@@ -46,7 +46,6 @@ export default function({
         onChange={onChange}
         onBlur={onBlur}
         value={value}
-        defaultValue={"Untitled"}
       />
     </div>
   );
