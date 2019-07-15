@@ -16,6 +16,8 @@ import ListView from "./ListView";
 import { setSubjectName } from "../model/Title";
 import { setSubjectDescription } from "../model/Description";
 import { IContextualMenuItem } from "office-ui-fabric-react/lib/ContextualMenu";
+import { completeSubject } from "../model/Completed";
+import { deleteSubject } from "../model/Delete";
 
 interface SubjectProps {
   subject: Subject;
@@ -54,6 +56,9 @@ const styles = mergeStyleSets({
     display: "flex",
     justifyContent: "flex-end",
   },
+  heroButton: {
+    marginTop: 10,
+  },
 });
 
 export default function({ subject, id }: SubjectProps): JSX.Element {
@@ -78,14 +83,20 @@ export default function({ subject, id }: SubjectProps): JSX.Element {
     }
   };
 
+  const onClick = () => dispatch(completeSubject(id, 1));
+
   const contextItems: IContextualMenuItem[] = [
     {
       key: "complete-2-level",
       text: "Mark this and its children as complete",
+      onClick: () => {
+        dispatch(completeSubject(id, 2));
+      },
     },
     {
       key: "delete",
       text: "Delete this",
+      onClick: () => dispatch(deleteSubject(id)),
     },
   ];
 
@@ -122,16 +133,19 @@ export default function({ subject, id }: SubjectProps): JSX.Element {
             <Label>{`${daysLeft} days left`}</Label>
           </div>
           <ListView id={id} />
-          <DefaultButton
-            primary
-            text="Mark as complete"
-            style={{ marginTop: 10 }}
-            menuProps={{
-              directionalHint: DirectionalHint.bottomCenter,
-              isBeakVisible: false,
-              items: contextItems,
-            }}
-          />
+          <div className={styles.heroButton}>
+            <DefaultButton
+              primary
+              text="Mark as complete"
+              split={true}
+              onClick={onClick}
+              menuProps={{
+                directionalHint: DirectionalHint.bottomCenter,
+                isBeakVisible: false,
+                items: contextItems,
+              }}
+            />
+          </div>
         </div>
       </Stack>
     </FocusZone>
