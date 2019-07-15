@@ -12,6 +12,7 @@ import {
 import { Subject } from "../model/Subject";
 import { useDispatch } from "react-redux";
 import { completeSubject, uncompleteSubject } from "../model/Completed";
+import { deleteSubject } from "../model/Delete";
 
 const theme = getTheme();
 
@@ -96,11 +97,12 @@ export default function ListItem({ id, subject }: ListItemProps): JSX.Element {
         if (item) {
           onChange(e, !item.checked, 2);
         }
-      }
+      },
     },
     {
       key: "delete",
       text: "Delete this",
+      onClick: () => dispatch(deleteSubject(id)),
     },
   ];
 

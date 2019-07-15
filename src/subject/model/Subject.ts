@@ -10,6 +10,7 @@ export interface Subject<T = BaseSubject> {
   description: string;
   dueDate?: Date;
   children: string[];
+  parents: Set<string>;
 }
 
 export interface SubjectState {
