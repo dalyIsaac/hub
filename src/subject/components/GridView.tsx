@@ -87,10 +87,20 @@ export default function(): JSX.Element {
     return columnCount.current * ROWS_PER_PAGE;
   };
 
+  let items = [];
+  let completedItems = [];
+  for (const entry of Object.entries(subjects)) {
+    if (entry[1].completed) {
+      completedItems.push(entry);
+    } else {
+      items.push(entry);
+    }
+  }
+
   return (
     <List
       className={styles.list}
-      items={[...Object.entries(subjects)]}
+      items={items.concat(completedItems)}
       getItemCountForPage={getItemCountForPage}
       getPageHeight={getPageHeight}
       renderedWindowsAhead={4}

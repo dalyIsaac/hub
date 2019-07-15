@@ -15,8 +15,7 @@ import Title from "./Title";
 import ListView from "./ListView";
 import { setSubjectName } from "../model/Title";
 import { setSubjectDescription } from "../model/Description";
-import { IContextualMenuItem } from "office-ui-fabric-react/lib/ContextualMenu";
-import { completeSubject } from "../model/Completed";
+import { completeSubject, uncompleteSubject } from "../model/Completed";
 import { deleteSubject } from "../model/Delete";
 
 interface SubjectProps {
@@ -27,7 +26,6 @@ interface SubjectProps {
 const theme = getTheme();
 const styles = mergeStyleSets({
   header: {
-    backgroundColor: theme.palette.themePrimary,
     color: theme.palette.neutralLight,
     padding: 5,
     selectors: {
@@ -83,32 +81,81 @@ export default function({ subject, id }: SubjectProps): JSX.Element {
     }
   };
 
-  const onClick = () => dispatch(completeSubject(id, 1));
+  const completeOnClick = () => dispatch(completeSubject(id, 1));
+  const uncompleteOnClick = () => dispatch(uncompleteSubject(id));
 
-  const contextItems: IContextualMenuItem[] = [
-    {
-      key: "complete-2-level",
-      text: "Mark this and its children as complete",
-      onClick: () => {
-        dispatch(completeSubject(id, 2));
-      },
+  const completeItem = {
+    key: "complete-2-level",
+    text: "Mark this and its children as complete",
+    onClick: () => {
+      dispatch(completeSubject(id, 2));
     },
-    {
-      key: "delete",
-      text: "Delete this",
-      onClick: () => dispatch(deleteSubject(id)),
+  };
+  const deleteItem = {
+    key: "delete",
+    text: "Delete this",
+    onClick: () => {
+      dispatch(deleteSubject(id));
     },
-  ];
+  };
 
   const daysLeft = subject.dueDate
     ? new Date().getDate() - subject.dueDate.getDate()
     : "∞";
+
+  let header;
+  let heroButton;
+  if (!subject.completed) {
+    header = (
+      <Text
+        className={styles.header}
+        style={{ backgroundColor: theme.palette.green }}
+      >
+        Created {subject.created.toLocaleString()}
+      </Text>
+    );
+
+    heroButton = (
+      <DefaultButton
+        primary
+        text="Mark as complete"
+        split={true}
+        onClick={completeOnClick}
+        menuProps={{
+          directionalHint: DirectionalHint.bottomCenter,
+          isBeakVisible: false,
+          items: [completeItem, deleteItem],
+        }}
+      />
+    );
+  } else {
+    header = (
+      <Text
+        className={styles.header}
+        style={{ backgroundColor: theme.palette.red }}
+      >
+        Completed {subject.completed.toLocaleString()}
+      </Text>
+    );
+
+    heroButton = (
+      <DefaultButton
+        text="Mark as uncomplete"
+        split={true}
+        onClick={uncompleteOnClick}
+        menuProps={{
+          directionalHint: DirectionalHint.bottomCenter,
+          isBeakVisible: false,
+          items: [deleteItem],
+        }}
+      />
+    );
+  }
+
   return (
     <FocusZone>
       <Stack verticalAlign={"center"}>
-        <Text className={styles.header}>
-          Created {subject.created.toLocaleString()}
-        </Text>
+        {header}
 
         <div className={styles.body}>
           <Title
@@ -133,19 +180,7 @@ export default function({ subject, id }: SubjectProps): JSX.Element {
             <Label>{`${daysLeft} days left`}</Label>
           </div>
           <ListView id={id} />
-          <div className={styles.heroButton}>
-            <DefaultButton
-              primary
-              text="Mark as complete"
-              split={true}
-              onClick={onClick}
-              menuProps={{
-                directionalHint: DirectionalHint.bottomCenter,
-                isBeakVisible: false,
-                items: contextItems,
-              }}
-            />
-          </div>
+          <div className={styles.heroButton}>{heroButton}</div>
         </div>
       </Stack>
     </FocusZone>
