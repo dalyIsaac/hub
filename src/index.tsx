@@ -6,6 +6,7 @@ import { createStore } from "redux";
 import { Provider } from "react-redux";
 import { composeWithDevTools } from "redux-devtools-extension";
 import { initializeIcons } from "@uifabric/icons";
+import { HashRouter } from "react-router-dom";
 
 import rootReducer from "./Reducer";
 
@@ -14,7 +15,9 @@ initializeIcons();
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <HashRouter>
+      <App />
+    </HashRouter>
   </Provider>,
   document.getElementById("root"),
 );

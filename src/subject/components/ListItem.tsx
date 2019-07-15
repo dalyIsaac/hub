@@ -13,6 +13,7 @@ import { Subject } from "../model/Subject";
 import { useDispatch } from "react-redux";
 import { completeSubject, uncompleteSubject } from "../model/Completed";
 import { deleteSubject } from "../model/Delete";
+import { Link } from "react-router-dom";
 
 const theme = getTheme();
 
@@ -126,9 +127,11 @@ export default function ListItem({ id, subject }: ListItemProps): JSX.Element {
         </div>
 
         <TooltipHost content={"Open " + subject.name} id={hostId.current}>
-          <button className={styles.open} aria-labelledby={hostId.current}>
-            <Icon iconName="OpenFile" />
-          </button>
+          <Link to={`/${id}`}>
+            <button className={styles.open} aria-labelledby={hostId.current}>
+              <Icon iconName="OpenFile" />
+            </button>
+          </Link>
         </TooltipHost>
       </div>
 
