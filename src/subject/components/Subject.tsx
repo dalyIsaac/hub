@@ -29,6 +29,9 @@ const styles = mergeStyleSets({
   header: {
     color: theme.palette.neutralLight,
     padding: 5,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
     selectors: {
       "&:focus": {
         outline: "none",
@@ -42,6 +45,9 @@ const styles = mergeStyleSets({
   title: {
     paddingTop: 10,
     paddingBottom: 5,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   },
   description: {
     paddingTop: 10,
@@ -61,6 +67,9 @@ const styles = mergeStyleSets({
   },
   heroButton: {
     marginTop: 10,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   },
 });
 
@@ -71,6 +80,7 @@ function getDaysDifference(first: Date, second: Date) {
     (second.valueOf() - first.valueOf()) / (1000 * 60 * 60 * 24),
   );
 }
+
 export default function({ subject, id }: SubjectProps): JSX.Element {
   const dispatch = useDispatch();
   const [name, setName] = useState(subject.name);

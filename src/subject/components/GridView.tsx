@@ -44,6 +44,10 @@ const styles = mergeStyleSets({
     left: 0,
     outline: "1px solid " + theme.palette.neutralTertiary,
   },
+  sidebar: {
+    outline: "1px solid " + theme.palette.neutralTertiary,
+    gridColumn: "2",
+  },
 });
 
 interface GridViewProps {
@@ -118,7 +122,11 @@ export default function({ match }: GridViewProps): JSX.Element {
       }
     }
 
-    sidebar = <SubjectComponent subject={subject} id={id} />;
+    sidebar = (
+      <div className={styles.sidebar}>
+        <SubjectComponent subject={subject} id={id} />
+      </div>
+    );
   } else {
     for (const entry of Object.entries(subjects)) {
       if (entry[1].completed) {
