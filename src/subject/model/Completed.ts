@@ -22,10 +22,12 @@ const markAsComplete = (
   level: number,
   date = new Date(),
 ): void => {
-  state[subjectId].completed = new Date();
-  if (level > 1) {
-    for (const childId of state[subjectId].children) {
-      markAsComplete(state, childId, level - 1, date);
+  if (state[subjectId].completed === undefined) {
+    state[subjectId].completed = date;
+    if (level > 1) {
+      for (const childId of state[subjectId].children) {
+        markAsComplete(state, childId, level - 1, date);
+      }
     }
   }
 };

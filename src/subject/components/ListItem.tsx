@@ -92,6 +92,11 @@ export default function ListItem({ id, subject }: ListItemProps): JSX.Element {
     {
       key: "complete-2-level",
       text: "Mark this and its children as complete",
+      onClick: (e, item) => {
+        if (item) {
+          onChange(e, !item.checked, 2);
+        }
+      }
     },
     {
       key: "delete",
