@@ -5,9 +5,14 @@ import { Icon } from "office-ui-fabric-react/lib/Icon";
 import { mergeStyleSets, getTheme } from "@uifabric/styling";
 import { getId } from "office-ui-fabric-react/lib/Utilities";
 import { DirectionalHint } from "office-ui-fabric-react/lib/Callout";
-import { ContextualMenu } from "office-ui-fabric-react/lib/ContextualMenu";
+import {
+  ContextualMenu,
+  IContextualMenuItem,
+} from "office-ui-fabric-react/lib/ContextualMenu";
 import { Subject } from "../model/Subject";
-import { contextItems } from "./Subject";
+import { useDispatch } from "react-redux";
+import { completeSubject, uncompleteSubject } from "../model/Completed";
+import { deleteSubject } from "../model/Delete";
 
 const theme = getTheme();
 
@@ -57,23 +62,64 @@ interface ListItemProps {
 }
 
 export default function ListItem({ id, subject }: ListItemProps): JSX.Element {
+  const dispatch = useDispatch();
   const hostId = useRef(getId(id));
   const listItemRef = useRef(null);
 
-  const [calloutVisible, _setCalloutVisible] = useState(false);
+  const [menuVisible, _setMenuVisible] = useState(false);
   function setCalloutVisible(e: React.MouseEvent<HTMLDivElement>) {
     e.preventDefault();
-    _setCalloutVisible(!calloutVisible);
+    _setMenuVisible(!menuVisible);
   }
+
+  const onChange = (e: any, checked?: boolean, level?: number) => {
+    if (checked === true) {
+      dispatch(completeSubject(id, level));
+    } else {
+      dispatch(uncompleteSubject(id));
+    }
+  };
+
+  const contextItems: IContextualMenuItem[] = [
+    {
+      key: "complete-1-level",
+      text: "Mark as complete",
+      onClick: (e, item) => {
+        if (item) {
+          onChange(e, !item.checked, 1);
+        }
+      },
+    },
+    {
+      key: "complete-2-level",
+      text: "Mark this and its children as complete",
+      onClick: (e, item) => {
+        if (item) {
+          onChange(e, !item.checked, 2);
+        }
+      },
+    },
+    {
+      key: "delete",
+      text: "Delete this",
+      onClick: () => dispatch(deleteSubject(id)),
+    },
+  ];
 
   return (
     <div
       data-is-focusable={true}
       onContextMenu={setCalloutVisible}
       ref={listItemRef}
+      key={id}
     >
       <div className={styles.wrapper}>
-        <Checkbox label={subject.name} className={styles.checkbox} />
+        <Checkbox
+          checked={!!subject.completed}
+          label={subject.name}
+          className={styles.checkbox}
+          onChange={onChange}
+        />
 
         <div className={styles.content}>
           {/* // TODO: include custom content here. It should render below. */}
@@ -86,7 +132,7 @@ export default function ListItem({ id, subject }: ListItemProps): JSX.Element {
         </TooltipHost>
       </div>
 
-      {calloutVisible ? (
+      {menuVisible ? (
         <ContextualMenu
           isBeakVisible={false}
           onDismiss={setCalloutVisible}

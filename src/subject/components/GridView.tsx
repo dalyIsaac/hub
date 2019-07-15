@@ -46,7 +46,6 @@ export default function(): JSX.Element {
   const columnWidth = useRef(0);
 
   const subjects = useSelector((state: State) => state.subjects);
-
   const renderCell = (props?: [string, Subject]): JSX.Element | undefined => {
     if (!props) {
       return;
@@ -57,6 +56,7 @@ export default function(): JSX.Element {
       <div
         className={styles.tile}
         data-is-focusable={true}
+        key={id}
         style={{
           width: 100 / columnCount.current + "%",
           height: ROW_HEIGHT,
@@ -90,7 +90,7 @@ export default function(): JSX.Element {
   return (
     <List
       className={styles.list}
-      items={Object.entries(subjects)}
+      items={[...Object.entries(subjects)]}
       getItemCountForPage={getItemCountForPage}
       getPageHeight={getPageHeight}
       renderedWindowsAhead={4}

@@ -11,6 +11,19 @@ import {
   setSubjectDescriptionReducer,
   SetSubjectDescriptionAction,
 } from "./model/Description";
+import {
+  COMPLETE_SUBJECT,
+  CompleteSubjectAction,
+  UNCOMPLETE_SUBJECT,
+  uncompleteSubjectReducer,
+  completeSubjectReducer,
+  UncompleteSubjectAction,
+} from "./model/Completed";
+import {
+  DELETE_SUBJECT,
+  DeleteSubjectAction,
+  deleteSubjectReducer,
+} from "./model/Delete";
 
 const NUM_ITEMS = 23;
 
@@ -36,7 +49,15 @@ const getInitialState = (amount: number): SubjectState => {
       description: `Description${i}`,
       dueDate: new Date(),
       children: getRandomChildren(),
+      parents: new Set(),
     };
+  }
+
+  // Update parents
+  for (let i = 0; i < amount; i++) {
+    for (const childId of state[i.toString()].children) {
+      state[childId].parents.add(i.toString());
+    }
   }
   return state;
 };
@@ -55,6 +76,15 @@ const subjectReducer = (
           draftState,
           action as SetSubjectDescriptionAction,
         );
+        break;
+      case COMPLETE_SUBJECT:
+        completeSubjectReducer(draftState, action as CompleteSubjectAction);
+        break;
+      case UNCOMPLETE_SUBJECT:
+        uncompleteSubjectReducer(draftState, action as UncompleteSubjectAction);
+        break;
+      case DELETE_SUBJECT:
+        deleteSubjectReducer(draftState, action as DeleteSubjectAction);
         break;
       default:
         break;

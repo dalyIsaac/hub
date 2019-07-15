@@ -6,9 +6,11 @@ export interface Subject<T = BaseSubject> {
   type: T;
   name: string;
   readonly created: Date;
+  completed?: Date;
   description: string;
   dueDate?: Date;
   children: string[];
+  parents: Set<string>;
 }
 
 export interface SubjectState {
