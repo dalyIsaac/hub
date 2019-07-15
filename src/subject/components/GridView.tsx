@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import { State } from "../../Reducer";
 import { Subject } from "../model/Subject";
 import SubjectComponent from "./Subject";
+import { match, Redirect } from "react-router";
 
 const ROWS_PER_PAGE = 3;
 const ROW_HEIGHT = 600;
@@ -41,7 +42,13 @@ const styles = mergeStyleSets({
   },
 });
 
-export default function(): JSX.Element {
+interface GridViewProps {
+  match: match<{ id?: string }>;
+}
+
+type Items = Array<[string, Subject<"BaseSubject">]>;
+
+export default function({ match }: GridViewProps): JSX.Element {
   const columnCount = useRef(0);
   const columnWidth = useRef(0);
 
@@ -87,13 +94,28 @@ export default function(): JSX.Element {
     return columnCount.current * ROWS_PER_PAGE;
   };
 
-  let items = [];
-  let completedItems = [];
-  for (const entry of Object.entries(subjects)) {
-    if (entry[1].completed) {
-      completedItems.push(entry);
-    } else {
-      items.push(entry);
+  let items: Items = [];
+  let completedItems: Items = [];
+
+  if (match.params.id !== undefined) {
+    if (!(match.params.id in subjects)) {
+      return <Redirect to="/" />;
+    }
+
+    for (const childId of subjects[match.params.id].children) {
+      if (subjects[childId].completed) {
+        completedItems.push([childId, subjects[childId]]);
+      } else {
+        items.push([childId, subjects[childId]]);
+      }
+    }
+  } else {
+    for (const entry of Object.entries(subjects)) {
+      if (entry[1].completed) {
+        completedItems.push(entry);
+      } else {
+        items.push(entry);
+      }
     }
   }
 
