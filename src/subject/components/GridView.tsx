@@ -15,6 +15,10 @@ const MIN_COL_WIDTH = 400;
 
 const theme = getTheme();
 const styles = mergeStyleSets({
+  wrapper: {
+    display: "grid",
+    gridTemplateColumns: `auto ${MIN_COL_WIDTH}px`,
+  },
   list: {
     overflow: "hidden",
     position: "relative",
@@ -96,19 +100,25 @@ export default function({ match }: GridViewProps): JSX.Element {
 
   let items: Items = [];
   let completedItems: Items = [];
+  let sidebar = null;
 
   if (match.params.id !== undefined) {
     if (!(match.params.id in subjects)) {
       return <Redirect to="/" />;
     }
 
-    for (const childId of subjects[match.params.id].children) {
+    const { id } = match.params;
+    const subject = subjects[id];
+
+    for (const childId of subject.children) {
       if (subjects[childId].completed) {
         completedItems.push([childId, subjects[childId]]);
       } else {
         items.push([childId, subjects[childId]]);
       }
     }
+
+    sidebar = <SubjectComponent subject={subject} id={id} />;
   } else {
     for (const entry of Object.entries(subjects)) {
       if (entry[1].completed) {
@@ -119,7 +129,7 @@ export default function({ match }: GridViewProps): JSX.Element {
     }
   }
 
-  return (
+  const grid = (
     <List
       className={styles.list}
       items={items.concat(completedItems)}
@@ -128,5 +138,13 @@ export default function({ match }: GridViewProps): JSX.Element {
       renderedWindowsAhead={4}
       onRenderCell={renderCell}
     />
+  );
+  return sidebar ? (
+    <div className={styles.wrapper}>
+      {grid}
+      {sidebar}
+    </div>
+  ) : (
+    grid
   );
 }
