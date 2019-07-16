@@ -4,7 +4,7 @@ import { mergeStyleSets, getTheme } from "@uifabric/styling";
 import { useRef } from "react";
 import { useSelector } from "react-redux";
 import { State } from "../../Reducer";
-import { Subject } from "../model/Subject";
+import { Subject, SubjectState } from "../model/Subject";
 import SubjectComponent from "./Subject";
 import { match, Redirect } from "react-router";
 import { APPBAR_HEIGHT } from "../../AppBar";
@@ -44,11 +44,47 @@ const styles = mergeStyleSets({
   },
 });
 
+type GridMatch = match<{ id?: string }>;
+
 interface GridViewProps {
-  match: match<{ id?: string }>;
+  match: GridMatch;
 }
 
-type Items = Array<[string, Subject<"BaseSubject">]>;
+type Item = [string, Subject<"BaseSubject">];
+
+function getItems(match: GridMatch, subjects: SubjectState): Item[] {
+  let items: Item[] = [];
+  let completedItems: Item[] = [];
+
+  if (match.params.id !== undefined) {
+    if (!(match.params.id in subjects)) {
+      throw new Error("Given id is not valid");
+    }
+
+    const { id } = match.params;
+    const subject = subjects[id];
+
+    for (const childId of subject.children) {
+      if (subjects[childId].completed) {
+        completedItems.push([childId, subjects[childId]]);
+      } else {
+        items.push([childId, subjects[childId]]);
+      }
+    }
+  } else {
+    for (const entry of Object.entries(subjects)) {
+      if (entry[1].completed) {
+        completedItems.push(entry);
+      } else {
+        items.push(entry);
+      }
+    }
+  }
+
+  return items.concat(completedItems);
+}
+
+const getPageHeight = (): number => ROW_HEIGHT * ROWS_PER_PAGE;
 
 export default function({ match }: GridViewProps): JSX.Element {
   const columnCount = useRef(0);
@@ -80,8 +116,6 @@ export default function({ match }: GridViewProps): JSX.Element {
     );
   };
 
-  const getPageHeight = (): number => ROW_HEIGHT * ROWS_PER_PAGE;
-
   const getItemCountForPage = (
     itemIndex?: number,
     surfaceRect?: IRectangle,
@@ -94,55 +128,37 @@ export default function({ match }: GridViewProps): JSX.Element {
     return columnCount.current * ROWS_PER_PAGE;
   };
 
-  let items: Items = [];
-  let completedItems: Items = [];
+  let items: Item[];
+  try {
+    items = getItems(match, subjects);
+  } catch (error) {
+    return <Redirect to="/" />;
+  }
+
   let sidebar = null;
-
   if (match.params.id !== undefined) {
-    if (!(match.params.id in subjects)) {
-      return <Redirect to="/" />;
-    }
-
-    const { id } = match.params;
-    const subject = subjects[id];
-
-    for (const childId of subject.children) {
-      if (subjects[childId].completed) {
-        completedItems.push([childId, subjects[childId]]);
-      } else {
-        items.push([childId, subjects[childId]]);
-      }
-    }
-
     sidebar = (
       <div className={styles.sidebar}>
         <SubjectComponent
-          subject={subject}
-          id={id}
+          subject={subjects[match.params.id]}
+          id={match.params.id}
           listHeight={`calc(100vh - ${APPBAR_HEIGHT}px - 303px)`}
         />
       </div>
     );
-  } else {
-    for (const entry of Object.entries(subjects)) {
-      if (entry[1].completed) {
-        completedItems.push(entry);
-      } else {
-        items.push(entry);
-      }
-    }
   }
 
   const grid = (
     <List
       className={styles.grid}
-      items={items.concat(completedItems)}
+      items={items}
       getItemCountForPage={getItemCountForPage}
       getPageHeight={getPageHeight}
       renderedWindowsAhead={4}
       onRenderCell={renderCell}
     />
   );
+
   return sidebar ? (
     <div className={styles.wrapper}>
       {grid}
