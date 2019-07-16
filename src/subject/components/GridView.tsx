@@ -19,7 +19,8 @@ const styles = mergeStyleSets({
     gridTemplateColumns: `auto ${MIN_COL_WIDTH}px`,
   },
   list: {
-    overflow: "hidden",
+    height: "100vh",
+    overflow: "auto",
     position: "relative",
   },
   tile: {
@@ -109,7 +110,7 @@ export default function({ match }: GridViewProps): JSX.Element {
         <SubjectComponent
           subject={subject}
           id={id}
-          listHeight={"calc(100vh - 320px)"}
+          listHeight={"calc(100vh - 303px)"}
         />
       </div>
     );
