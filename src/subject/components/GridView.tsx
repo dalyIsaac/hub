@@ -10,13 +10,18 @@ import SubjectComponent from "./Subject";
 import { match, Redirect } from "react-router";
 
 const ROWS_PER_PAGE = 3;
-const ROW_HEIGHT = 600;
+const ROW_HEIGHT = 603;
 const MIN_COL_WIDTH = 400;
 
 const theme = getTheme();
 const styles = mergeStyleSets({
+  wrapper: {
+    display: "grid",
+    gridTemplateColumns: `auto ${MIN_COL_WIDTH}px`,
+  },
   list: {
-    overflow: "hidden",
+    height: "100vh",
+    overflow: "auto",
     position: "relative",
   },
   tile: {
@@ -24,21 +29,18 @@ const styles = mergeStyleSets({
     position: "relative",
     float: "left",
   },
-  sizer: {
-    paddingBottom: "100%",
-  },
-  padder: {
-    position: "absolute",
-    left: 4,
-    top: 4,
-    right: 4,
-    bottom: 4,
+  padding: {
+    padding: 5,
   },
   contents: {
-    position: "absolute",
-    top: 0,
-    left: 0,
     outline: "1px solid " + theme.palette.neutralTertiary,
+    boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.2)",
+  },
+  sidebar: {
+    gridColumn: "2",
+    padding: 5,
+    boxShadow:
+      "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
   },
 });
 
@@ -69,11 +71,9 @@ export default function({ match }: GridViewProps): JSX.Element {
           height: ROW_HEIGHT,
         }}
       >
-        <div className={styles.sizer}>
-          <div className={styles.padder}>
-            <div className={styles.contents}>
-              <SubjectComponent subject={subject} id={id} />
-            </div>
+        <div className={styles.padding}>
+          <div className={styles.contents}>
+            <SubjectComponent subject={subject} id={id} listHeight={300} />
           </div>
         </div>
       </div>
@@ -96,19 +96,33 @@ export default function({ match }: GridViewProps): JSX.Element {
 
   let items: Items = [];
   let completedItems: Items = [];
+  let sidebar = null;
 
   if (match.params.id !== undefined) {
     if (!(match.params.id in subjects)) {
       return <Redirect to="/" />;
     }
 
-    for (const childId of subjects[match.params.id].children) {
+    const { id } = match.params;
+    const subject = subjects[id];
+
+    for (const childId of subject.children) {
       if (subjects[childId].completed) {
         completedItems.push([childId, subjects[childId]]);
       } else {
         items.push([childId, subjects[childId]]);
       }
     }
+
+    sidebar = (
+      <div className={styles.sidebar}>
+        <SubjectComponent
+          subject={subject}
+          id={id}
+          listHeight={"calc(100vh - 303px)"}
+        />
+      </div>
+    );
   } else {
     for (const entry of Object.entries(subjects)) {
       if (entry[1].completed) {
@@ -119,7 +133,7 @@ export default function({ match }: GridViewProps): JSX.Element {
     }
   }
 
-  return (
+  const grid = (
     <List
       className={styles.list}
       items={items.concat(completedItems)}
@@ -128,5 +142,13 @@ export default function({ match }: GridViewProps): JSX.Element {
       renderedWindowsAhead={4}
       onRenderCell={renderCell}
     />
+  );
+  return sidebar ? (
+    <div className={styles.wrapper}>
+      {grid}
+      {sidebar}
+    </div>
+  ) : (
+    grid
   );
 }
