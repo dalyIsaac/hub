@@ -15,7 +15,7 @@ const styles = mergeStyleSets({
     alignItems: "center",
   },
   title: {
-    paddingLeft: 20,
+    paddingLeft: 24,
   },
 });
 

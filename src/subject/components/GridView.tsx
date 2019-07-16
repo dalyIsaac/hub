@@ -6,8 +6,10 @@ import { useSelector } from "react-redux";
 import { State } from "../../Reducer";
 import { Subject, SubjectState } from "../model/Subject";
 import SubjectComponent from "./Subject";
-import { match, Redirect } from "react-router";
+import { Redirect } from "react-router";
 import { APPBAR_HEIGHT } from "../../AppBar";
+import { RouteIdMatch, RouteIdProps } from "../../routing";
+import { APP_COMMAND_BAR_HEIGHT } from "../../AppCommandBar";
 
 const ROWS_PER_PAGE = 3;
 const ROW_HEIGHT = 603;
@@ -20,7 +22,7 @@ const styles = mergeStyleSets({
     gridTemplateColumns: `auto ${MIN_COL_WIDTH}px`,
   },
   grid: {
-    height: `calc(100vh - ${APPBAR_HEIGHT}px)`,
+    height: `calc(100vh - ${APPBAR_HEIGHT}px - ${APP_COMMAND_BAR_HEIGHT}px)`,
     overflow: "auto",
     position: "relative",
   },
@@ -44,15 +46,9 @@ const styles = mergeStyleSets({
   },
 });
 
-type GridMatch = match<{ id?: string }>;
-
-interface GridViewProps {
-  match: GridMatch;
-}
-
 type Item = [string, Subject<"BaseSubject">];
 
-function getItems(match: GridMatch, subjects: SubjectState): Item[] {
+function getItems(match: RouteIdMatch, subjects: SubjectState): Item[] {
   let items: Item[] = [];
   let completedItems: Item[] = [];
 
@@ -86,7 +82,7 @@ function getItems(match: GridMatch, subjects: SubjectState): Item[] {
 
 const getPageHeight = (): number => ROW_HEIGHT * ROWS_PER_PAGE;
 
-export default function({ match }: GridViewProps): JSX.Element {
+export default function({ match }: RouteIdProps): JSX.Element {
   const columnCount = useRef(0);
   const columnWidth = useRef(0);
 
@@ -142,7 +138,7 @@ export default function({ match }: GridViewProps): JSX.Element {
         <SubjectComponent
           subject={subjects[match.params.id]}
           id={match.params.id}
-          listHeight={`calc(100vh - ${APPBAR_HEIGHT}px - 303px)`}
+          listHeight={`calc(100vh-${APPBAR_HEIGHT}px-303px-${APP_COMMAND_BAR_HEIGHT}px)`}
         />
       </div>
     );
