@@ -33,7 +33,8 @@ const styles = mergeStyleSets({
     padding: 5,
   },
   contents: {
-    outline: "1px solid " + theme.palette.neutralTertiary,
+    border: "1px solid " + theme.palette.neutralTertiary,
+    borderRadius: 4,
     boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.2)",
   },
   sidebar: {
