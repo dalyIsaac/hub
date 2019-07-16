@@ -8,6 +8,7 @@ import { ListViewItem } from "./ListItem";
 
 interface ListViewProps {
   id: string;
+  height: number | string;
 }
 
 const theme = getTheme();
@@ -15,13 +16,12 @@ const border = "1px solid " + theme.palette.neutralTertiary;
 const styles = mergeStyleSets({
   list: {
     overflow: "auto",
-    height: 300,
     borderTop: border,
     borderBottom: border,
   },
 });
 
-export default function({ id }: ListViewProps): JSX.Element {
+export default function({ id, height }: ListViewProps): JSX.Element {
   const subjects = useSelector((state: State) => state.subjects);
 
   const childIds = subjects[id].children;
@@ -31,12 +31,8 @@ export default function({ id }: ListViewProps): JSX.Element {
   }
 
   return (
-    <FocusZone>
-      <List
-        items={children}
-        onRenderCell={ListViewItem}
-        className={styles.list}
-      />
+    <FocusZone className={styles.list} style={{ height }}>
+      <List items={children} onRenderCell={ListViewItem} />
     </FocusZone>
   );
 }

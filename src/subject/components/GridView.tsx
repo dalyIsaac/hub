@@ -1,7 +1,7 @@
 import React from "react";
 import { List } from "office-ui-fabric-react/lib/List";
 import { IRectangle } from "office-ui-fabric-react/lib/Utilities";
-import { mergeStyleSets, getTheme } from "@uifabric/styling";
+import { mergeStyleSets } from "@uifabric/styling";
 import { useRef } from "react";
 import { useSelector } from "react-redux";
 import { State } from "../../Reducer";
@@ -10,10 +10,9 @@ import SubjectComponent from "./Subject";
 import { match, Redirect } from "react-router";
 
 const ROWS_PER_PAGE = 3;
-const ROW_HEIGHT = 600;
+const ROW_HEIGHT = 603;
 const MIN_COL_WIDTH = 400;
 
-const theme = getTheme();
 const styles = mergeStyleSets({
   wrapper: {
     display: "grid",
@@ -28,25 +27,12 @@ const styles = mergeStyleSets({
     position: "relative",
     float: "left",
   },
-  sizer: {
-    paddingBottom: "100%",
-  },
-  padder: {
-    position: "absolute",
-    left: 4,
-    top: 4,
-    right: 4,
-    bottom: 4,
-  },
   contents: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    outline: "1px solid " + theme.palette.neutralTertiary,
+    padding: 5,
   },
   sidebar: {
-    outline: "1px solid " + theme.palette.neutralTertiary,
     gridColumn: "2",
+    padding: 5,
   },
 });
 
@@ -77,12 +63,8 @@ export default function({ match }: GridViewProps): JSX.Element {
           height: ROW_HEIGHT,
         }}
       >
-        <div className={styles.sizer}>
-          <div className={styles.padder}>
-            <div className={styles.contents}>
-              <SubjectComponent subject={subject} id={id} />
-            </div>
-          </div>
+        <div className={styles.contents}>
+          <SubjectComponent subject={subject} id={id} listHeight={300} />
         </div>
       </div>
     );
@@ -124,7 +106,11 @@ export default function({ match }: GridViewProps): JSX.Element {
 
     sidebar = (
       <div className={styles.sidebar}>
-        <SubjectComponent subject={subject} id={id} />
+        <SubjectComponent
+          subject={subject}
+          id={id}
+          listHeight={"calc(100vh - 320px)"}
+        />
       </div>
     );
   } else {

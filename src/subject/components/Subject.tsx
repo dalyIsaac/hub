@@ -22,10 +22,14 @@ import { setSubjectDueDate } from "../model/Date";
 interface SubjectProps {
   subject: Subject;
   id: string;
+  listHeight: number | string;
 }
 
 const theme = getTheme();
 const styles = mergeStyleSets({
+  wrapper: {
+    outline: "1px solid " + theme.palette.neutralTertiary,
+  },
   header: {
     color: theme.palette.neutralLight,
     padding: 5,
@@ -81,7 +85,11 @@ function getDaysDifference(first: Date, second: Date) {
   );
 }
 
-export default function({ subject, id }: SubjectProps): JSX.Element {
+export default function({
+  subject,
+  id,
+  listHeight,
+}: SubjectProps): JSX.Element {
   const dispatch = useDispatch();
   const [name, setName] = useState(subject.name);
   const [description, setDescription] = useState(subject.description || "");
@@ -181,7 +189,7 @@ export default function({ subject, id }: SubjectProps): JSX.Element {
   }
 
   return (
-    <FocusZone>
+    <FocusZone className={styles.wrapper}>
       <Stack verticalAlign={"center"}>
         {header}
 
@@ -219,7 +227,7 @@ export default function({ subject, id }: SubjectProps): JSX.Element {
           <div className={styles.daysLeft}>
             <Label>{`${daysLeft} days left`}</Label>
           </div>
-          <ListView id={id} />
+          <ListView id={id} height={listHeight} />
           <div className={styles.heroButton}>{heroButton}</div>
         </div>
       </Stack>
