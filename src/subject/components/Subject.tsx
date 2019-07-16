@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { FocusZone } from "office-ui-fabric-react/lib/FocusZone";
-import { Stack } from "office-ui-fabric-react/lib/Stack";
-import { Text } from "office-ui-fabric-react/lib/Text";
-import { TextField } from "office-ui-fabric-react/lib/TextField";
-import { Label } from "office-ui-fabric-react/lib/Label";
-import { DatePicker } from "office-ui-fabric-react/lib/DatePicker";
+import {
+  FocusZone,
+  Stack,
+  Text,
+  TextField,
+  Label,
+  DatePicker,
+  DefaultButton,
+  IconButton,
+  DirectionalHint,
+} from "office-ui-fabric-react";
 import { getTheme, mergeStyleSets } from "@uifabric/styling";
-import { DefaultButton, IconButton } from "office-ui-fabric-react/lib/Button";
-import { DirectionalHint } from "office-ui-fabric-react/lib/Callout";
 
 import { Subject } from "../model/Subject";
 import Title from "./Title";

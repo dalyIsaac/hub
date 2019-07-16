@@ -1,6 +1,5 @@
 import React from "react";
-import { List } from "office-ui-fabric-react/lib/List";
-import { IRectangle } from "office-ui-fabric-react/lib/Utilities";
+import { List, IRectangle } from "office-ui-fabric-react";
 import { mergeStyleSets, getTheme } from "@uifabric/styling";
 import { useRef } from "react";
 import { useSelector } from "react-redux";
@@ -40,8 +39,7 @@ const styles = mergeStyleSets({
   sidebar: {
     gridColumn: "2",
     padding: 5,
-    boxShadow:
-      "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
+    boxShadow: "0 6px 20px 0 rgba(0, 0, 0, 0.19)",
   },
 });
 

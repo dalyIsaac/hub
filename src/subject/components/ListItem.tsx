@@ -1,14 +1,14 @@
 import React, { useRef, useState } from "react";
-import { Checkbox } from "office-ui-fabric-react/lib/Checkbox";
-import { TooltipHost } from "office-ui-fabric-react/lib/Tooltip";
-import { Icon } from "office-ui-fabric-react/lib/Icon";
-import { mergeStyleSets, getTheme } from "@uifabric/styling";
-import { getId } from "office-ui-fabric-react/lib/Utilities";
-import { DirectionalHint } from "office-ui-fabric-react/lib/Callout";
 import {
+  Checkbox,
+  TooltipHost,
+  Icon,
+  getId,
+  DirectionalHint,
   ContextualMenu,
   IContextualMenuItem,
-} from "office-ui-fabric-react/lib/ContextualMenu";
+} from "office-ui-fabric-react";
+import { mergeStyleSets, getTheme } from "@uifabric/styling";
 import { Subject } from "../model/Subject";
 import { useDispatch } from "react-redux";
 import { completeSubject, uncompleteSubject } from "../model/Completed";

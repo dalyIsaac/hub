@@ -1,8 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { List } from "office-ui-fabric-react/lib/List";
+import { FocusZone, List } from "office-ui-fabric-react";
 import { mergeStyleSets, getTheme } from "@uifabric/styling";
-import { FocusZone } from "office-ui-fabric-react/lib/FocusZone";
 import { State } from "../../Reducer";
 import { ListViewItem } from "./ListItem";
 
