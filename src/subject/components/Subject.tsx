@@ -27,9 +27,6 @@ interface SubjectProps {
 
 const theme = getTheme();
 const styles = mergeStyleSets({
-  wrapper: {
-    outline: "1px solid " + theme.palette.neutralTertiary,
-  },
   header: {
     color: theme.palette.neutralLight,
     padding: 5,
@@ -189,7 +186,7 @@ export default function({
   }
 
   return (
-    <FocusZone className={styles.wrapper}>
+    <FocusZone>
       <Stack verticalAlign={"center"}>
         {header}
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { List } from "office-ui-fabric-react/lib/List";
 import { IRectangle } from "office-ui-fabric-react/lib/Utilities";
-import { mergeStyleSets } from "@uifabric/styling";
+import { mergeStyleSets, getTheme } from "@uifabric/styling";
 import { useRef } from "react";
 import { useSelector } from "react-redux";
 import { State } from "../../Reducer";
@@ -13,6 +13,7 @@ const ROWS_PER_PAGE = 3;
 const ROW_HEIGHT = 603;
 const MIN_COL_WIDTH = 400;
 
+const theme = getTheme();
 const styles = mergeStyleSets({
   wrapper: {
     display: "grid",
@@ -28,12 +29,18 @@ const styles = mergeStyleSets({
     position: "relative",
     float: "left",
   },
-  contents: {
+  padding: {
     padding: 5,
+  },
+  contents: {
+    outline: "1px solid " + theme.palette.neutralTertiary,
+    boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.2)",
   },
   sidebar: {
     gridColumn: "2",
     padding: 5,
+    boxShadow:
+      "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
   },
 });
 
@@ -64,8 +71,10 @@ export default function({ match }: GridViewProps): JSX.Element {
           height: ROW_HEIGHT,
         }}
       >
-        <div className={styles.contents}>
-          <SubjectComponent subject={subject} id={id} listHeight={300} />
+        <div className={styles.padding}>
+          <div className={styles.contents}>
+            <SubjectComponent subject={subject} id={id} listHeight={300} />
+          </div>
         </div>
       </div>
     );
