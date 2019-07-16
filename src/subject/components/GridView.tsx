@@ -7,6 +7,7 @@ import { State } from "../../Reducer";
 import { Subject } from "../model/Subject";
 import SubjectComponent from "./Subject";
 import { match, Redirect } from "react-router";
+import { APPBAR_HEIGHT } from "../../AppBar";
 
 const ROWS_PER_PAGE = 3;
 const ROW_HEIGHT = 603;
@@ -18,8 +19,8 @@ const styles = mergeStyleSets({
     display: "grid",
     gridTemplateColumns: `auto ${MIN_COL_WIDTH}px`,
   },
-  list: {
-    height: "100vh",
+  grid: {
+    height: `calc(100vh - ${APPBAR_HEIGHT}px)`,
     overflow: "auto",
     position: "relative",
   },
@@ -118,7 +119,7 @@ export default function({ match }: GridViewProps): JSX.Element {
         <SubjectComponent
           subject={subject}
           id={id}
-          listHeight={"calc(100vh - 303px)"}
+          listHeight={`calc(100vh - ${APPBAR_HEIGHT}px - 303px)`}
         />
       </div>
     );
@@ -134,7 +135,7 @@ export default function({ match }: GridViewProps): JSX.Element {
 
   const grid = (
     <List
-      className={styles.list}
+      className={styles.grid}
       items={items.concat(completedItems)}
       getItemCountForPage={getItemCountForPage}
       getPageHeight={getPageHeight}
