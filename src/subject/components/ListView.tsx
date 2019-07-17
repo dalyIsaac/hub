@@ -1,38 +1,52 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { List } from "office-ui-fabric-react/lib/List";
-import { mergeStyleSets, getTheme } from "@uifabric/styling";
-import { FocusZone } from "office-ui-fabric-react/lib/FocusZone";
+import { FocusZone, List } from "office-ui-fabric-react";
+import { mergeStyleSets } from "@uifabric/styling";
 import { State } from "../../Reducer";
-import { ListViewItem } from "./ListItem";
+import { getItems, Item } from "../model/Subject";
 
 interface ListViewProps {
-  id: string;
-  height: number | string;
+  subjectId: string;
+  maxHeight: number | string;
+
+  /**
+   * If `true`, it gets all the children of the `subjectId`. If `false`, it gets
+   * all the subjects **except** the children of the `subjectId`.
+   */
+  getChildren?: boolean;
+  onRenderCell: (
+    item?: Item,
+    index?: number | undefined,
+    isScrolling?: boolean | undefined,
+  ) => React.ReactNode;
 }
 
-const theme = getTheme();
-const border = "1px solid " + theme.palette.neutralTertiary;
 const styles = mergeStyleSets({
   list: {
     overflow: "auto",
-    borderTop: border,
-    borderBottom: border,
   },
 });
 
-export default function({ id, height }: ListViewProps): JSX.Element {
+export default function({
+  subjectId,
+  maxHeight,
+  onRenderCell,
+  getChildren,
+}: ListViewProps): JSX.Element {
   const subjects = useSelector((state: State) => state.subjects);
 
-  const childIds = subjects[id].children;
-  const children = [];
-  for (const id of childIds) {
-    children.push({ id, subject: subjects[id] });
+  let children;
+  if (getChildren) {
+    children = getItems(subjects, subjectId, { getChildrenOfParent: true });
+  } else {
+    const childrenSet = new Set(subjects[subjectId].children);
+    const condition = (i: Item) => !childrenSet.has(i.id) && i.id !== subjectId;
+    children = getItems(subjects, subjectId, { condition });
   }
 
   return (
-    <FocusZone className={styles.list} style={{ height }}>
-      <List items={children} onRenderCell={ListViewItem} />
+    <FocusZone className={styles.list} style={{ maxHeight }}>
+      <List items={children} onRenderCell={onRenderCell} />
     </FocusZone>
   );
 }

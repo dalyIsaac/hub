@@ -1,6 +1,6 @@
 import produce from "immer";
 import { Action } from "redux";
-import { SubjectState } from "./model/Subject";
+import { SubjectState, SubjectTypes } from "./model/Subject";
 import {
   SET_SUBJECT_NAME,
   setSubjectNameReducer,
@@ -29,6 +29,21 @@ import {
   SetSubjectDueDateAction,
   setSubjectDueDateReducer,
 } from "./model/Date";
+import {
+  CREATE_SUBJECT,
+  createSubjectReducer,
+  CreateSubjectAction,
+} from "./model/Create";
+import {
+  REMOVE_CHILD_SUBJECT,
+  removeChildReducer,
+  RemoveChildAction,
+} from "./model/RemoveChild";
+import {
+  APPEND_CHILD_SUBJECT,
+  AppendChildAction,
+  appendChildReducer,
+} from "./model/CreateChild";
 
 const NUM_ITEMS = 23;
 
@@ -38,7 +53,7 @@ function getRandomInt(max: number) {
 
 const getRandomChildren = (): string[] => {
   const children = [];
-  for (let i = 0; i < 12; i++) {
+  for (let i = 0; i < getRandomInt(12); i++) {
     children.push(getRandomInt(NUM_ITEMS).toString());
   }
   return children;
@@ -93,6 +108,17 @@ const subjectReducer = (
         break;
       case SET_SUBJECT_DUE_DATE:
         setSubjectDueDateReducer(draftState, action as SetSubjectDueDateAction);
+        break;
+      case CREATE_SUBJECT:
+        createSubjectReducer(draftState, action as CreateSubjectAction<
+          SubjectTypes
+        >);
+        break;
+      case REMOVE_CHILD_SUBJECT:
+        removeChildReducer(draftState, action as RemoveChildAction);
+        break;
+      case APPEND_CHILD_SUBJECT:
+        appendChildReducer(draftState, action as AppendChildAction);
         break;
       default:
         break;

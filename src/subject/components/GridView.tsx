@@ -1,26 +1,29 @@
 import React from "react";
-import { List } from "office-ui-fabric-react/lib/List";
-import { IRectangle } from "office-ui-fabric-react/lib/Utilities";
+import { List, IRectangle } from "office-ui-fabric-react";
 import { mergeStyleSets, getTheme } from "@uifabric/styling";
 import { useRef } from "react";
 import { useSelector } from "react-redux";
 import { State } from "../../Reducer";
-import { Subject } from "../model/Subject";
+import { Item, getItems } from "../model/Subject";
 import SubjectComponent from "./Subject";
-import { match, Redirect } from "react-router";
+import { Redirect } from "react-router";
+import { APPBAR_HEIGHT } from "../../AppBar";
+import { RouteIdProps } from "../../Routing";
+import { APP_COMMAND_BAR_HEIGHT } from "../../AppCommandBar";
 
 const ROWS_PER_PAGE = 3;
 const ROW_HEIGHT = 603;
 const MIN_COL_WIDTH = 400;
 
 const theme = getTheme();
+const sidebarListHeight = `calc(100vh-${APPBAR_HEIGHT}px-303px-${APP_COMMAND_BAR_HEIGHT}px)`;
 const styles = mergeStyleSets({
   wrapper: {
     display: "grid",
     gridTemplateColumns: `auto ${MIN_COL_WIDTH}px`,
   },
-  list: {
-    height: "100vh",
+  grid: {
+    height: `calc(100vh - ${APPBAR_HEIGHT}px - ${APP_COMMAND_BAR_HEIGHT}px)`,
     overflow: "auto",
     position: "relative",
   },
@@ -33,34 +36,30 @@ const styles = mergeStyleSets({
     padding: 5,
   },
   contents: {
-    outline: "1px solid " + theme.palette.neutralTertiary,
+    border: "1px solid " + theme.palette.neutralTertiary,
+    borderRadius: 4,
     boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.2)",
   },
   sidebar: {
     gridColumn: "2",
     padding: 5,
-    boxShadow:
-      "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
+    boxShadow: "0 6px 20px 0 rgba(0, 0, 0, 0.19)",
   },
 });
 
-interface GridViewProps {
-  match: match<{ id?: string }>;
-}
+const getPageHeight = (): number => ROW_HEIGHT * ROWS_PER_PAGE;
 
-type Items = Array<[string, Subject<"BaseSubject">]>;
-
-export default function({ match }: GridViewProps): JSX.Element {
+export default function({ match }: RouteIdProps): JSX.Element {
   const columnCount = useRef(0);
   const columnWidth = useRef(0);
 
   const subjects = useSelector((state: State) => state.subjects);
-  const renderCell = (props?: [string, Subject]): JSX.Element | undefined => {
+  const renderCell = (props?: Item): JSX.Element | undefined => {
     if (!props) {
       return;
     }
 
-    const [id, subject] = props;
+    const { id, subject } = props;
     return (
       <div
         className={styles.tile}
@@ -73,14 +72,12 @@ export default function({ match }: GridViewProps): JSX.Element {
       >
         <div className={styles.padding}>
           <div className={styles.contents}>
-            <SubjectComponent subject={subject} id={id} listHeight={300} />
+            <SubjectComponent subject={subject} id={id} listHeight={260} />
           </div>
         </div>
       </div>
     );
   };
-
-  const getPageHeight = (): number => ROW_HEIGHT * ROWS_PER_PAGE;
 
   const getItemCountForPage = (
     itemIndex?: number,
@@ -94,55 +91,39 @@ export default function({ match }: GridViewProps): JSX.Element {
     return columnCount.current * ROWS_PER_PAGE;
   };
 
-  let items: Items = [];
-  let completedItems: Items = [];
+  let items: Item[];
+  try {
+    items = getItems(subjects, match.params.id, {
+      separateCompletedItems: true,
+    });
+  } catch (error) {
+    return <Redirect to="/" />;
+  }
+
   let sidebar = null;
-
   if (match.params.id !== undefined) {
-    if (!(match.params.id in subjects)) {
-      return <Redirect to="/" />;
-    }
-
-    const { id } = match.params;
-    const subject = subjects[id];
-
-    for (const childId of subject.children) {
-      if (subjects[childId].completed) {
-        completedItems.push([childId, subjects[childId]]);
-      } else {
-        items.push([childId, subjects[childId]]);
-      }
-    }
-
     sidebar = (
       <div className={styles.sidebar}>
         <SubjectComponent
-          subject={subject}
-          id={id}
-          listHeight={"calc(100vh - 303px)"}
+          subject={subjects[match.params.id]}
+          id={match.params.id}
+          listHeight={sidebarListHeight}
         />
       </div>
     );
-  } else {
-    for (const entry of Object.entries(subjects)) {
-      if (entry[1].completed) {
-        completedItems.push(entry);
-      } else {
-        items.push(entry);
-      }
-    }
   }
 
   const grid = (
     <List
-      className={styles.list}
-      items={items.concat(completedItems)}
+      className={styles.grid}
+      items={items}
       getItemCountForPage={getItemCountForPage}
       getPageHeight={getPageHeight}
       renderedWindowsAhead={4}
       onRenderCell={renderCell}
     />
   );
+
   return sidebar ? (
     <div className={styles.wrapper}>
       {grid}

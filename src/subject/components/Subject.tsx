@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { FocusZone } from "office-ui-fabric-react/lib/FocusZone";
-import { Stack } from "office-ui-fabric-react/lib/Stack";
-import { Text } from "office-ui-fabric-react/lib/Text";
-import { TextField } from "office-ui-fabric-react/lib/TextField";
-import { Label } from "office-ui-fabric-react/lib/Label";
-import { DatePicker } from "office-ui-fabric-react/lib/DatePicker";
+import {
+  FocusZone,
+  Stack,
+  Text,
+  TextField,
+  Label,
+  DatePicker,
+  DefaultButton,
+  IconButton,
+  DirectionalHint,
+} from "office-ui-fabric-react";
 import { getTheme, mergeStyleSets } from "@uifabric/styling";
-import { DefaultButton, IconButton } from "office-ui-fabric-react/lib/Button";
-import { DirectionalHint } from "office-ui-fabric-react/lib/Callout";
 
 import { Subject } from "../model/Subject";
 import Title from "./Title";
@@ -18,6 +21,8 @@ import { setSubjectDescription } from "../model/Description";
 import { completeSubject, uncompleteSubject } from "../model/Completed";
 import { deleteSubject } from "../model/Delete";
 import { setSubjectDueDate } from "../model/Date";
+import AppendChildren, { AppendChildrenHeight } from "./AppendChildren";
+import SubjectListItem from "./ListItem/SubjectListItem";
 
 interface SubjectProps {
   subject: Subject;
@@ -66,6 +71,11 @@ const styles = mergeStyleSets({
     display: "flex",
     justifyContent: "flex-end",
   },
+  appendChildren: {
+    background: theme.palette.white,
+    border: "1px solid " + theme.palette.neutralTertiary,
+    width: "100%",
+  },
   heroButton: {
     marginTop: 10,
     display: "flex",
@@ -91,30 +101,30 @@ export default function({
   const [name, setName] = useState(subject.name);
   const [description, setDescription] = useState(subject.description || "");
 
-  const updateTitleLocal = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const setTitleLocal = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value || "Untitled");
   };
-  const updateTitleRedux = () => {
+  const setTitleRedux = () => {
     if (subject.name !== name) {
       dispatch(setSubjectName(id, name));
     }
   };
-  const updateDescriptionLocal = (e: any, newValue?: string) => {
+  const setDescriptionLocal = (e: any, newValue?: string) => {
     setDescription(newValue || "");
   };
-  const updateDescriptionRedux = () => {
+  const setDescriptionRedux = () => {
     if (subject.description !== description) {
       dispatch(setSubjectDescription(id, description));
     }
   };
-  const updateDueDateRedux = (date?: Date | null) => {
+  const setDueDateRedux = (date?: Date | null) => {
     dispatch(setSubjectDueDate(id, date || undefined));
   };
 
   const completeOnClick = () => dispatch(completeSubject(id, 1));
   const uncompleteOnClick = () => dispatch(uncompleteSubject(id));
   const clearDueDateOnClick = () => {
-    updateDueDateRedux();
+    setDueDateRedux();
   };
 
   const completeItem = {
@@ -194,15 +204,15 @@ export default function({
           <Title
             className={styles.title}
             value={name}
-            onChange={updateTitleLocal}
-            onBlur={updateTitleRedux}
+            onChange={setTitleLocal}
+            onBlur={setTitleRedux}
           />
           <TextField
             multiline
             rows={3}
             value={description}
-            onChange={updateDescriptionLocal}
-            onBlur={updateDescriptionRedux}
+            onChange={setDescriptionLocal}
+            onBlur={setDescriptionRedux}
             className={styles.description}
           />
           <div className={styles.date}>
@@ -210,7 +220,7 @@ export default function({
             <div className={styles.datePicker}>
               <DatePicker
                 value={subject.dueDate}
-                onSelectDate={updateDueDateRedux}
+                onSelectDate={setDueDateRedux}
               />
               {subject.dueDate ? (
                 <IconButton
@@ -224,7 +234,22 @@ export default function({
           <div className={styles.daysLeft}>
             <Label>{`${daysLeft} days left`}</Label>
           </div>
-          <ListView id={id} height={listHeight} />
+          <div
+            style={{
+              minHeight:
+                typeof listHeight === "string"
+                  ? listHeight + `${AppendChildrenHeight}px`
+                  : listHeight + AppendChildrenHeight,
+            }}
+          >
+            <ListView
+              subjectId={id}
+              maxHeight={listHeight}
+              onRenderCell={SubjectListItem}
+              getChildren={true}
+            />
+            <AppendChildren parent={id} />
+          </div>
           <div className={styles.heroButton}>{heroButton}</div>
         </div>
       </Stack>
