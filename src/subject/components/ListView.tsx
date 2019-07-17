@@ -23,10 +23,9 @@ const styles = mergeStyleSets({
 export default function({ id, height }: ListViewProps): JSX.Element {
   const subjects = useSelector((state: State) => state.subjects);
 
-  const childIds = subjects[id].children;
   const children = [];
-  for (const id of childIds) {
-    children.push({ id, subject: subjects[id] });
+  for (const childId of subjects[id].children) {
+    children.push({ id: childId, subject: subjects[childId], parent: id });
   }
 
   return (

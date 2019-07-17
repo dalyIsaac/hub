@@ -14,6 +14,7 @@ import { useDispatch } from "react-redux";
 import { completeSubject, uncompleteSubject } from "../model/Completed";
 import { deleteSubject } from "../model/Delete";
 import { Link } from "react-router-dom";
+import { removeChild } from "../model/RemoveChild";
 
 const theme = getTheme();
 
@@ -59,10 +60,15 @@ const styles = mergeStyleSets({
 
 interface ListItemProps {
   id: string;
+  parent: string;
   subject: Subject;
 }
 
-export default function ListItem({ id, subject }: ListItemProps): JSX.Element {
+export default function ListItem({
+  id,
+  parent,
+  subject,
+}: ListItemProps): JSX.Element {
   const dispatch = useDispatch();
   const hostId = useRef(getId(id));
   const listItemRef = useRef(null);
@@ -99,6 +105,11 @@ export default function ListItem({ id, subject }: ListItemProps): JSX.Element {
           onChange(e, !item.checked, 2);
         }
       },
+    },
+    {
+      key: "remove",
+      text: "Remove this as a child",
+      onClick: () => dispatch(removeChild(id, parent)),
     },
     {
       key: "delete",
@@ -153,6 +164,6 @@ export function ListViewItem(props?: ListItemProps): JSX.Element | undefined {
     return;
   }
 
-  const { id, subject } = props;
-  return <ListItem id={id} subject={subject} />;
+  const { id, parent, subject } = props;
+  return <ListItem id={id} parent={parent} subject={subject} />;
 }

@@ -34,6 +34,11 @@ import {
   createSubjectReducer,
   CreateSubjectAction,
 } from "./model/Create";
+import {
+  REMOVE_CHILD_SUBJECT,
+  removeChildReducer,
+  RemoveChildAction,
+} from "./model/RemoveChild";
 
 const NUM_ITEMS = 23;
 
@@ -103,6 +108,9 @@ const subjectReducer = (
         createSubjectReducer(draftState, action as CreateSubjectAction<
           SubjectTypes
         >);
+        break;
+      case REMOVE_CHILD_SUBJECT:
+        removeChildReducer(draftState, action as RemoveChildAction);
         break;
       default:
         break;
