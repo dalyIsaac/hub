@@ -4,13 +4,12 @@ import { mergeStyleSets, getTheme } from "@uifabric/styling";
 import { useRef } from "react";
 import { useSelector } from "react-redux";
 import { State } from "../../Reducer";
-import { Subject, SubjectState } from "../model/Subject";
+import { Item, getItems } from "../model/Subject";
 import SubjectComponent from "./Subject";
 import { Redirect } from "react-router";
 import { APPBAR_HEIGHT } from "../../AppBar";
-import { RouteIdMatch, RouteIdProps } from "../../Routing";
+import { RouteIdProps } from "../../Routing";
 import { APP_COMMAND_BAR_HEIGHT } from "../../AppCommandBar";
-import { isUndefined } from "util";
 
 const ROWS_PER_PAGE = 3;
 const ROW_HEIGHT = 603;
@@ -48,66 +47,6 @@ const styles = mergeStyleSets({
   },
 });
 
-type Item = [string, Subject<"BaseSubject">];
-
-function comparator(param: keyof Subject, desc = false) {
-  const coeff = desc ? -1 : 1;
-  return function(a: Item, b: Item): number {
-    const aVal = a[1][param];
-    const bVal = b[1][param];
-
-    const aDefined = !isUndefined(aVal);
-    const bDefined = !isUndefined(bVal);
-
-    if (!aDefined && !bDefined) {
-      return 0;
-    } else if (aDefined && !bDefined) {
-      return coeff * 1;
-    } else if (!aDefined && bDefined) {
-      return coeff * -1;
-    } else if (aVal! < bVal!) {
-      return coeff * -1;
-    } else if (aVal! > bVal!) {
-      return coeff * 1;
-    }
-    return 0;
-  };
-}
-
-function getItems(match: RouteIdMatch, subjects: SubjectState): Item[] {
-  let items: Item[] = [];
-  let completedItems: Item[] = [];
-
-  if (match.params.id !== undefined) {
-    if (!(match.params.id in subjects)) {
-      throw new Error("Given id is not valid");
-    }
-
-    const { id } = match.params;
-    const subject = subjects[id];
-
-    for (const childId of subject.children) {
-      if (subjects[childId].completed) {
-        completedItems.push([childId, subjects[childId]]);
-      } else {
-        items.push([childId, subjects[childId]]);
-      }
-    }
-  } else {
-    for (const entry of Object.entries(subjects)) {
-      if (entry[1].completed) {
-        completedItems.push(entry);
-      } else {
-        items.push(entry);
-      }
-    }
-  }
-
-  items.sort(comparator("created", true));
-  completedItems.sort(comparator("created", true));
-  return items.concat(completedItems);
-}
-
 const getPageHeight = (): number => ROW_HEIGHT * ROWS_PER_PAGE;
 
 export default function({ match }: RouteIdProps): JSX.Element {
@@ -115,12 +54,12 @@ export default function({ match }: RouteIdProps): JSX.Element {
   const columnWidth = useRef(0);
 
   const subjects = useSelector((state: State) => state.subjects);
-  const renderCell = (props?: [string, Subject]): JSX.Element | undefined => {
+  const renderCell = (props?: Item): JSX.Element | undefined => {
     if (!props) {
       return;
     }
 
-    const [id, subject] = props;
+    const { id, subject } = props;
     return (
       <div
         className={styles.tile}
@@ -154,7 +93,7 @@ export default function({ match }: RouteIdProps): JSX.Element {
 
   let items: Item[];
   try {
-    items = getItems(match, subjects);
+    items = getItems(subjects, match.params.id);
   } catch (error) {
     return <Redirect to="/" />;
   }
