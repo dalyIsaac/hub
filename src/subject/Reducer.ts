@@ -48,7 +48,7 @@ function getRandomInt(max: number) {
 
 const getRandomChildren = (): string[] => {
   const children = [];
-  for (let i = 0; i < 12; i++) {
+  for (let i = 0; i < getRandomInt(12); i++) {
     children.push(getRandomInt(NUM_ITEMS).toString());
   }
   return children;

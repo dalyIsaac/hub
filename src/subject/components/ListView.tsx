@@ -1,26 +1,22 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { FocusZone, List } from "office-ui-fabric-react";
-import { mergeStyleSets, getTheme } from "@uifabric/styling";
+import { mergeStyleSets } from "@uifabric/styling";
 import { State } from "../../Reducer";
-import { ListViewItem } from "./ListItem";
+import { ListViewItem } from "./ListItem/ListItem";
 
 interface ListViewProps {
   id: string;
-  height: number | string;
+  maxHeight: number | string;
 }
 
-const theme = getTheme();
-const border = "1px solid " + theme.palette.neutralTertiary;
 const styles = mergeStyleSets({
   list: {
     overflow: "auto",
-    borderTop: border,
-    borderBottom: border,
   },
 });
 
-export default function({ id, height }: ListViewProps): JSX.Element {
+export default function({ id, maxHeight }: ListViewProps): JSX.Element {
   const subjects = useSelector((state: State) => state.subjects);
 
   const children = [];
@@ -29,7 +25,7 @@ export default function({ id, height }: ListViewProps): JSX.Element {
   }
 
   return (
-    <FocusZone className={styles.list} style={{ height }}>
+    <FocusZone className={styles.list} style={{ maxHeight }}>
       <List items={children} onRenderCell={ListViewItem} />
     </FocusZone>
   );

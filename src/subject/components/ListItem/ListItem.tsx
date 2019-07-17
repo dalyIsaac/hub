@@ -9,17 +9,15 @@ import {
   IContextualMenuItem,
 } from "office-ui-fabric-react";
 import { mergeStyleSets, getTheme } from "@uifabric/styling";
-import { Subject } from "../model/Subject";
+import { Subject } from "../../model/Subject";
 import { useDispatch } from "react-redux";
-import { completeSubject, uncompleteSubject } from "../model/Completed";
-import { deleteSubject } from "../model/Delete";
+import { completeSubject, uncompleteSubject } from "../../model/Completed";
+import { deleteSubject } from "../../model/Delete";
 import { Link } from "react-router-dom";
-import { removeChild } from "../model/RemoveChild";
+import { removeChild } from "../../model/RemoveChild";
 
 const theme = getTheme();
-
 const border = "1px solid " + theme.palette.neutralTertiary;
-
 const styles = mergeStyleSets({
   wrapper: {
     display: "flex",

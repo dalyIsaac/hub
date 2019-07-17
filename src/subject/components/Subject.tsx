@@ -21,6 +21,7 @@ import { setSubjectDescription } from "../model/Description";
 import { completeSubject, uncompleteSubject } from "../model/Completed";
 import { deleteSubject } from "../model/Delete";
 import { setSubjectDueDate } from "../model/Date";
+import AppendChildren, { AppendChildrenHeight } from "./AppendChildren";
 
 interface SubjectProps {
   subject: Subject;
@@ -29,6 +30,7 @@ interface SubjectProps {
 }
 
 const theme = getTheme();
+const border = "1px solid " + theme.palette.neutralTertiary;
 const styles = mergeStyleSets({
   header: {
     color: theme.palette.neutralLight,
@@ -68,6 +70,11 @@ const styles = mergeStyleSets({
   daysLeft: {
     display: "flex",
     justifyContent: "flex-end",
+  },
+  appendChildren: {
+    background: theme.palette.white,
+    border: "1px solid " + theme.palette.neutralTertiary,
+    width: "100%",
   },
   heroButton: {
     marginTop: 10,
@@ -227,7 +234,17 @@ export default function({
           <div className={styles.daysLeft}>
             <Label>{`${daysLeft} days left`}</Label>
           </div>
-          <ListView id={id} height={listHeight} />
+          <div
+            style={{
+              minHeight:
+                typeof listHeight === "string"
+                  ? listHeight + `${AppendChildrenHeight}px`
+                  : listHeight + AppendChildrenHeight,
+            }}
+          >
+            <ListView id={id} maxHeight={listHeight} />
+            <AppendChildren />
+          </div>
           <div className={styles.heroButton}>{heroButton}</div>
         </div>
       </Stack>
