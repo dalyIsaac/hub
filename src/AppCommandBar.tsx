@@ -5,7 +5,7 @@ import {
   getTheme,
   mergeStyleSets,
 } from "office-ui-fabric-react";
-import { RouteIdProps } from "./routing";
+import { RouteIdProps } from "./Routing";
 import { useDispatch } from "react-redux";
 import { Dispatch } from "redux";
 
