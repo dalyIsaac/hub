@@ -243,11 +243,12 @@ export default function({
             }}
           >
             <ListView
-              id={id}
+              subjectId={id}
               maxHeight={listHeight}
               onRenderCell={SubjectListItem}
+              getChildren={true}
             />
-            <AppendChildren />
+            <AppendChildren parent={id} />
           </div>
           <div className={styles.heroButton}>{heroButton}</div>
         </div>

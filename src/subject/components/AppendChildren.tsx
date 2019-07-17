@@ -6,8 +6,11 @@ import {
   Text,
   Panel,
 } from "office-ui-fabric-react";
+import ListView from "./ListView";
+import AppendChildrenListItem from "./ListItem/AppendChildrenListItem";
 
 export const AppendChildrenHeight = 32;
+const panelHeaderHeight = 115;
 
 const theme = getTheme();
 const styles = mergeStyleSets({
@@ -48,10 +51,16 @@ const styles = mergeStyleSets({
   },
 });
 
-export default function(): JSX.Element {
+interface AppendChildrenProps {
+  parent: string;
+}
+
+export default function({ parent }: AppendChildrenProps): JSX.Element {
   const [panelVisible, setPanelVisible] = useState(false);
   const hidePanel = () => setPanelVisible(false);
   const showPanel = () => setPanelVisible(true);
+
+  // TODO: filter out items already included in the parent
 
   return (
     <React.Fragment>
@@ -65,10 +74,11 @@ export default function(): JSX.Element {
         headerText="Append Children"
         onDismiss={hidePanel}
       >
-        <span>
-          Light Dismiss usage is meant for the Contextual Menu on mobile sized
-          breakpoints.
-        </span>
+        <ListView
+          subjectId={parent}
+          maxHeight={`calc(100vh-${panelHeaderHeight})`}
+          onRenderCell={AppendChildrenListItem}
+        />
       </Panel>
     </React.Fragment>
   );

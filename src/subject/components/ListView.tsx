@@ -3,19 +3,19 @@ import { useSelector } from "react-redux";
 import { FocusZone, List } from "office-ui-fabric-react";
 import { mergeStyleSets } from "@uifabric/styling";
 import { State } from "../../Reducer";
-import { Subject } from "../model/Subject";
+import { getItems, Item } from "../model/Subject";
 
 interface ListViewProps {
-  id: string;
+  subjectId: string;
   maxHeight: number | string;
+
+  /**
+   * If `true`, it gets all the children of the `subjectId`. If `false`, it gets
+   * all the subjects **except** the children of the `subjectId`.
+   */
+  getChildren?: boolean;
   onRenderCell: (
-    item?:
-      | {
-          id: string;
-          subject: Subject<"BaseSubject">;
-          parent: string;
-        }
-      | undefined,
+    item?: Item,
     index?: number | undefined,
     isScrolling?: boolean | undefined,
   ) => React.ReactNode;
@@ -28,15 +28,20 @@ const styles = mergeStyleSets({
 });
 
 export default function({
-  id,
+  subjectId,
   maxHeight,
   onRenderCell,
+  getChildren,
 }: ListViewProps): JSX.Element {
   const subjects = useSelector((state: State) => state.subjects);
 
-  const children = [];
-  for (const childId of subjects[id].children) {
-    children.push({ id: childId, subject: subjects[childId], parent: id });
+  let children;
+  if (getChildren) {
+    children = getItems(subjects, subjectId, { getChildrenOfParent: true });
+  } else {
+    const childrenSet = new Set(subjects[subjectId].children);
+    const condition = (i: Item) => !childrenSet.has(i.id) && i.id !== subjectId;
+    children = getItems(subjects, subjectId, { condition });
   }
 
   return (

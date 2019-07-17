@@ -19,7 +19,10 @@ const styles = mergeStyleSets({
     boxShadow: "0 6px 20px 0 rgba(0, 0, 0, 0.19)",
   },
 });
-const getItems = (dispatch: Dispatch, id?: string): ICommandBarItemProps[] => {
+const getCommandItems = (
+  dispatch: Dispatch,
+  id?: string,
+): ICommandBarItemProps[] => {
   const items = [
     {
       key: "createSubject",
@@ -57,7 +60,7 @@ export default function({ match }: RouteIdProps): JSX.Element {
 
   return (
     <CommandBar
-      items={getItems(dispatch, id)}
+      items={getCommandItems(dispatch, id)}
       className={styles.appCommandBar}
     />
   );

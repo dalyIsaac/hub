@@ -6,13 +6,14 @@ import {
   IContextualMenuItem,
 } from "office-ui-fabric-react";
 import { mergeStyleSets, getTheme } from "@uifabric/styling";
-import { Subject } from "../../model/Subject";
+import { Item } from "../../model/Subject";
 import { useDispatch } from "react-redux";
 import { completeSubject, uncompleteSubject } from "../../model/Completed";
 import { deleteSubject } from "../../model/Delete";
 import { Link } from "react-router-dom";
 import { removeChild } from "../../model/RemoveChild";
 import ListItemBase from "./ListItemBase";
+import { isUndefined } from "lodash";
 
 const theme = getTheme();
 const styles = mergeStyleSets({
@@ -36,13 +37,7 @@ const styles = mergeStyleSets({
   },
 });
 
-interface ListItemProps {
-  id: string;
-  parent: string;
-  subject: Subject;
-}
-
-function ListItem({ id, parent, subject }: ListItemProps): JSX.Element {
+function ListItem({ id, parent, subject }: Item): JSX.Element {
   const dispatch = useDispatch();
   const hostId = useRef(getId(id));
 
@@ -76,7 +71,7 @@ function ListItem({ id, parent, subject }: ListItemProps): JSX.Element {
     {
       key: "remove",
       text: "Remove this as a child",
-      onClick: () => dispatch(removeChild(id, parent)),
+      onClick: () => dispatch(removeChild(id, parent!)),
     },
     {
       key: "delete",
@@ -105,10 +100,8 @@ function ListItem({ id, parent, subject }: ListItemProps): JSX.Element {
   );
 }
 
-export default function SubjectListItem(
-  props?: ListItemProps,
-): JSX.Element | undefined {
-  if (!props) {
+export default function SubjectListItem(props?: Item): JSX.Element | undefined {
+  if (!props || isUndefined(props.parent)) {
     return;
   }
 

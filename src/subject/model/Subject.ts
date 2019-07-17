@@ -54,11 +54,21 @@ export function comparator(param: keyof Subject, desc = false) {
   };
 }
 
-export function getItems(subjects: SubjectState, parentId?: string): Item[] {
+interface GetItemsOptions {
+  separateCompletedItems?: boolean;
+  getChildrenOfParent?: boolean;
+  condition?: (s: Item) => boolean;
+}
+
+export function getItems(
+  subjects: SubjectState,
+  parentId?: string,
+  options?: GetItemsOptions,
+): Item[] {
   let items: Item[] = [];
   let completedItems: Item[] = [];
 
-  if (parentId !== undefined) {
+  if (parentId !== undefined && options && options.getChildrenOfParent) {
     if (!(parentId in subjects)) {
       throw new Error("Given id is not valid");
     }
@@ -71,19 +81,37 @@ export function getItems(subjects: SubjectState, parentId?: string): Item[] {
         subject: subjects[childId],
         parent: parentId,
       };
-      if (subjects[childId].completed) {
-        completedItems.push(current);
-      } else {
-        items.push(current);
+      const valid =
+        isUndefined(options) ||
+        isUndefined(options.condition) ||
+        options.condition(current);
+
+      if (valid) {
+        if (
+          options &&
+          options.separateCompletedItems &&
+          subjects[childId].completed
+        ) {
+          completedItems.push(current);
+        } else {
+          items.push(current);
+        }
       }
     }
   } else {
     for (const entry of Object.entries(subjects)) {
-      const current = { id: entry[0], subject: entry[1] };
-      if (entry[1].completed) {
-        completedItems.push(current);
-      } else {
-        items.push(current);
+      const current = { id: entry[0], subject: entry[1], parent: parentId };
+      const valid =
+        isUndefined(options) ||
+        isUndefined(options.condition) ||
+        options.condition(current);
+
+      if (valid) {
+        if (options && options.separateCompletedItems && entry[1].completed) {
+          completedItems.push(current);
+        } else {
+          items.push(current);
+        }
       }
     }
   }

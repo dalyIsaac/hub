@@ -93,7 +93,9 @@ export default function({ match }: RouteIdProps): JSX.Element {
 
   let items: Item[];
   try {
-    items = getItems(subjects, match.params.id);
+    items = getItems(subjects, match.params.id, {
+      separateCompletedItems: true,
+    });
   } catch (error) {
     return <Redirect to="/" />;
   }
