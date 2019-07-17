@@ -8,6 +8,7 @@ import {
 import { RouteIdProps } from "./Routing";
 import { useDispatch } from "react-redux";
 import { Dispatch } from "redux";
+import { createSubject } from "./subject/model/Create";
 
 export const APP_COMMAND_BAR_HEIGHT = 45;
 
@@ -27,6 +28,9 @@ const getItems = (dispatch: Dispatch, id?: string): ICommandBarItemProps[] => {
         iconName: "Add",
       },
       ariaLabel: "Create subject",
+      onClick: () => {
+        dispatch(createSubject());
+      },
     },
   ];
 
@@ -38,6 +42,9 @@ const getItems = (dispatch: Dispatch, id?: string): ICommandBarItemProps[] => {
         iconName: "Childof",
       },
       ariaLabel: "Create child subject",
+      onClick: () => {
+        dispatch(createSubject({ parent: id }));
+      },
     });
   }
 

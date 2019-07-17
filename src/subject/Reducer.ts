@@ -1,6 +1,6 @@
 import produce from "immer";
 import { Action } from "redux";
-import { SubjectState } from "./model/Subject";
+import { SubjectState, SubjectTypes } from "./model/Subject";
 import {
   SET_SUBJECT_NAME,
   setSubjectNameReducer,
@@ -29,6 +29,11 @@ import {
   SetSubjectDueDateAction,
   setSubjectDueDateReducer,
 } from "./model/Date";
+import {
+  CREATE_SUBJECT,
+  createSubjectReducer,
+  CreateSubjectAction,
+} from "./model/Create";
 
 const NUM_ITEMS = 23;
 
@@ -93,6 +98,11 @@ const subjectReducer = (
         break;
       case SET_SUBJECT_DUE_DATE:
         setSubjectDueDateReducer(draftState, action as SetSubjectDueDateAction);
+        break;
+      case CREATE_SUBJECT:
+        createSubjectReducer(draftState, action as CreateSubjectAction<
+          SubjectTypes
+        >);
         break;
       default:
         break;

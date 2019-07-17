@@ -102,8 +102,8 @@ function getItems(match: RouteIdMatch, subjects: SubjectState): Item[] {
     }
   }
 
-  items.sort(comparator("created"));
-  completedItems.sort(comparator("created"));
+  items.sort(comparator("created", true));
+  completedItems.sort(comparator("created", true));
   return items.concat(completedItems);
 }
 

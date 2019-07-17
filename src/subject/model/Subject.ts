@@ -2,7 +2,9 @@ import { BaseAction } from "../../Common";
 
 export type BaseSubject = "BaseSubject";
 
-export interface Subject<T = BaseSubject> {
+export type SubjectTypes = BaseSubject;
+
+export interface Subject<T = SubjectTypes> {
   type: T;
   name: string;
   readonly created: Date;
