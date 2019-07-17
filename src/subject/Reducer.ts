@@ -45,47 +45,7 @@ import {
   appendChildReducer,
 } from "./model/CreateChild";
 
-const NUM_ITEMS = 23;
-
-function getRandomInt(max: number) {
-  return Math.floor(Math.random() * Math.floor(max));
-}
-
-const getRandomChildren = (): string[] => {
-  const children = [];
-  for (let i = 0; i < getRandomInt(12); i++) {
-    children.push(getRandomInt(NUM_ITEMS).toString());
-  }
-  return children;
-};
-
-const getInitialState = (amount: number): SubjectState => {
-  const state: SubjectState = {};
-  for (let i = 0; i < amount; i++) {
-    state[i.toString()] = {
-      type: "BaseSubject",
-      name: `Name${i}`,
-      created: new Date(),
-      description: `Description${i}`,
-      dueDate: new Date(),
-      children: getRandomChildren(),
-      parents: new Set(),
-    };
-  }
-
-  // Update parents
-  for (let i = 0; i < amount; i++) {
-    for (const childId of state[i.toString()].children) {
-      state[childId].parents.add(i.toString());
-    }
-  }
-  return state;
-};
-
-const subjectReducer = (
-  state: SubjectState = getInitialState(NUM_ITEMS),
-  action: Action,
-) =>
+const subjectReducer = (state: SubjectState = {}, action: Action) =>
   produce(state, (draftState) => {
     switch (action.type) {
       case SET_SUBJECT_NAME:
