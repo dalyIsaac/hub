@@ -1,11 +1,8 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import {
-  Checkbox,
   TooltipHost,
   Icon,
   getId,
-  DirectionalHint,
-  ContextualMenu,
   IContextualMenuItem,
 } from "office-ui-fabric-react";
 import { mergeStyleSets, getTheme } from "@uifabric/styling";
@@ -15,27 +12,10 @@ import { completeSubject, uncompleteSubject } from "../../model/Completed";
 import { deleteSubject } from "../../model/Delete";
 import { Link } from "react-router-dom";
 import { removeChild } from "../../model/RemoveChild";
+import ListItemBase from "./ListItemBase";
 
 const theme = getTheme();
-const border = "1px solid " + theme.palette.neutralTertiary;
 const styles = mergeStyleSets({
-  wrapper: {
-    display: "flex",
-    flexDirection: "row",
-    border,
-    borderRadius: 2,
-    marginTop: 1,
-    marginBottom: 1,
-  },
-  checkbox: {
-    margin: 8,
-  },
-  content: {
-    display: "flex",
-    flexGrow: 2,
-    paddingLeft: 8,
-    paddingRight: 8,
-  },
   open: {
     color: theme.palette.white,
     background: theme.palette.themePrimary,
@@ -62,20 +42,9 @@ interface ListItemProps {
   subject: Subject;
 }
 
-export default function ListItem({
-  id,
-  parent,
-  subject,
-}: ListItemProps): JSX.Element {
+function ListItem({ id, parent, subject }: ListItemProps): JSX.Element {
   const dispatch = useDispatch();
   const hostId = useRef(getId(id));
-  const listItemRef = useRef(null);
-
-  const [menuVisible, _setMenuVisible] = useState(false);
-  function setCalloutVisible(e: React.MouseEvent<HTMLDivElement>) {
-    e.preventDefault();
-    _setMenuVisible(!menuVisible);
-  }
 
   const onChange = (e: any, checked?: boolean, level?: number) => {
     if (checked === true) {
@@ -116,52 +85,32 @@ export default function ListItem({
     },
   ];
 
+  const button = (
+    <TooltipHost content={"Open " + subject.name} id={hostId.current}>
+      <Link to={`/${id}`}>
+        <button className={styles.open} aria-labelledby={hostId.current}>
+          <Icon iconName="OpenFile" />
+        </button>
+      </Link>
+    </TooltipHost>
+  );
   return (
-    <div
-      data-is-focusable={true}
-      onContextMenu={setCalloutVisible}
-      ref={listItemRef}
-      key={id}
-    >
-      <div className={styles.wrapper}>
-        <Checkbox
-          checked={!!subject.completed}
-          label={subject.name}
-          className={styles.checkbox}
-          onChange={onChange}
-        />
-
-        <div className={styles.content}>
-          {/* // TODO: include custom content here. It should render below. */}
-        </div>
-
-        <TooltipHost content={"Open " + subject.name} id={hostId.current}>
-          <Link to={`/${id}`}>
-            <button className={styles.open} aria-labelledby={hostId.current}>
-              <Icon iconName="OpenFile" />
-            </button>
-          </Link>
-        </TooltipHost>
-      </div>
-
-      {menuVisible ? (
-        <ContextualMenu
-          isBeakVisible={false}
-          onDismiss={setCalloutVisible}
-          target={listItemRef}
-          directionalHint={DirectionalHint.bottomRightEdge}
-          items={contextItems}
-        />
-      ) : null}
-    </div>
+    <ListItemBase
+      checked={!!subject.completed}
+      label={subject.name}
+      onCheckboxChange={onChange}
+      contextMenuItems={contextItems}
+      button={button}
+    />
   );
 }
 
-export function ListViewItem(props?: ListItemProps): JSX.Element | undefined {
+export default function SubjectListItem(
+  props?: ListItemProps,
+): JSX.Element | undefined {
   if (!props) {
     return;
   }
 
-  const { id, parent, subject } = props;
-  return <ListItem id={id} parent={parent} subject={subject} />;
+  return <ListItem {...props} />;
 }

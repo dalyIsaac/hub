@@ -22,6 +22,7 @@ import { completeSubject, uncompleteSubject } from "../model/Completed";
 import { deleteSubject } from "../model/Delete";
 import { setSubjectDueDate } from "../model/Date";
 import AppendChildren, { AppendChildrenHeight } from "./AppendChildren";
+import SubjectListItem from "./ListItem/SubjectListItem";
 
 interface SubjectProps {
   subject: Subject;
@@ -30,7 +31,6 @@ interface SubjectProps {
 }
 
 const theme = getTheme();
-const border = "1px solid " + theme.palette.neutralTertiary;
 const styles = mergeStyleSets({
   header: {
     color: theme.palette.neutralLight,
@@ -242,7 +242,11 @@ export default function({
                   : listHeight + AppendChildrenHeight,
             }}
           >
-            <ListView id={id} maxHeight={listHeight} />
+            <ListView
+              id={id}
+              maxHeight={listHeight}
+              onRenderCell={SubjectListItem}
+            />
             <AppendChildren />
           </div>
           <div className={styles.heroButton}>{heroButton}</div>
