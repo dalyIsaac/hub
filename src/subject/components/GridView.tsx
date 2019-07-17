@@ -8,8 +8,9 @@ import { Subject, SubjectState } from "../model/Subject";
 import SubjectComponent from "./Subject";
 import { Redirect } from "react-router";
 import { APPBAR_HEIGHT } from "../../AppBar";
-import { RouteIdMatch, RouteIdProps } from "../../routing";
+import { RouteIdMatch, RouteIdProps } from "../../Routing";
 import { APP_COMMAND_BAR_HEIGHT } from "../../AppCommandBar";
+import { isUndefined } from "util";
 
 const ROWS_PER_PAGE = 3;
 const ROW_HEIGHT = 603;
@@ -48,6 +49,30 @@ const styles = mergeStyleSets({
 
 type Item = [string, Subject<"BaseSubject">];
 
+function comparator(param: keyof Subject, desc = false) {
+  const coeff = desc ? -1 : 1;
+  return function(a: Item, b: Item): number {
+    const aVal = a[1][param];
+    const bVal = b[1][param];
+
+    const aDefined = !isUndefined(aVal);
+    const bDefined = !isUndefined(bVal);
+
+    if (!aDefined && !bDefined) {
+      return 0;
+    } else if (aDefined && !bDefined) {
+      return coeff * 1;
+    } else if (!aDefined && bDefined) {
+      return coeff * -1;
+    } else if (aVal! < bVal!) {
+      return coeff * -1;
+    } else if (aVal! > bVal!) {
+      return coeff * 1;
+    }
+    return 0;
+  };
+}
+
 function getItems(match: RouteIdMatch, subjects: SubjectState): Item[] {
   let items: Item[] = [];
   let completedItems: Item[] = [];
@@ -77,6 +102,8 @@ function getItems(match: RouteIdMatch, subjects: SubjectState): Item[] {
     }
   }
 
+  items.sort(comparator("created"));
+  completedItems.sort(comparator("created"));
   return items.concat(completedItems);
 }
 
