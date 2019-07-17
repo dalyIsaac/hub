@@ -191,6 +191,7 @@ export default function({
           isBeakVisible: false,
           items: [deleteItem],
         }}
+        style={{ background: theme.palette.white }}
       />
     );
   }
