@@ -20,4 +20,5 @@ export const appendChildReducer = (
   { subjectId, child }: AppendChildAction,
 ): void => {
   state[subjectId].children.push(child);
+  state[child].parents.add(subjectId);
 };

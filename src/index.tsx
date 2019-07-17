@@ -7,17 +7,32 @@ import { Provider } from "react-redux";
 import { composeWithDevTools } from "redux-devtools-extension";
 import { initializeIcons } from "@uifabric/icons";
 import { HashRouter } from "react-router-dom";
+import { persistStore, persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage";
 
 import rootReducer from "./Reducer";
+import { PersistGate } from "redux-persist/integration/react";
+import transformSubjects from "./subject/model/Transform";
 
-const store = createStore(rootReducer, composeWithDevTools());
+const persistConfig = {
+  key: "root",
+  storage,
+  transforms: [transformSubjects],
+};
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+const store = createStore(persistedReducer, composeWithDevTools());
+const persistor = persistStore(store);
+
 initializeIcons();
 
 ReactDOM.render(
   <Provider store={store}>
-    <HashRouter>
-      <App />
-    </HashRouter>
+    <PersistGate loading={null} persistor={persistor}>
+      <HashRouter>
+        <App />
+      </HashRouter>
+    </PersistGate>
   </Provider>,
   document.getElementById("root"),
 );

@@ -21,4 +21,5 @@ export const removeChildReducer = (
   { subjectId, parent }: RemoveChildAction,
 ): void => {
   remove(state[parent].children, (s) => s === subjectId);
+  state[subjectId].parents.delete(parent);
 };
