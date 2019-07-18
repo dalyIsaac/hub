@@ -1,7 +1,7 @@
 import React from "react";
 import { Item } from "../../model/Subject";
 import { useDispatch } from "react-redux";
-import { appendChild } from "../../model/CreateChild";
+import { appendChild } from "../../model/AppendChild";
 import { isUndefined } from "lodash";
 import ListItemBase from "./ListItemBase";
 

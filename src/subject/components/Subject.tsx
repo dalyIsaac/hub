@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import {
   FocusZone,
@@ -101,6 +101,16 @@ export default function({
   const [name, setName] = useState(subject.name);
   const [description, setDescription] = useState(subject.description || "");
 
+  // Side effects update state with new props
+  useEffect(() => {
+    setName(subject.name);
+  }, [subject.name]);
+
+  useEffect(() => {
+    setDescription(subject.description);
+  }, [subject.description]);
+
+  // Event handlers
   const setTitleLocal = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value || "Untitled");
   };

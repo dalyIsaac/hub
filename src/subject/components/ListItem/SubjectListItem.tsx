@@ -14,18 +14,22 @@ import { Link } from "react-router-dom";
 import { removeChild } from "../../model/RemoveChild";
 import ListItemBase from "./ListItemBase";
 import { isUndefined } from "lodash";
+import { setSubjectName } from "../../model/Title";
 
 const theme = getTheme();
 const styles = mergeStyleSets({
   open: {
     color: theme.palette.white,
     background: theme.palette.themePrimary,
-    fontSize: 18,
     cursor: "pointer",
     border: "none",
+    borderRadius: 2,
     outline: "none",
     margin: -1,
+    marginBottom: -2,
+    marginRight: -3,
     height: 40,
+    width: 32,
     selectors: {
       "&:hover": {
         filter: "brightness(90%)",
@@ -48,6 +52,8 @@ function ListItem({ id, parent, subject }: Item): JSX.Element {
       dispatch(uncompleteSubject(id));
     }
   };
+
+  const onBlur = (newValue: string) => dispatch(setSubjectName(id, newValue));
 
   const contextItems: IContextualMenuItem[] = [
     {
@@ -91,6 +97,8 @@ function ListItem({ id, parent, subject }: Item): JSX.Element {
   );
   return (
     <ListItemBase
+      editable={true}
+      onEditableBlur={onBlur}
       checked={!!subject.completed}
       label={subject.name}
       onCheckboxChange={onChange}
@@ -105,5 +113,5 @@ export default function SubjectListItem(props?: Item): JSX.Element | undefined {
     return;
   }
 
-  return <ListItem {...props} />;
+  return <ListItem {...props} key={props.id} />;
 }
