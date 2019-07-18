@@ -11,6 +11,8 @@ import {
 } from "office-ui-fabric-react";
 import ListView from "./ListView";
 import AppendChildrenListItem from "./ListItem/AppendChildrenListItem";
+import { useDispatch } from "react-redux";
+import { createSubject } from "../model/Create";
 
 export const AppendChildrenHeight = 32;
 const panelHeaderHeight = 115;
@@ -74,6 +76,7 @@ interface AppendChildrenProps {
 export default function({ parent }: AppendChildrenProps): JSX.Element {
   const target = useRef(null);
 
+  const dispatch = useDispatch();
   const [panelVisible, setPanelVisible] = useState(false);
   const [menuVisible, setMenuVisible] = useState(false);
 
@@ -81,6 +84,10 @@ export default function({ parent }: AppendChildrenProps): JSX.Element {
   const showPanel = () => setPanelVisible(true);
   const toggleMenu = () => setMenuVisible(!menuVisible);
   const hideMenu = () => setMenuVisible(false);
+
+  const addChild = () => {
+    dispatch(createSubject({ parent }));
+  };
 
   const contextMenuItems: IContextualMenuItem[] = [
     {
@@ -96,7 +103,11 @@ export default function({ parent }: AppendChildrenProps): JSX.Element {
   return (
     <React.Fragment>
       <div className={styles.wrapper}>
-        <button className={styles.button} style={{ gridColumn: 1 }}>
+        <button
+          className={styles.button}
+          style={{ gridColumn: 1 }}
+          onClick={addChild}
+        >
           <Icon iconName="Add" className={styles.icon} />
           <Text className={styles.text}>Add child</Text>
         </button>

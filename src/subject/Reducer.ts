@@ -43,7 +43,7 @@ import {
   APPEND_CHILD_SUBJECT,
   AppendChildAction,
   appendChildReducer,
-} from "./model/CreateChild";
+} from "./model/AppendChild";
 
 const subjectReducer = (state: SubjectState = {}, action: Action) =>
   produce(state, (draftState) => {
