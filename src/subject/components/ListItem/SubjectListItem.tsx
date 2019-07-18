@@ -26,6 +26,7 @@ const styles = mergeStyleSets({
     outline: "none",
     margin: -1,
     height: 40,
+    width: 32,
     selectors: {
       "&:hover": {
         filter: "brightness(90%)",
