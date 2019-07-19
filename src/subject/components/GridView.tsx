@@ -1,5 +1,5 @@
-import React from "react";
-import { List, IRectangle } from "office-ui-fabric-react";
+import React, { useEffect, useState } from "react";
+import { List, IRectangle, ScrollToMode } from "office-ui-fabric-react";
 import { mergeStyleSets, getTheme } from "@uifabric/styling";
 import { useRef } from "react";
 import { useSelector } from "react-redux";
@@ -50,13 +50,53 @@ const styles = mergeStyleSets({
 
 const getPageHeight = (): number => ROW_HEIGHT * ROWS_PER_PAGE;
 
+const getDiffIndex = (oldOrder: string[], newOrder: string[]): number => {
+  for (let i = 0; i < newOrder.length; i++) {
+    const newEl = newOrder[i];
+    const oldEl = oldOrder[i];
+
+    if (newEl !== oldEl) {
+      return i;
+    }
+  }
+  return 0;
+};
+
 export default function({ match }: RouteIdProps): JSX.Element {
   const columnCount = useRef(0);
   const columnWidth = useRef(0);
+  const gridRef: React.MutableRefObject<List | null> = useRef(null);
 
-  const { dict: subjects, order } = useSelector(
-    (state: State) => state.subjects,
-  );
+  const state = useSelector((state: State) => state.subjects);
+  const { dict: subjects } = state;
+  const order = !isUndefined(match.params.id)
+    ? subjects[match.params.id].children.order
+    : state.order.order;
+
+  const [orderState, setOrderState] = useState(order);
+
+  // Scrolls to newly added subjects
+  useEffect(() => {
+    if (gridRef.current && orderState !== order) {
+      // Gets the index to scroll to
+      const index = getDiffIndex(orderState, order);
+
+      // Scroll to the index if either:
+      // - the new index doesn't have a parent
+      // - the new index has a parent, which matches match.param.id
+      const s = subjects[order[index]];
+      if (s.parents.size === 0 || s.parents.has(match.params.id!)) {
+        gridRef.current.scrollToIndex(
+          index,
+          () => ROW_HEIGHT,
+          ScrollToMode.top,
+        );
+      }
+
+      setOrderState(order);
+    }
+  }, [order, orderState, match.params.id, subjects]);
+
   const renderCell = (props?: Item): JSX.Element | undefined => {
     if (!props) {
       return;
@@ -96,13 +136,7 @@ export default function({ match }: RouteIdProps): JSX.Element {
 
   let items: Item[];
   try {
-    items = getItems(
-      subjects,
-      !isUndefined(match.params.id)
-        ? subjects[match.params.id].children.order
-        : order.order,
-      { parent: match.params.id },
-    );
+    items = getItems(subjects, order, { parent: match.params.id });
   } catch (error) {
     return <Redirect to="/" />;
   }
@@ -122,6 +156,7 @@ export default function({ match }: RouteIdProps): JSX.Element {
 
   const grid = (
     <List
+      ref={gridRef}
       className={styles.grid}
       items={items}
       getItemCountForPage={getItemCountForPage}

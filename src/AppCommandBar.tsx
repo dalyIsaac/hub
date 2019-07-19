@@ -23,19 +23,7 @@ const getCommandItems = (
   dispatch: Dispatch,
   id?: string,
 ): ICommandBarItemProps[] => {
-  const items = [
-    {
-      key: "createSubject",
-      name: "Create subject",
-      iconProps: {
-        iconName: "Add",
-      },
-      ariaLabel: "Create subject",
-      onClick: () => {
-        dispatch(createSubject());
-      },
-    },
-  ];
+  const items = [];
 
   if (id !== undefined) {
     items.push({
@@ -47,6 +35,18 @@ const getCommandItems = (
       ariaLabel: "Create child subject",
       onClick: () => {
         dispatch(createSubject({ parent: id }));
+      },
+    });
+  } else {
+    items.push({
+      key: "createSubject",
+      name: "Create subject",
+      iconProps: {
+        iconName: "Add",
+      },
+      ariaLabel: "Create subject",
+      onClick: () => {
+        dispatch(createSubject());
       },
     });
   }
