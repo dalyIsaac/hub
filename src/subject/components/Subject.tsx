@@ -245,7 +245,9 @@ export default function({
             </div>
           </div>
           <div className={styles.daysLeft}>
-            <Label>{`${daysLeft} days left`}</Label>
+            <Label>
+              {`${daysLeft} ${daysLeft === 1 ? "day" : "days"} left`}
+            </Label>
           </div>
           <div
             style={{
