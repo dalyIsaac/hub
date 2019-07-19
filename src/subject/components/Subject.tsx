@@ -35,6 +35,9 @@ const styles = mergeStyleSets({
   header: {
     color: theme.palette.neutralLight,
     padding: 5,
+    borderTopLeftRadius: 2,
+    borderTopRightRadius: 2,
+    margin: -1,
     display: "flex",
     flexDirection: "column",
     alignItems: "center",

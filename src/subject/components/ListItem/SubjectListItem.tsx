@@ -19,17 +19,20 @@ import { setSubjectName } from "../../model/Name";
 const theme = getTheme();
 const styles = mergeStyleSets({
   open: {
-    color: theme.palette.white,
-    background: theme.palette.themePrimary,
+    color: theme.palette.black,
+    // color: theme.palette.white,
+    // background: theme.palette.themePrimary,
+    background: theme.palette.white,
     cursor: "pointer",
     border: "none",
     borderRadius: 2,
     outline: "none",
-    margin: -1,
-    marginBottom: -2,
-    marginRight: -3,
+    // marginTop: -1,
+    // marginLeft: 0,
+    // marginBottom: -1,
+    // marginRight: -1,
     height: 40,
-    width: 32,
+    width: "100%",
     selectors: {
       "&:hover": {
         filter: "brightness(90%)",

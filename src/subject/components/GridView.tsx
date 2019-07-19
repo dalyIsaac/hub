@@ -43,7 +43,8 @@ const styles = mergeStyleSets({
   },
   sidebar: {
     gridColumn: "2",
-    padding: 5,
+    border: "1px solid " + theme.palette.white,
+    borderRadius: 2,
     boxShadow: "0 6px 20px 0 rgba(0, 0, 0, 0.19)",
   },
 });
