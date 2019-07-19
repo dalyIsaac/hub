@@ -14,11 +14,11 @@ export const deleteSubjectReducer = (
   state: SubjectState,
   { subjectId }: DeleteSubjectAction,
 ): void => {
-  for (const parentId of state[subjectId].parents) {
-    remove(state[parentId].children, (s) => s === subjectId);
+  for (const parentId of state.dict[subjectId].parents) {
+    remove(state.dict[parentId].children.order, (s) => s === subjectId);
   }
-  for (const childId of state[subjectId].children) {
-    state[childId].parents.delete(subjectId);
+  for (const childId of state.dict[subjectId].children.order) {
+    state.dict[childId].parents.delete(subjectId);
   }
-  delete state[subjectId];
+  delete state.dict[subjectId];
 };

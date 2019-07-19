@@ -33,15 +33,22 @@ export default function({
   onRenderCell,
   getChildren,
 }: ListViewProps): JSX.Element {
-  const subjects = useSelector((state: State) => state.subjects);
+  const { dict: subjects, order } = useSelector(
+    (state: State) => state.subjects,
+  );
 
   let children;
   if (getChildren) {
-    children = getItems(subjects, subjectId, { getChildrenOfParent: true });
+    children = getItems(subjects, subjects[subjectId].children.order, {
+      parent: subjectId,
+    });
   } else {
-    const childrenSet = new Set(subjects[subjectId].children);
+    const childrenSet = new Set(subjects[subjectId].children.order);
     const condition = (i: Item) => !childrenSet.has(i.id) && i.id !== subjectId;
-    children = getItems(subjects, subjectId, { condition });
+    children = getItems(subjects, order.order, {
+      condition,
+      parent: subjectId,
+    });
   }
 
   return (

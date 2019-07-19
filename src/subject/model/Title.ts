@@ -19,5 +19,5 @@ export const setSubjectNameReducer = (
   state: SubjectState,
   { subjectId, name }: SetSubjectNameAction,
 ): void => {
-  state[subjectId].name = name;
+  state.dict[subjectId].name = name;
 };

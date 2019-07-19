@@ -10,6 +10,7 @@ import { Redirect } from "react-router";
 import { APPBAR_HEIGHT } from "../../AppBar";
 import { RouteIdProps } from "../../Routing";
 import { APP_COMMAND_BAR_HEIGHT } from "../../AppCommandBar";
+import { isUndefined } from "lodash";
 
 const ROWS_PER_PAGE = 3;
 const ROW_HEIGHT = 603;
@@ -53,7 +54,9 @@ export default function({ match }: RouteIdProps): JSX.Element {
   const columnCount = useRef(0);
   const columnWidth = useRef(0);
 
-  const subjects = useSelector((state: State) => state.subjects);
+  const { dict: subjects, order } = useSelector(
+    (state: State) => state.subjects,
+  );
   const renderCell = (props?: Item): JSX.Element | undefined => {
     if (!props) {
       return;
@@ -93,10 +96,13 @@ export default function({ match }: RouteIdProps): JSX.Element {
 
   let items: Item[];
   try {
-    items = getItems(subjects, match.params.id, {
-      separateCompletedItems: true,
-      getChildrenOfParent: true,
-    });
+    items = getItems(
+      subjects,
+      !isUndefined(match.params.id)
+        ? subjects[match.params.id].children.order
+        : order.order,
+      { parent: match.params.id },
+    );
   } catch (error) {
     return <Redirect to="/" />;
   }

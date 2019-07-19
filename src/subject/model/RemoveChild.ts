@@ -20,6 +20,6 @@ export const removeChildReducer = (
   state: SubjectState,
   { subjectId, parent }: RemoveChildAction,
 ): void => {
-  remove(state[parent].children, (s) => s === subjectId);
-  state[subjectId].parents.delete(parent);
+  remove(state.dict[parent].children.order, (s) => s === subjectId);
+  state.dict[subjectId].parents.delete(parent);
 };

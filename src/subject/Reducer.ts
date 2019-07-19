@@ -45,7 +45,26 @@ import {
   appendChildReducer,
 } from "./model/AppendChild";
 
-const subjectReducer = (state: SubjectState = {}, action: Action) =>
+const getInitialState = (): SubjectState => ({
+  dict: {},
+  order: {
+    order: [],
+    options: {
+      fields: [
+        {
+          key: "created",
+          desc: false,
+        },
+      ],
+      separateCompletedItems: true,
+    },
+  },
+});
+
+const subjectReducer = (
+  state: SubjectState = getInitialState(),
+  action: Action,
+) =>
   produce(state, (draftState) => {
     switch (action.type) {
       case SET_SUBJECT_NAME:

@@ -1,5 +1,5 @@
 import { createTransform } from "redux-persist";
-import { Subject, SubjectState } from "./Subject";
+import { Subject, SubjectState, SubjectDictState } from "./Subject";
 
 interface PersistSubject
   extends Omit<Subject, "created" | "completed" | "dueDate" | "parents"> {
@@ -9,27 +9,31 @@ interface PersistSubject
   parents: string[];
 }
 
-interface PersistSubjectState {
+interface PersistSubjectDictState {
   [key: string]: PersistSubject;
 }
 
+interface PersistSubjectState extends Omit<SubjectState, "dict"> {
+  dict: PersistSubjectDictState;
+}
+
 const transformSubjects = createTransform<SubjectState, PersistSubjectState>(
-  (inboundSubjects, key) => {
-    const subjects: PersistSubjectState = {};
+  ({ dict: inboundSubjects, ...everythingElse }, key) => {
+    const dict: PersistSubjectDictState = {};
     for (const [key, s] of Object.entries(inboundSubjects)) {
-      subjects[key] = { ...s, parents: [...s.parents] };
+      dict[key] = { ...s, parents: [...s.parents] };
     }
-    return subjects;
+    return { dict, ...everythingElse };
   },
-  (outboundSubjects, key) => {
-    const subjects: SubjectState = {};
+  ({ dict: outboundSubjects, ...everythingElse }, key) => {
+    const dict: SubjectDictState = {};
     for (const [
       key,
       { created, completed, dueDate, parents, ...s },
     ] of Object.entries(outboundSubjects)) {
       const completedDate = completed ? new Date(completed) : undefined;
       const dueDateDate = dueDate ? new Date(dueDate) : undefined;
-      subjects[key] = {
+      dict[key] = {
         ...s,
         parents: new Set(parents),
         created: new Date(created),
@@ -37,7 +41,7 @@ const transformSubjects = createTransform<SubjectState, PersistSubjectState>(
         dueDate: dueDateDate,
       };
     }
-    return subjects;
+    return { dict, ...everythingElse };
   },
   {
     whitelist: ["subjects"],

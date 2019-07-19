@@ -1,4 +1,4 @@
-import { SubjectBaseAction, SubjectState } from "./Subject";
+import { SubjectBaseAction, SubjectState, SubjectDictState } from "./Subject";
 
 // Complete subject
 export const COMPLETE_SUBJECT = "COMPLETE_SUBJECT";
@@ -17,16 +17,16 @@ export const completeSubject = (
 });
 
 const markAsComplete = (
-  state: SubjectState,
+  dict: SubjectDictState,
   subjectId: string,
   level: number,
   date = new Date(),
 ): void => {
-  if (state[subjectId].completed === undefined) {
-    state[subjectId].completed = date;
+  if (dict[subjectId].completed === undefined) {
+    dict[subjectId].completed = date;
     if (level > 1) {
-      for (const childId of state[subjectId].children) {
-        markAsComplete(state, childId, level - 1, date);
+      for (const childId of dict[subjectId].children.order) {
+        markAsComplete(dict, childId, level - 1, date);
       }
     }
   }
@@ -36,7 +36,7 @@ export const completeSubjectReducer = (
   state: SubjectState,
   { subjectId, level }: CompleteSubjectAction,
 ): void => {
-  markAsComplete(state, subjectId, level);
+  markAsComplete(state.dict, subjectId, level);
 };
 
 // Remove subject completion
@@ -55,5 +55,5 @@ export const uncompleteSubjectReducer = (
   state: SubjectState,
   { subjectId }: UncompleteSubjectAction,
 ): void => {
-  state[subjectId].completed = undefined;
+  state.dict[subjectId].completed = undefined;
 };

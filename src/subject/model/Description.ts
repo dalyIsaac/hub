@@ -19,5 +19,5 @@ export const setSubjectDescriptionReducer = (
   state: SubjectState,
   { subjectId, description }: SetSubjectDescriptionAction,
 ): void => {
-  state[subjectId].description = description;
+  state.dict[subjectId].description = description;
 };

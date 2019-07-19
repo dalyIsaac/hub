@@ -20,5 +20,5 @@ export const setSubjectDueDateReducer = (
   state: SubjectState,
   { subjectId, date }: SetSubjectDueDateAction,
 ): void => {
-  state[subjectId].dueDate = date;
+  state.dict[subjectId].dueDate = date;
 };
