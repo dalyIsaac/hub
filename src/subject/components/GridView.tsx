@@ -69,15 +69,17 @@ export default function({ match }: RouteIdProps): JSX.Element {
 
   const state = useSelector((state: State) => state.subjects);
   const { dict: subjects } = state;
-  const order = !isUndefined(match.params.id)
-    ? subjects[match.params.id].children.order
-    : state.order.order;
+
+  const order =
+    !isUndefined(match.params.id) && match.params.id in subjects
+      ? subjects[match.params.id].children.order
+      : state.order.order;
 
   const [orderState, setOrderState] = useState(order);
 
   // Scrolls to newly added subjects
   useEffect(() => {
-    if (gridRef.current && orderState !== order) {
+    if (gridRef.current && orderState !== order && order.length > 0) {
       // Gets the index to scroll to
       const index = getDiffIndex(orderState, order);
 
@@ -134,12 +136,11 @@ export default function({ match }: RouteIdProps): JSX.Element {
     return columnCount.current * ROWS_PER_PAGE;
   };
 
-  let items: Item[];
-  try {
-    items = getItems(subjects, order, { parent: match.params.id });
-  } catch (error) {
+  if (!isUndefined(match.params.id) && !(match.params.id in subjects)) {
     return <Redirect to="/" />;
   }
+
+  const items = getItems(subjects, order, { parent: match.params.id });
 
   let sidebar = null;
   if (match.params.id !== undefined) {
