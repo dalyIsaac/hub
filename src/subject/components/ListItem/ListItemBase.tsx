@@ -78,12 +78,16 @@ export default function({
   }
 
   function setLocalLabel(e: any, newValue?: string): void {
-    if (newValue) {
-      _setLocalLabel(newValue);
-    }
+    _setLocalLabel(newValue || "");
   }
 
-  const onBlur = () => onEditableBlur!(localLabel);
+  const onBlur = () => {
+    if (onEditableBlur) {
+      const newLabel = localLabel || "Untitled";
+      onEditableBlur(newLabel);
+      _setLocalLabel(newLabel);
+    }
+  };
 
   return (
     <div

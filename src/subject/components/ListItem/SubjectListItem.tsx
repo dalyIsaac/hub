@@ -14,7 +14,7 @@ import { Link } from "react-router-dom";
 import { removeChild } from "../../model/RemoveChild";
 import ListItemBase from "./ListItemBase";
 import { isUndefined } from "lodash";
-import { setSubjectName } from "../../model/Title";
+import { setSubjectName } from "../../model/Name";
 
 const theme = getTheme();
 const styles = mergeStyleSets({
@@ -53,7 +53,8 @@ function ListItem({ id, parent, subject }: Item): JSX.Element {
     }
   };
 
-  const onBlur = (newValue: string) => dispatch(setSubjectName(id, newValue));
+  const onBlur = (newValue: string) =>
+    dispatch(setSubjectName(id, newValue || "Untitled"));
 
   const contextItems: IContextualMenuItem[] = [
     {

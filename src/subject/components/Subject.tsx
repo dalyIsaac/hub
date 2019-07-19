@@ -14,9 +14,9 @@ import {
 import { getTheme, mergeStyleSets } from "@uifabric/styling";
 
 import { Subject } from "../model/Subject";
-import Title from "./Title";
+import Name from "./Name";
 import ListView from "./ListView";
-import { setSubjectName } from "../model/Title";
+import { setSubjectName } from "../model/Name";
 import { setSubjectDescription } from "../model/Description";
 import { completeSubject, uncompleteSubject } from "../model/Completed";
 import { deleteSubject } from "../model/Delete";
@@ -99,7 +99,7 @@ export default function({
 }: SubjectProps): JSX.Element {
   const dispatch = useDispatch();
   const [name, setName] = useState(subject.name);
-  const [description, setDescription] = useState(subject.description || "");
+  const [description, setDescription] = useState(subject.description);
 
   // Side effects update state with new props
   useEffect(() => {
@@ -111,13 +111,15 @@ export default function({
   }, [subject.description]);
 
   // Event handlers
-  const setTitleLocal = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setName(e.target.value || "Untitled");
+  const setNameLocal = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setName(e.target.value);
   };
-  const setTitleRedux = () => {
-    if (subject.name !== name) {
-      dispatch(setSubjectName(id, name));
+  const setNameRedux = () => {
+    const newName = name || "Untitled";
+    if (subject.name !== newName) {
+      dispatch(setSubjectName(id, newName));
     }
+    setName(newName);
   };
   const setDescriptionLocal = (e: any, newValue?: string) => {
     setDescription(newValue || "");
@@ -212,11 +214,11 @@ export default function({
         {header}
 
         <div className={styles.body}>
-          <Title
+          <Name
             className={styles.title}
             value={name}
-            onChange={setTitleLocal}
-            onBlur={setTitleRedux}
+            onChange={setNameLocal}
+            onBlur={setNameRedux}
           />
           <TextField
             multiline

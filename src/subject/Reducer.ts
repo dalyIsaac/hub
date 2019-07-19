@@ -5,7 +5,7 @@ import {
   SET_SUBJECT_NAME,
   setSubjectNameReducer,
   SetSubjectNameAction,
-} from "./model/Title";
+} from "./model/Name";
 import {
   SET_SUBJECT_DESCRIPTION,
   setSubjectDescriptionReducer,
