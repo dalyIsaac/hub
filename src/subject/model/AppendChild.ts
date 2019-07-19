@@ -19,6 +19,6 @@ export const appendChildReducer = (
   state: SubjectState,
   { subjectId, child }: AppendChildAction,
 ): void => {
-  state[subjectId].children.push(child);
-  state[child].parents.add(subjectId);
+  state.dict[subjectId].children.order.push(child);
+  state.dict[child].parents.add(subjectId);
 };
