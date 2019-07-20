@@ -13,6 +13,7 @@ import ListView from "./ListView";
 import AppendChildrenListItem from "./ListItem/AppendChildrenListItem";
 import { useDispatch } from "react-redux";
 import { createSubject } from "../model/Create";
+import { border, gridTemplateColumns } from "./ListItem/ListItemBase";
 
 export const AppendChildrenHeight = 32;
 const panelHeaderHeight = 115;
@@ -21,8 +22,8 @@ const theme = getTheme();
 const styles = mergeStyleSets({
   wrapper: {
     display: "grid",
-    gridTemplateColumns: "auto 1px 32px",
-    border: "1px solid " + theme.palette.neutralTertiary,
+    gridTemplateColumns,
+    border,
     borderRadius: 2,
     marginTop: 1,
     marginBottom: 1,

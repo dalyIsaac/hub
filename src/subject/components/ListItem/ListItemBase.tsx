@@ -23,13 +23,15 @@ interface ListItemBaseProps {
 }
 
 const theme = getTheme();
-const border = "1px solid " + theme.palette.neutralTertiary;
+
+export const gridTemplateColumns = "auto 1px 32px";
+export const border = "1px solid " + theme.palette.neutralTertiary;
+
 const styles = mergeStyleSets({
   wrapper: {
     display: "grid",
-    gridTemplateColumns: "auto 32px",
+    gridTemplateColumns,
     gridTemplateRows: "auto auto",
-    flexDirection: "row",
     border,
     borderRadius: 2,
     marginBottom: 2,
@@ -42,12 +44,19 @@ const styles = mergeStyleSets({
   checkbox: {
     margin: 8,
   },
-  button: {
+  divider: {
     gridColumn: "2",
+    background: theme.palette.neutralTertiary,
+    width: 1,
+    marginTop: 8,
+    marginBottom: 8,
+  },
+  button: {
+    gridColumn: "3",
   },
   content: {
     gridRow: "2",
-    gridColumn: "1 / 2",
+    gridColumn: "1 / 3",
     paddingLeft: 8,
     paddingRight: 8,
   },
@@ -116,6 +125,7 @@ export default function({
         </div>
         <div className={styles.content}>{children}</div>
 
+        {!!button ? <span className={styles.divider} /> : null}
         <div className={styles.button}>{button || null}</div>
       </div>
 

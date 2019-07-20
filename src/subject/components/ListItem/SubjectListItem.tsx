@@ -1,11 +1,9 @@
-import React, { useRef } from "react";
+import React from "react";
 import {
-  TooltipHost,
-  Icon,
-  getId,
   IContextualMenuItem,
+  IconButton,
 } from "office-ui-fabric-react";
-import { mergeStyleSets, getTheme } from "@uifabric/styling";
+import { mergeStyleSets } from "@uifabric/styling";
 import { Item } from "../../model/Subject";
 import { useDispatch } from "react-redux";
 import { completeSubject, uncompleteSubject } from "../../model/Completed";
@@ -16,37 +14,15 @@ import ListItemBase from "./ListItemBase";
 import { isUndefined } from "lodash";
 import { setSubjectName } from "../../model/Name";
 
-const theme = getTheme();
 const styles = mergeStyleSets({
   open: {
-    color: theme.palette.black,
-    // color: theme.palette.white,
-    // background: theme.palette.themePrimary,
-    background: theme.palette.white,
-    cursor: "pointer",
-    border: "none",
-    borderRadius: 2,
-    outline: "none",
-    // marginTop: -1,
-    // marginLeft: 0,
-    // marginBottom: -1,
-    // marginRight: -1,
     height: 40,
     width: "100%",
-    selectors: {
-      "&:hover": {
-        filter: "brightness(90%)",
-      },
-      "&:active": {
-        filter: "brightness(80%)",
-      },
-    },
   },
 });
 
 function ListItem({ id, parent, subject }: Item): JSX.Element {
   const dispatch = useDispatch();
-  const hostId = useRef(getId(id));
 
   const onChange = (e: any, checked?: boolean, level?: number) => {
     if (checked === true) {
@@ -90,14 +66,16 @@ function ListItem({ id, parent, subject }: Item): JSX.Element {
     },
   ];
 
+  const buttonLabel = "Open " + subject.name;
   const button = (
-    <TooltipHost content={"Open " + subject.name} id={hostId.current}>
-      <Link to={`/${id}`}>
-        <button className={styles.open} aria-labelledby={hostId.current}>
-          <Icon iconName="OpenFile" />
-        </button>
-      </Link>
-    </TooltipHost>
+    <Link to={`/${id}`}>
+      <IconButton
+        className={styles.open}
+        iconProps={{ iconName: "OpenFile" }}
+        ariaLabel={buttonLabel}
+        title={buttonLabel}
+      />
+    </Link>
   );
   return (
     <ListItemBase
