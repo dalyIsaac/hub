@@ -44,7 +44,7 @@ const styles = mergeStyleSets({
   sidebar: {
     gridColumn: "2",
     border: "1px solid " + theme.palette.white,
-    borderRadius: 2,
+    borderRadius: 4,
     boxShadow: "0 6px 20px 0 rgba(0, 0, 0, 0.19)",
   },
 });
@@ -77,6 +77,14 @@ export default function({ match }: RouteIdProps): JSX.Element {
       : state.order.order;
 
   const [orderState, setOrderState] = useState(order);
+
+  useEffect(() => {
+    if (match.params.id) {
+      document.title = "hub - " + subjects[match.params.id].name;
+    } else {
+      document.title = "hub";
+    }
+  }, [match.params.id, subjects]);
 
   // Scrolls to newly added subjects
   useEffect(() => {
@@ -118,7 +126,12 @@ export default function({ match }: RouteIdProps): JSX.Element {
       >
         <div className={styles.padding}>
           <div className={styles.contents}>
-            <SubjectComponent subject={subject} id={id} listHeight={"260px"} showOpenButton={true} />
+            <SubjectComponent
+              subject={subject}
+              id={id}
+              listHeight={"260px"}
+              showOpenButton={true}
+            />
           </div>
         </div>
       </div>
