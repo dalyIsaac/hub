@@ -23,6 +23,7 @@ import { deleteSubject } from "../model/Delete";
 import { setSubjectDueDate } from "../model/Date";
 import AppendChildren, { AppendChildrenHeight } from "./AppendChildren";
 import SubjectListItem from "./ListItem/SubjectListItem";
+import { Link } from "react-router-dom";
 
 interface SubjectProps {
   subject: Subject;
@@ -32,10 +33,12 @@ interface SubjectProps {
    * This should be an expression which can be evaluated by CSS calc()
    */
   listHeight?: string;
+
+  showOpenButton?: boolean;
 }
 
 const theme = getTheme();
-const border = "1px solid " + theme.palette.neutralTertiary
+const border = "1px solid " + theme.palette.neutralTertiary;
 const styles = mergeStyleSets({
   headerWrapper: {
     display: "grid",
@@ -60,9 +63,11 @@ const styles = mergeStyleSets({
       },
     },
   },
-  headerButton: {
+  headerLink: {
     gridColumn: "2",
     gridRow: "1",
+  },
+  headerButton: {
     background: theme.palette.white,
     borderTop: border,
     borderRight: border,
@@ -127,6 +132,7 @@ export default function({
   subject,
   id,
   listHeight,
+  showOpenButton,
 }: SubjectProps): JSX.Element {
   const dispatch = useDispatch();
   const [name, setName] = useState(subject.name);
@@ -246,13 +252,17 @@ export default function({
       <Stack verticalAlign={"center"}>
         <div className={styles.headerWrapper}>
           {header}
-          <IconButton
-            styles={{root: {width: "10"}}}
-            className={styles.headerButton}
-            iconProps={{ iconName: "OpenFile" }}
-            title={headerOpenLabel}
-            ariaLabel={headerOpenLabel}
-          />
+          {showOpenButton ? (
+            <Link to={`/${id}`} className={styles.headerLink}>
+              <IconButton
+                styles={{ root: { width: "" } }}
+                className={styles.headerButton}
+                iconProps={{ iconName: "OpenFile" }}
+                title={headerOpenLabel}
+                ariaLabel={headerOpenLabel}
+              />
+            </Link>
+          ) : null}
         </div>
 
         <div className={styles.body}>
