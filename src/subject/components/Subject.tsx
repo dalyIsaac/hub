@@ -27,7 +27,11 @@ import SubjectListItem from "./ListItem/SubjectListItem";
 interface SubjectProps {
   subject: Subject;
   id: string;
-  listHeight: number | string;
+  
+  /**
+   * This should be an expression which can be evaluated by CSS calc()
+   */
+  listHeight: string;
 }
 
 const theme = getTheme();
@@ -254,15 +258,12 @@ export default function({
           </div>
           <div
             style={{
-              minHeight:
-                typeof listHeight === "string"
-                  ? listHeight + `${AppendChildrenHeight}px`
-                  : listHeight + AppendChildrenHeight,
+              minHeight: `calc((${listHeight}) + ${AppendChildrenHeight}px)`
             }}
           >
             <ListView
               subjectId={id}
-              maxHeight={listHeight}
+              maxHeight={`calc(${listHeight})`}
               onRenderCell={SubjectListItem}
               getChildren={true}
             />

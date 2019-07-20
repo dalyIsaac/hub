@@ -17,7 +17,7 @@ const ROW_HEIGHT = 603;
 const MIN_COL_WIDTH = 400;
 
 const theme = getTheme();
-const sidebarListHeight = `calc(100vh-${APPBAR_HEIGHT}px-303px-${APP_COMMAND_BAR_HEIGHT}px)`;
+const sidebarListHeight = `100vh - ${APPBAR_HEIGHT + 330 + APP_COMMAND_BAR_HEIGHT}px`;
 const styles = mergeStyleSets({
   wrapper: {
     display: "grid",
@@ -118,7 +118,7 @@ export default function({ match }: RouteIdProps): JSX.Element {
       >
         <div className={styles.padding}>
           <div className={styles.contents}>
-            <SubjectComponent subject={subject} id={id} listHeight={260} />
+            <SubjectComponent subject={subject} id={id} listHeight={"260px"} />
           </div>
         </div>
       </div>
