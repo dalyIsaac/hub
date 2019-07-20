@@ -31,7 +31,7 @@ interface SubjectProps {
   /**
    * This should be an expression which can be evaluated by CSS calc()
    */
-  listHeight: string;
+  listHeight?: string;
 }
 
 const theme = getTheme();
