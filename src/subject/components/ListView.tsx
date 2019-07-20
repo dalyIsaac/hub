@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { FocusZone, List } from "office-ui-fabric-react";
+import { FocusZone, List, Text } from "office-ui-fabric-react";
 import { mergeStyleSets } from "@uifabric/styling";
 import { State } from "../../Reducer";
 import { getItems, Item } from "../model/Subject";
@@ -19,6 +19,11 @@ interface ListViewProps {
     index?: number | undefined,
     isScrolling?: boolean | undefined,
   ) => React.ReactNode;
+
+  /**
+   * When true, text is shown if there's no children
+   */
+  notifyNoChildren?: boolean;
 }
 
 const styles = mergeStyleSets({
@@ -32,6 +37,7 @@ export default function({
   maxHeight,
   onRenderCell,
   getChildren,
+  notifyNoChildren,
 }: ListViewProps): JSX.Element {
   const { dict: subjects, order } = useSelector(
     (state: State) => state.subjects,
@@ -53,7 +59,16 @@ export default function({
 
   return (
     <FocusZone className={styles.list} style={{ maxHeight }}>
-      <List items={children} onRenderCell={onRenderCell} />
+      {children.length === 0 && notifyNoChildren ? (
+        <Text>
+          There's nothing here{" "}
+          <span role="img" aria-label="Gust of Wind emoji">
+            💨
+          </span>
+        </Text>
+      ) : (
+        <List items={children} onRenderCell={onRenderCell} />
+      )}
     </FocusZone>
   );
 }

@@ -130,6 +130,7 @@ export default function({ parent }: AppendChildrenProps): JSX.Element {
       >
         <ListView
           subjectId={parent}
+          notifyNoChildren={true}
           maxHeight={`calc(100vh-${panelHeaderHeight})`}
           onRenderCell={AppendChildrenListItem}
         />
