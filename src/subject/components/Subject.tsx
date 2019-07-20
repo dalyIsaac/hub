@@ -23,24 +23,35 @@ import { deleteSubject } from "../model/Delete";
 import { setSubjectDueDate } from "../model/Date";
 import AppendChildren, { AppendChildrenHeight } from "./AppendChildren";
 import SubjectListItem from "./ListItem/SubjectListItem";
+import { Link } from "react-router-dom";
 
 interface SubjectProps {
   subject: Subject;
   id: string;
-  
+
   /**
    * This should be an expression which can be evaluated by CSS calc()
    */
   listHeight?: string;
+
+  showOpenButton?: boolean;
 }
 
 const theme = getTheme();
+const border = "1px solid " + theme.palette.neutralTertiary;
 const styles = mergeStyleSets({
+  headerWrapper: {
+    display: "grid",
+    gridTemplateColumns: "auto 32px",
+  },
   header: {
     color: theme.palette.neutralLight,
     padding: 5,
     borderTopLeftRadius: 2,
     borderTopRightRadius: 2,
+    gridRow: "1",
+    zIndex: 1,
+    gridColumn: "1 / 3",
     margin: -1,
     display: "flex",
     flexDirection: "column",
@@ -51,6 +62,24 @@ const styles = mergeStyleSets({
         border: "none",
       },
     },
+  },
+  headerLink: {
+    gridColumn: "2",
+    gridRow: "1",
+  },
+  headerButton: {
+    background: theme.palette.white,
+    borderTop: border,
+    borderRight: border,
+    borderTopRightRadius: 2,
+    borderTopLeftRadius: 0,
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
+    marginTop: -1,
+    marginRight: -1,
+    marginBottom: -1,
+    marginLeft: 0,
+    zIndex: 2,
   },
   body: {
     padding: 10,
@@ -80,7 +109,7 @@ const styles = mergeStyleSets({
   },
   appendChildren: {
     background: theme.palette.white,
-    border: "1px solid " + theme.palette.neutralTertiary,
+    border,
     width: "100%",
   },
   heroButton: {
@@ -103,6 +132,7 @@ export default function({
   subject,
   id,
   listHeight,
+  showOpenButton,
 }: SubjectProps): JSX.Element {
   const dispatch = useDispatch();
   const [name, setName] = useState(subject.name);
@@ -215,10 +245,25 @@ export default function({
     );
   }
 
+  const headerOpenLabel = "Open " + subject.name;
+
   return (
     <FocusZone>
       <Stack verticalAlign={"center"}>
-        {header}
+        <div className={styles.headerWrapper}>
+          {header}
+          {showOpenButton ? (
+            <Link to={`/${id}`} className={styles.headerLink}>
+              <IconButton
+                styles={{ root: { width: "" } }}
+                className={styles.headerButton}
+                iconProps={{ iconName: "OpenFile" }}
+                title={headerOpenLabel}
+                ariaLabel={headerOpenLabel}
+              />
+            </Link>
+          ) : null}
+        </div>
 
         <div className={styles.body}>
           <Name
@@ -258,7 +303,7 @@ export default function({
           </div>
           <div
             style={{
-              minHeight: `calc((${listHeight}) + ${AppendChildrenHeight}px)`
+              minHeight: `calc((${listHeight}) + ${AppendChildrenHeight}px)`,
             }}
           >
             <ListView

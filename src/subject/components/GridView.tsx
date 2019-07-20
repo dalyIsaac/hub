@@ -118,7 +118,7 @@ export default function({ match }: RouteIdProps): JSX.Element {
       >
         <div className={styles.padding}>
           <div className={styles.contents}>
-            <SubjectComponent subject={subject} id={id} listHeight={"260px"} />
+            <SubjectComponent subject={subject} id={id} listHeight={"260px"} showOpenButton={true} />
           </div>
         </div>
       </div>
