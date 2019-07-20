@@ -44,7 +44,7 @@ const styles = mergeStyleSets({
   sidebar: {
     gridColumn: "2",
     border: "1px solid " + theme.palette.white,
-    borderRadius: 2,
+    borderRadius: 4,
     boxShadow: "0 6px 20px 0 rgba(0, 0, 0, 0.19)",
   },
 });
