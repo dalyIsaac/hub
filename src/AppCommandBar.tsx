@@ -20,6 +20,7 @@ import { State } from "./Reducer";
 import { SortField } from "./subject/model/Order";
 import { setFieldsArray } from "./subject/model/SetFieldsArray";
 import { setFieldsDesc } from "./subject/model/SetFieldsDesc";
+import { setSeparateComplete } from "./subject/model/SetSeparateComplete";
 
 export const APP_COMMAND_BAR_HEIGHT = 45;
 const BUTTON_HEIGHT = 44;
@@ -33,6 +34,7 @@ const styles = mergeStyleSets({
     flexDirection: "row",
     height: BUTTON_HEIGHT,
     backgroundColor: theme.palette.white,
+    alignItems: "center",
     paddingLeft: 24,
   },
   dragEnterClass: {
@@ -48,12 +50,10 @@ export default function({ match }: RouteIdProps): JSX.Element {
   const { dict, order: rootOrder } = useSelector(
     (state: State) => state.subjects,
   );
+
   const draggedIndex = useRef(-1);
   const draggedItem = useRef(null);
   const selection = useRef(new Selection());
-
-  const order =
-    id && id in dict ? dict[id].children.options : rootOrder.options;
 
   const dismissCallout = () => setShowCallout(false);
   const openCallout = () => setShowCallout(true);
@@ -66,6 +66,9 @@ export default function({ match }: RouteIdProps): JSX.Element {
   };
   const dispatchSetFieldsDesc = (e: any, checked: boolean, key: string) => {
     dispatch(setFieldsDesc(key, checked, id));
+  };
+  const dispatchSetSeparateComplete = (e: any, checked?: boolean) => {
+    dispatch(setSeparateComplete(checked!, id));
   };
 
   const insertBeforeItem = (item: any) => {
@@ -117,6 +120,9 @@ export default function({ match }: RouteIdProps): JSX.Element {
       draggedIndex.current = -1;
     },
   };
+
+  const order =
+    id && id in dict ? dict[id].children.options : rootOrder.options;
 
   const createSubjectButton = id ? (
     <CommandBarButton
@@ -171,9 +177,16 @@ export default function({ match }: RouteIdProps): JSX.Element {
           iconProps={{ iconName: "Sortlines" }}
           ariaLabel="Sort"
           onClick={openCallout}
-          styles={{ root: { height: 44 } }}
+          styles={{ root: { height: BUTTON_HEIGHT } }}
         />
       </div>
+      <Toggle
+        checked={order.separateCompletedItems}
+        offText={"Don't separate completed items"}
+        onText={"Separate completed items"}
+        onChange={dispatchSetSeparateComplete}
+        styles={{ root: { marginBottom: 0, marginLeft: 4, marginRight: 4 } }}
+      />
       <Callout
         target={target.current}
         onDismiss={dismissCallout}

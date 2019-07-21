@@ -55,6 +55,11 @@ import {
   setFieldsDescReducer,
   SetFieldsDescAction,
 } from "./model/SetFieldsDesc";
+import {
+  SET_SEPARATE_COMPLETE,
+  setSeparateCompleteReducer,
+  SetSeparateCompleteAction,
+} from "./model/SetSeparateComplete";
 
 const getInitialState = (): SubjectState => ({
   dict: {},
@@ -104,6 +109,12 @@ const subjectReducer = (
         break;
       case SET_FIELDS_DESC:
         setFieldsDescReducer(draftState, action as SetFieldsDescAction);
+        break;
+      case SET_SEPARATE_COMPLETE:
+        setSeparateCompleteReducer(
+          draftState,
+          action as SetSeparateCompleteAction,
+        );
         break;
       default:
         break;
