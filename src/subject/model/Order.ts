@@ -3,7 +3,9 @@ import { isUndefined } from "lodash";
 
 export interface SortField {
   key: keyof Omit<Subject, "parents">;
+  name: string;
   desc: boolean;
+  compareLength?: boolean;
 }
 
 export interface SortItemsOptions {
@@ -17,13 +19,31 @@ export interface OrderState {
 }
 
 export function comparator(fields: SortField[], subjects: SubjectDictState) {
-  function compare(a: any, b: any, desc: boolean): number {
+  function compare(
+    a: any,
+    b: any,
+    desc: boolean,
+    compareLength?: boolean,
+  ): number {
+    if (compareLength) {
+      if (
+        (Array.isArray(a) && Array.isArray(b)) ||
+        (typeof a === "string" && typeof b === "string")
+      ) {
+        a = a.length;
+        b = b.length;
+      } else if (a instanceof Set && b instanceof Set) {
+        a = a.size;
+        b = b.size;
+      }
+    }
+
     const aDefined = !isUndefined(a);
     const bDefined = !isUndefined(b);
     const coeff = desc ? -1 : 1;
     if (!aDefined && !bDefined) {
       return 0;
-    } else if (aDefined && bDefined) {
+    } else if (aDefined && !bDefined) {
       return coeff * 1;
     } else if (!aDefined && bDefined) {
       return coeff * -1;
@@ -36,8 +56,14 @@ export function comparator(fields: SortField[], subjects: SubjectDictState) {
   }
 
   return function(a: string, b: string): number {
-    for (const { key, desc } of fields) {
-      const result = compare(subjects[a][key], subjects[b][key], desc);
+    for (const { key, desc, compareLength } of fields) {
+      let _a: any = subjects[a][key];
+      let _b: any = subjects[b][key];
+      if (key === "children") {
+        _a = (_a as OrderState)["order"];
+        _b = (_b as OrderState)["order"];
+      }
+      const result = compare(_a, _b, desc, compareLength);
       if (result !== 0) {
         return result;
       }
@@ -68,3 +94,44 @@ export function sortItems(
 
   return items.concat(completedItems);
 }
+
+export const getInitialOrder = (): OrderState => ({
+  order: [],
+  options: {
+    fields: [
+      {
+        key: "created",
+        name: "Date created",
+        desc: false,
+      },
+      {
+        key: "completed",
+        name: "Date completed",
+        desc: false,
+      },
+      {
+        key: "children",
+        name: "Number of children",
+        desc: false,
+        compareLength: true,
+      },
+      {
+        key: "description",
+        name: "Description size",
+        desc: false,
+        compareLength: true,
+      },
+      {
+        key: "dueDate",
+        name: "Due date",
+        desc: false,
+      },
+      {
+        key: "name",
+        name: "Name",
+        desc: false,
+      },
+    ],
+    separateCompletedItems: true,
+  },
+});

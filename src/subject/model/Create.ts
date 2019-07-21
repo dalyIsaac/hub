@@ -5,7 +5,7 @@ import {
   SubjectBaseAction,
 } from "./Subject";
 import { v4 } from "uuid";
-import { sortItems } from "./Order";
+import { sortItems, getInitialOrder } from "./Order";
 
 export const CREATE_SUBJECT = "CREATE_SUBJECT";
 
@@ -35,18 +35,7 @@ export const createSubjectReducer = (
     name: "Untitled",
     created: new Date(),
     description: "",
-    children: {
-      order: [],
-      options: {
-        fields: [
-          {
-            key: "created",
-            desc: false,
-          },
-        ],
-        separateCompletedItems: true,
-      },
-    },
+    children: getInitialOrder(),
     parents: new Set(),
   };
 

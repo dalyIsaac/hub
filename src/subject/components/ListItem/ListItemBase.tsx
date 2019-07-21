@@ -129,15 +129,14 @@ export default function({
         <div className={styles.button}>{button || null}</div>
       </div>
 
-      {contextMenuItems && menuVisible ? (
-        <ContextualMenu
-          isBeakVisible={false}
-          onDismiss={setCalloutVisible}
-          target={target}
-          directionalHint={DirectionalHint.bottomRightEdge}
-          items={contextMenuItems}
-        />
-      ) : null}
+      <ContextualMenu
+        hidden={!(contextMenuItems && menuVisible)}
+        isBeakVisible={false}
+        onDismiss={setCalloutVisible}
+        target={target}
+        directionalHint={DirectionalHint.bottomRightEdge}
+        items={contextMenuItems!}
+      />
     </div>
   );
 }

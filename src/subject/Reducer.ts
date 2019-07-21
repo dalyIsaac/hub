@@ -44,21 +44,26 @@ import {
   AppendChildAction,
   appendChildReducer,
 } from "./model/AppendChild";
+import { getInitialOrder } from "./model/Order";
+import {
+  SET_FIELDS_ARRAY,
+  SetFieldsArrayAction,
+  setFieldsArrayReducer,
+} from "./model/SetFieldsArray";
+import {
+  SET_FIELDS_DESC,
+  setFieldsDescReducer,
+  SetFieldsDescAction,
+} from "./model/SetFieldsDesc";
+import {
+  SET_SEPARATE_COMPLETE,
+  setSeparateCompleteReducer,
+  SetSeparateCompleteAction,
+} from "./model/SetSeparateComplete";
 
 const getInitialState = (): SubjectState => ({
   dict: {},
-  order: {
-    order: [],
-    options: {
-      fields: [
-        {
-          key: "created",
-          desc: false,
-        },
-      ],
-      separateCompletedItems: true,
-    },
-  },
+  order: getInitialOrder(),
 });
 
 const subjectReducer = (
@@ -98,6 +103,18 @@ const subjectReducer = (
         break;
       case APPEND_CHILD_SUBJECT:
         appendChildReducer(draftState, action as AppendChildAction);
+        break;
+      case SET_FIELDS_ARRAY:
+        setFieldsArrayReducer(draftState, action as SetFieldsArrayAction);
+        break;
+      case SET_FIELDS_DESC:
+        setFieldsDescReducer(draftState, action as SetFieldsDescAction);
+        break;
+      case SET_SEPARATE_COMPLETE:
+        setSeparateCompleteReducer(
+          draftState,
+          action as SetSeparateCompleteAction,
+        );
         break;
       default:
         break;
