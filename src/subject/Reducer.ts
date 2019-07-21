@@ -44,21 +44,11 @@ import {
   AppendChildAction,
   appendChildReducer,
 } from "./model/AppendChild";
+import { getInitialOrder } from "./model/Order";
 
 const getInitialState = (): SubjectState => ({
   dict: {},
-  order: {
-    order: [],
-    options: {
-      fields: [
-        {
-          key: "created",
-          desc: false,
-        },
-      ],
-      separateCompletedItems: true,
-    },
-  },
+  order: getInitialOrder(),
 });
 
 const subjectReducer = (

@@ -5,10 +5,18 @@ import {
   CommandBarButton,
   Callout,
   DirectionalHint,
+  DetailsList,
+  IColumn,
+  Toggle,
+  SelectionMode,
+  IDragDropEvents,
+  IDragDropContext,
 } from "office-ui-fabric-react";
 import { RouteIdProps } from "./Routing";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { createSubject } from "./subject/model/Create";
+import { State } from "./Reducer";
+import { SortField } from "./subject/model/Order";
 
 export const APP_COMMAND_BAR_HEIGHT = 45;
 const BUTTON_HEIGHT = 44;
@@ -24,6 +32,9 @@ const styles = mergeStyleSets({
     backgroundColor: theme.palette.white,
     paddingLeft: 24,
   },
+  dragEnterClass: {
+    backgroundColor: theme.palette.neutralLight,
+  },
 });
 
 export default function({ match }: RouteIdProps): JSX.Element {
@@ -31,6 +42,15 @@ export default function({ match }: RouteIdProps): JSX.Element {
   const dispatch = useDispatch();
   const target = useRef(null);
   const [calloutVisible, setShowCallout] = useState(false);
+  const { dict, order: rootOrder } = useSelector(
+    (state: State) => state.subjects,
+  );
+  const draggedIndex = useRef(-1);
+  const draggedItem = useRef(null);
+
+  const order = match.params.id
+    ? dict[match.params.id].children.options
+    : rootOrder.options;
 
   const dismissCallout = () => setShowCallout(false);
   const openCallout = () => setShowCallout(true);
@@ -40,6 +60,41 @@ export default function({ match }: RouteIdProps): JSX.Element {
   };
   const dispatchCreateSubject = () => {
     dispatch(createSubject());
+  };
+
+  const insertBeforeItem = (item: any) => {
+    console.log(item);
+  };
+
+  const dragDropEvents: IDragDropEvents = {
+    canDrop: (dropContext?: IDragDropContext, dragContext?: IDragDropContext) =>
+      true,
+    canDrag: (item?: any) => true,
+    onDragEnter: (item?: any, event?: DragEvent) => {
+      // return string is the css classes that will be added to the entering element.
+      return styles.dragEnterClass;
+    },
+    onDragLeave: (item?: any, event?: DragEvent) => {
+      return;
+    },
+    onDrop: (item?: any, event?: DragEvent) => {
+      if (draggedItem.current) {
+        insertBeforeItem(item);
+      }
+    },
+    onDragStart: (
+      item?: any,
+      itemIndex?: number,
+      selectedItems?: any[],
+      event?: MouseEvent,
+    ) => {
+      draggedItem.current = item;
+      draggedIndex.current = itemIndex!;
+    },
+    onDragEnd: (item?: any, event?: DragEvent) => {
+      draggedItem.current = null;
+      draggedIndex.current = -1;
+    },
   };
 
   const createSubjectButton = id ? (
@@ -57,6 +112,30 @@ export default function({ match }: RouteIdProps): JSX.Element {
       onClick={dispatchCreateSubject}
     />
   );
+
+  const sortColumns: IColumn[] = [
+    {
+      key: "param",
+      name: "Parameter",
+      fieldName: "name",
+      minWidth: 150,
+    },
+    {
+      key: "direction",
+      name: "Direction",
+      fieldName: "desc",
+      minWidth: 150,
+      onRender: (item: SortField) => {
+        return (
+          <Toggle
+            defaultChecked={item.desc}
+            onText="Ascending"
+            offText="Descending"
+          />
+        );
+      },
+    },
+  ];
 
   return (
     <div className={styles.wrapper}>
@@ -77,7 +156,12 @@ export default function({ match }: RouteIdProps): JSX.Element {
         directionalHint={DirectionalHint.bottomCenter}
         isBeakVisible={false}
       >
-        <div>Hello world</div>
+        <DetailsList
+          columns={sortColumns}
+          items={order.fields}
+          selectionMode={SelectionMode.none}
+          dragDropEvents={dragDropEvents}
+        />
       </Callout>
     </div>
   );
