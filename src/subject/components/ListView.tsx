@@ -50,7 +50,8 @@ export default function({
     });
   } else {
     const childrenSet = new Set(subjects[subjectId].children.order);
-    const condition = (i: Item) => !childrenSet.has(i.id) && i.id !== subjectId;
+    const condition = (i: Item): boolean =>
+      !childrenSet.has(i.id) && i.id !== subjectId;
     children = getItems(subjects, order.order, {
       condition,
       parent: subjectId,

@@ -15,16 +15,16 @@ export const setFieldsDesc = (
   desc: boolean,
   subjectId?: string,
 ): SetFieldsDescAction => ({
-  type: SET_FIELDS_DESC,
-  subjectId,
-  key,
   desc,
+  key,
+  subjectId,
+  type: SET_FIELDS_DESC,
 });
 
 export const setFieldsDescReducer = (
   state: SubjectState,
   { subjectId, key, desc }: SetFieldsDescAction,
-) => {
+): void => {
   const children = subjectId ? state.dict[subjectId].children : state.order;
   for (const f of children.options.fields) {
     if (f.key === key) {

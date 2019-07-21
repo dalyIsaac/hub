@@ -4,7 +4,7 @@ import { Route } from "react-router";
 import AppBar from "./AppBar";
 import AppCommandBar from "./AppCommandBar";
 
-const App: React.FC = () => {
+const App: React.FC = (): JSX.Element => {
   return (
     <div>
       <AppBar />

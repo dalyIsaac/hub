@@ -78,7 +78,7 @@ export default function({ match }: RouteIdProps): JSX.Element {
 
   const [orderState, setOrderState] = useState(order);
 
-  useEffect(() => {
+  useEffect((): void => {
     if (match.params.id) {
       document.title = "hub - " + subjects[match.params.id].name;
     } else {
@@ -87,7 +87,7 @@ export default function({ match }: RouteIdProps): JSX.Element {
   }, [match.params.id, subjects]);
 
   // Scrolls to newly added subjects
-  useEffect(() => {
+  useEffect((): void => {
     if (gridRef.current && orderState !== order && order.length > 0) {
       // Gets the index to scroll to
       const index = getDiffIndex(orderState, order);
@@ -99,7 +99,7 @@ export default function({ match }: RouteIdProps): JSX.Element {
       if (s.parents.size === 0 || s.parents.has(match.params.id!)) {
         gridRef.current.scrollToIndex(
           index,
-          () => ROW_HEIGHT,
+          (): number => ROW_HEIGHT,
           ScrollToMode.top,
         );
       }
@@ -120,8 +120,8 @@ export default function({ match }: RouteIdProps): JSX.Element {
         data-is-focusable={true}
         key={id}
         style={{
-          width: 100 / columnCount.current + "%",
           height: ROW_HEIGHT,
+          width: 100 / columnCount.current + "%",
         }}
       >
         <div className={styles.padding}>

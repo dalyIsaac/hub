@@ -6,5 +6,6 @@
   },
   "editor.formatOnSave": true,
   "editor.tabSize": 2,
-  "jest.autoEnable": false
+  "jest.autoEnable": false,
+  "eslint.enable": true
 }

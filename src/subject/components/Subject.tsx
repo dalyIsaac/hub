@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useDispatch } from "react-redux";
 import {
   FocusZone,
@@ -45,55 +45,55 @@ const styles = mergeStyleSets({
     gridTemplateColumns: "auto 32px",
   },
   header: {
-    color: theme.palette.neutralLight,
-    padding: 5,
+    alignItems: "center",
     borderTopLeftRadius: 4,
     borderTopRightRadius: 4,
-    gridRow: "1",
-    zIndex: 1,
-    gridColumn: "1 / 3",
-    margin: -1,
+    color: theme.palette.neutralLight,
     display: "flex",
     flexDirection: "column",
-    alignItems: "center",
+    gridColumn: "1 / 3",
+    gridRow: "1",
+    margin: -1,
+    padding: 5,
+    zIndex: 1,
     selectors: {
       "&:focus": {
-        outline: "none",
         border: "none",
+        outline: "none",
       },
     },
+  },
+  headerButton: {
+    background: theme.palette.white,
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
+    borderRight: border,
+    borderTop: border,
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 4,
+    marginBottom: -1,
+    marginLeft: 0,
+    marginRight: -1,
+    marginTop: -1,
+    zIndex: 2,
   },
   headerLink: {
     gridColumn: "2",
     gridRow: "1",
   },
-  headerButton: {
-    background: theme.palette.white,
-    borderTop: border,
-    borderRight: border,
-    borderTopRightRadius: 4,
-    borderTopLeftRadius: 0,
-    borderBottomLeftRadius: 0,
-    borderBottomRightRadius: 0,
-    marginTop: -1,
-    marginRight: -1,
-    marginBottom: -1,
-    marginLeft: 0,
-    zIndex: 2,
-  },
   body: {
     padding: 10,
   },
   title: {
-    paddingTop: 10,
-    paddingBottom: 5,
+    alignItems: "center",
     display: "flex",
     flexDirection: "column",
-    alignItems: "center",
+    paddingBottom: 5,
+    paddingTop: 10,
   },
   description: {
-    paddingTop: 10,
     paddingBottom: 10,
+    paddingTop: 10,
   },
   date: {
     display: "flex",
@@ -113,14 +113,14 @@ const styles = mergeStyleSets({
     width: "100%",
   },
   heroButton: {
-    marginTop: 10,
+    alignItems: "center",
     display: "flex",
     flexDirection: "column",
-    alignItems: "center",
+    marginTop: 10,
   },
 });
 
-function getDaysDifference(first: Date, second: Date) {
+function getDaysDifference(first: Date, second: Date): number {
   // Take the difference between the dates and divide by milliseconds per day.
   // Round to nearest whole number to deal with DST.
   return Math.ceil(
@@ -128,7 +128,7 @@ function getDaysDifference(first: Date, second: Date) {
   );
 }
 
-export default function({
+export default function SubjectComponent({
   subject,
   id,
   listHeight,
@@ -139,56 +139,76 @@ export default function({
   const [description, setDescription] = useState(subject.description);
 
   // Side effects update state with new props
-  useEffect(() => {
+  useEffect((): void => {
     setName(subject.name);
   }, [subject.name]);
 
-  useEffect(() => {
+  useEffect((): void => {
     setDescription(subject.description);
   }, [subject.description]);
 
   // Event handlers
-  const setNameLocal = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setName(e.target.value);
-  };
-  const setNameRedux = () => {
+  const setNameLocal = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>): void => {
+      setName(e.target.value);
+    },
+    [],
+  );
+
+  const setNameRedux = useCallback((): void => {
     const newName = name || "Untitled";
     if (subject.name !== newName) {
       dispatch(setSubjectName(id, newName));
     }
     setName(newName);
-  };
-  const setDescriptionLocal = (e: any, newValue?: string) => {
+  }, [dispatch, id, name, subject.name]);
+
+  const setDescriptionLocal = useCallback((e: any, newValue?: string): void => {
     setDescription(newValue || "");
-  };
-  const setDescriptionRedux = () => {
+  }, []);
+
+  const setDescriptionRedux = useCallback((): void => {
     if (subject.description !== description) {
       dispatch(setSubjectDescription(id, description));
     }
-  };
-  const setDueDateRedux = (date?: Date | null) => {
-    dispatch(setSubjectDueDate(id, date || undefined));
-  };
+  }, [dispatch, id, description, subject.description]);
 
-  const completeOnClick = () => dispatch(completeSubject(id, 1));
-  const uncompleteOnClick = () => dispatch(uncompleteSubject(id));
-  const clearDueDateOnClick = () => {
-    setDueDateRedux();
-  };
+  const setDueDateRedux = useCallback(
+    (date?: Date | null): void => {
+      dispatch(setSubjectDueDate(id, date || undefined));
+    },
+    [dispatch, id],
+  );
+
+  const completeOnClick = useCallback((): void => {
+    dispatch(completeSubject(id, 1));
+  }, [dispatch, id]);
+  const uncompleteOnClick = useCallback((): void => {
+    dispatch(uncompleteSubject(id));
+  }, [dispatch, id]);
+  const clearDueDateOnClick = useCallback((): void => setDueDateRedux(), [
+    setDueDateRedux,
+  ]);
+
+  const completeSubjectOnClick = useCallback(
+    (): void => {
+      dispatch(completeSubject(id, 2));
+    }, [dispatch, id]
+  )
+
+const deleteSubjectOnClick = useCallback((): void => {
+  dispatch(deleteSubject(id));
+}, [dispatch, id])
 
   const completeItem = {
     key: "complete-2-level",
     text: "Mark this and its children as complete",
-    onClick: () => {
-      dispatch(completeSubject(id, 2));
-    },
+    onClick: completeSubjectOnClick,
   };
   const deleteItem = {
     key: "delete",
     text: "Delete this",
-    onClick: () => {
-      dispatch(deleteSubject(id));
-    },
+    onClick: deleteSubjectOnClick,
   };
 
   const daysLeft = subject.dueDate

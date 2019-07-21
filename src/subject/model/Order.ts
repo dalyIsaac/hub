@@ -18,7 +18,10 @@ export interface OrderState {
   options: SortItemsOptions;
 }
 
-export function comparator(fields: SortField[], subjects: SubjectDictState) {
+export function comparator(
+  fields: SortField[],
+  subjects: SubjectDictState,
+): (a: string, b: string) => number {
   function compare(
     a: any,
     b: any,
@@ -55,7 +58,7 @@ export function comparator(fields: SortField[], subjects: SubjectDictState) {
     return 0;
   }
 
-  return function(a: string, b: string): number {
+  return function compareOrder(a: string, b: string): number {
     for (const { key, desc, compareLength } of fields) {
       let _a: any = subjects[a][key];
       let _b: any = subjects[b][key];

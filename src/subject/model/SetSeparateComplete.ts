@@ -13,15 +13,15 @@ export const setSeparateComplete = (
   separateCompletedItems: boolean,
   subjectId?: string,
 ): SetSeparateCompleteAction => ({
-  type: SET_SEPARATE_COMPLETE,
   separateCompletedItems,
   subjectId,
+  type: SET_SEPARATE_COMPLETE,
 });
 
 export const setSeparateCompleteReducer = (
   state: SubjectState,
   { separateCompletedItems, subjectId }: SetSeparateCompleteAction,
-) => {
+): void => {
   const children = subjectId ? state.dict[subjectId].children : state.order;
   children.options.separateCompletedItems = separateCompletedItems;
   children.order = sortItems(state.dict, children);

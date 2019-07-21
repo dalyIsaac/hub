@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import {
   getTheme,
   mergeStyleSets,
@@ -28,13 +28,13 @@ const BUTTON_HEIGHT = 44;
 const theme = getTheme();
 const styles = mergeStyleSets({
   wrapper: {
+    alignItems: "center",
+    backgroundColor: theme.palette.white,
     borderBottom: "1px solid " + theme.palette.neutralQuaternary,
     boxShadow: "0 6px 20px 0 rgba(0, 0, 0, 0.19)",
     display: "flex",
     flexDirection: "row",
     height: BUTTON_HEIGHT,
-    backgroundColor: theme.palette.white,
-    alignItems: "center",
     paddingLeft: 24,
   },
   dragEnterClass: {
@@ -51,78 +51,120 @@ export default function({ match }: RouteIdProps): JSX.Element {
     (state: State) => state.subjects,
   );
 
+  const order =
+    id && id in dict ? dict[id].children.options : rootOrder.options;
+
   const draggedIndex = useRef(-1);
   const draggedItem = useRef(null);
   const selection = useRef(new Selection());
 
-  const dismissCallout = () => setShowCallout(false);
-  const openCallout = () => setShowCallout(true);
+  const dismissCallout = useCallback((): void => {
+    setShowCallout(false);
+  }, []);
+  const openCallout = useCallback((): void => {
+    setShowCallout(true);
+  }, []);
 
-  const dispatchCreateChildSubject = () => {
+  const dispatchCreateChildSubject = useCallback((): void => {
     dispatch(createSubject({ parent: id }));
-  };
-  const dispatchCreateSubject = () => {
+  }, [dispatch, id]);
+
+  const dispatchCreateSubject = useCallback((): void => {
     dispatch(createSubject());
-  };
-  const dispatchSetFieldsDesc = (e: any, checked: boolean, key: string) => {
-    dispatch(setFieldsDesc(key, checked, id));
-  };
-  const dispatchSetSeparateComplete = (e: any, checked?: boolean) => {
-    dispatch(setSeparateComplete(checked!, id));
-  };
+  }, [dispatch]);
 
-  const insertBeforeItem = (item: any) => {
-    const draggedItems = selection.current.isIndexSelected(draggedIndex.current)
-      ? (selection.current.getSelection() as SortField[])
-      : [draggedItem.current!];
-
-    const items = order.fields.filter(
-      (itm) => draggedItems.indexOf(itm) === -1,
-    );
-    let insertIndex = items.indexOf(item);
-
-    // if dragging/dropping on itself, index will be 0.
-    if (insertIndex === -1) {
-      insertIndex = 0;
-    }
-
-    items.splice(insertIndex, 0, ...draggedItems);
-    dispatch(setFieldsArray(items, id));
-  };
-
-  const dragDropEvents: IDragDropEvents = {
-    canDrop: (dropContext?: IDragDropContext, dragContext?: IDragDropContext) =>
-      true,
-    canDrag: (item?: any) => true,
-    onDragEnter: (item?: any, event?: DragEvent) => {
-      // return string is the css classes that will be added to the entering element.
-      return styles.dragEnterClass;
+  const dispatchSetFieldsDesc = useCallback(
+    (e: any, checked: boolean, key: string): void => {
+      dispatch(setFieldsDesc(key, checked, id));
     },
-    onDragLeave: (item?: any, event?: DragEvent) => {
-      return;
+    [dispatch, id],
+  );
+
+  const dispatchSetSeparateComplete = useCallback(
+    (e: any, checked?: boolean): void => {
+      dispatch(setSeparateComplete(checked!, id));
     },
-    onDrop: (item?: any, event?: DragEvent) => {
+    [dispatch, id],
+  );
+
+  const insertBeforeItem = useCallback(
+    (item: any): void => {
+      const draggedItems = selection.current.isIndexSelected(
+        draggedIndex.current,
+      )
+        ? (selection.current.getSelection() as SortField[])
+        : [draggedItem.current!];
+
+      const items = order.fields.filter(
+        (itm): boolean => draggedItems.indexOf(itm) === -1,
+      );
+      let insertIndex = items.indexOf(item);
+
+      // if dragging/dropping on itself, index will be 0.
+      if (insertIndex === -1) {
+        insertIndex = 0;
+      }
+
+      items.splice(insertIndex, 0, ...draggedItems);
+      dispatch(setFieldsArray(items, id));
+    },
+    [dispatch, order, id],
+  );
+
+  const canDrop = useCallback(
+    (
+      _dropContext?: IDragDropContext,
+      _dragContext?: IDragDropContext,
+    ): boolean => true,
+    [],
+  );
+
+  const canDrag = useCallback((_item?: any): boolean => true, []);
+
+  const onDragEnter = useCallback((_item?: any, _event?: DragEvent): string => {
+    return styles.dragEnterClass;
+  }, []);
+
+  const onDragLeave = useCallback((_item?: any, _event?: DragEvent): void => {
+    return;
+  }, []);
+
+  const onDrop = useCallback(
+    (item?: any, _event?: DragEvent): void => {
       if (draggedItem.current) {
         insertBeforeItem(item);
       }
     },
-    onDragStart: (
+    [insertBeforeItem],
+  );
+
+  const onDragStart = useCallback(
+    (
       item?: any,
       itemIndex?: number,
-      selectedItems?: any[],
-      event?: MouseEvent,
-    ) => {
+      _selectedItems?: any[],
+      _event?: MouseEvent,
+    ): void => {
       draggedItem.current = item;
       draggedIndex.current = itemIndex!;
     },
-    onDragEnd: (item?: any, event?: DragEvent) => {
-      draggedItem.current = null;
-      draggedIndex.current = -1;
-    },
-  };
+    [],
+  );
 
-  const order =
-    id && id in dict ? dict[id].children.options : rootOrder.options;
+  const onDragEnd = useCallback((_item?: any, _event?: DragEvent): void => {
+    draggedItem.current = null;
+    draggedIndex.current = -1;
+  }, []);
+
+  const dragDropEvents: IDragDropEvents = {
+    canDrop,
+    canDrag,
+    onDragEnter,
+    onDragLeave,
+    onDrop,
+    onDragStart,
+    onDragEnd,
+  };
 
   const createSubjectButton = id ? (
     <CommandBarButton
@@ -140,6 +182,20 @@ export default function({ match }: RouteIdProps): JSX.Element {
     />
   );
 
+  const onRenderDirection = useCallback(
+    (item: SortField): JSX.Element => (
+      <Toggle
+        key={item.key}
+        defaultChecked={item.desc}
+        offText="Ascending"
+        onText="Descending"
+        onChange={(e, checked) => dispatchSetFieldsDesc(e, checked!, item.key)}
+      />
+    ),
+
+    [dispatchSetFieldsDesc],
+  );
+
   const sortColumns: IColumn[] = [
     {
       key: "param",
@@ -152,19 +208,7 @@ export default function({ match }: RouteIdProps): JSX.Element {
       name: "Direction",
       fieldName: "desc",
       minWidth: 150,
-      onRender: (item: SortField) => {
-        return (
-          <Toggle
-            key={item.key}
-            defaultChecked={item.desc}
-            offText="Ascending"
-            onText="Descending"
-            onChange={(e, checked) =>
-              dispatchSetFieldsDesc(e, checked!, item.key)
-            }
-          />
-        );
-      },
+      onRender: onRenderDirection,
     },
   ];
 

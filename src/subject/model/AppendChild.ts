@@ -10,8 +10,8 @@ export const appendChild = (
   subjectId: string,
   child: string,
 ): AppendChildAction => ({
-  subjectId,
   child,
+  subjectId,
   type: APPEND_CHILD_SUBJECT,
 });
 

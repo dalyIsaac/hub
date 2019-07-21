@@ -69,57 +69,66 @@ const getInitialState = (): SubjectState => ({
 const subjectReducer = (
   state: SubjectState = getInitialState(),
   action: Action,
-) =>
-  produce(state, (draftState) => {
-    switch (action.type) {
-      case SET_SUBJECT_NAME:
-        setSubjectNameReducer(draftState, action as SetSubjectNameAction);
-        break;
-      case SET_SUBJECT_DESCRIPTION:
-        setSubjectDescriptionReducer(
-          draftState,
-          action as SetSubjectDescriptionAction,
-        );
-        break;
-      case COMPLETE_SUBJECT:
-        completeSubjectReducer(draftState, action as CompleteSubjectAction);
-        break;
-      case UNCOMPLETE_SUBJECT:
-        uncompleteSubjectReducer(draftState, action as UncompleteSubjectAction);
-        break;
-      case DELETE_SUBJECT:
-        deleteSubjectReducer(draftState, action as DeleteSubjectAction);
-        break;
-      case SET_SUBJECT_DUE_DATE:
-        setSubjectDueDateReducer(draftState, action as SetSubjectDueDateAction);
-        break;
-      case CREATE_SUBJECT:
-        createSubjectReducer(draftState, action as CreateSubjectAction<
-          SubjectTypes
-        >);
-        break;
-      case REMOVE_CHILD_SUBJECT:
-        removeChildReducer(draftState, action as RemoveChildAction);
-        break;
-      case APPEND_CHILD_SUBJECT:
-        appendChildReducer(draftState, action as AppendChildAction);
-        break;
-      case SET_FIELDS_ARRAY:
-        setFieldsArrayReducer(draftState, action as SetFieldsArrayAction);
-        break;
-      case SET_FIELDS_DESC:
-        setFieldsDescReducer(draftState, action as SetFieldsDescAction);
-        break;
-      case SET_SEPARATE_COMPLETE:
-        setSeparateCompleteReducer(
-          draftState,
-          action as SetSeparateCompleteAction,
-        );
-        break;
-      default:
-        break;
-    }
-    return draftState;
-  });
+): SubjectState =>
+  produce(
+    state,
+    (draftState): SubjectState => {
+      switch (action.type) {
+        case SET_SUBJECT_NAME:
+          setSubjectNameReducer(draftState, action as SetSubjectNameAction);
+          break;
+        case SET_SUBJECT_DESCRIPTION:
+          setSubjectDescriptionReducer(
+            draftState,
+            action as SetSubjectDescriptionAction,
+          );
+          break;
+        case COMPLETE_SUBJECT:
+          completeSubjectReducer(draftState, action as CompleteSubjectAction);
+          break;
+        case UNCOMPLETE_SUBJECT:
+          uncompleteSubjectReducer(
+            draftState,
+            action as UncompleteSubjectAction,
+          );
+          break;
+        case DELETE_SUBJECT:
+          deleteSubjectReducer(draftState, action as DeleteSubjectAction);
+          break;
+        case SET_SUBJECT_DUE_DATE:
+          setSubjectDueDateReducer(
+            draftState,
+            action as SetSubjectDueDateAction,
+          );
+          break;
+        case CREATE_SUBJECT:
+          createSubjectReducer(draftState, action as CreateSubjectAction<
+            SubjectTypes
+          >);
+          break;
+        case REMOVE_CHILD_SUBJECT:
+          removeChildReducer(draftState, action as RemoveChildAction);
+          break;
+        case APPEND_CHILD_SUBJECT:
+          appendChildReducer(draftState, action as AppendChildAction);
+          break;
+        case SET_FIELDS_ARRAY:
+          setFieldsArrayReducer(draftState, action as SetFieldsArrayAction);
+          break;
+        case SET_FIELDS_DESC:
+          setFieldsDescReducer(draftState, action as SetFieldsDescAction);
+          break;
+        case SET_SEPARATE_COMPLETE:
+          setSeparateCompleteReducer(
+            draftState,
+            action as SetSeparateCompleteAction,
+          );
+          break;
+        default:
+          break;
+      }
+      return draftState;
+    },
+  );
 
 export default subjectReducer;

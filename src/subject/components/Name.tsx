@@ -3,7 +3,7 @@ import React from "react";
 import { getTheme, mergeStyleSets } from "@uifabric/styling";
 import { FontSizes } from "@uifabric/fluent-theme/lib/fluent/FluentType";
 
-interface TitleProps {
+interface NameProps {
   className: string;
   value: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -13,12 +13,12 @@ interface TitleProps {
 const theme = getTheme();
 const styles = mergeStyleSets({
   title: {
-    textAlign: "center",
-    fontSize: FontSizes.size28,
     border: "1px solid transparent",
-    outline: "none",
     borderRadius: 0,
+    fontSize: FontSizes.size28,
+    outline: "none",
     paddingBottom: 4,
+    textAlign: "center",
     width: "80%",
     selectors: {
       "&:focus": {
@@ -33,12 +33,12 @@ const styles = mergeStyleSets({
   },
 });
 
-export default function({
+export default function Name({
   value,
   className,
   onBlur,
   onChange,
-}: TitleProps): JSX.Element {
+}: NameProps): JSX.Element {
   return (
     <div className={className}>
       <input

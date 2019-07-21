@@ -49,7 +49,7 @@ export function getItems(
   const items = [];
   const parent = options ? options.parent : undefined;
   for (const id of order) {
-    const current = { id, subject: subjects[id], parent };
+    const current = { id, parent, subject: subjects[id] };
     if (
       isUndefined(options) ||
       isUndefined(options.condition) ||

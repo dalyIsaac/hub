@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import {
   getTheme,
   mergeStyleSets,
@@ -21,45 +21,45 @@ const panelHeaderHeight = 115;
 const theme = getTheme();
 const styles = mergeStyleSets({
   wrapper: {
-    display: "grid",
-    gridTemplateColumns,
     border,
     borderRadius: 2,
-    marginTop: 1,
+    display: "grid",
+    gridTemplateColumns,
     marginBottom: 1,
+    marginTop: 1,
   },
   button: {
+    alignItems: "center",
+    background: theme.palette.white,
+    border: "none",
+    cursor: "pointer",
     display: "flex",
     flexDirection: "row",
-    alignItems: "center",
-    border: "none",
-    background: theme.palette.white,
-    padding: 0,
     height: AppendChildrenHeight,
-    cursor: "pointer",
     outline: "none",
+    padding: 0,
     selectors: {
-      "&:hover": {
-        filter: "brightness(90%)",
-        outline: "none",
-      },
       "&:active": {
         filter: "brightness(80%)",
+        outline: "none",
+      },
+      "&:hover": {
+        filter: "brightness(90%)",
         outline: "none",
       },
     },
   },
   divider: {
-    gridColumn: "2",
     background: theme.palette.neutralTertiary,
-    width: 1,
-    marginTop: 8,
+    gridColumn: "2",
     marginBottom: 8,
+    marginTop: 8,
+    width: 1,
   },
   icon: {
-    paddingLeft: 4,
-    margin: 8,
     fontSize: 12,
+    margin: 8,
+    paddingLeft: 4,
     textAlign: "center",
   },
   text: {
@@ -81,23 +81,25 @@ export default function({ parent }: AppendChildrenProps): JSX.Element {
   const [panelVisible, setPanelVisible] = useState(false);
   const [menuVisible, setMenuVisible] = useState(false);
 
-  const hidePanel = () => setPanelVisible(false);
-  const showPanel = () => setPanelVisible(true);
-  const toggleMenu = () => setMenuVisible(!menuVisible);
-  const hideMenu = () => setMenuVisible(false);
+  const hidePanel = useCallback((): void => setPanelVisible(false), []);
+  const showPanel = useCallback((): void => setPanelVisible(true), []);
+  const toggleMenu = useCallback((): void => setMenuVisible(!menuVisible), [
+    menuVisible,
+  ]);
+  const hideMenu = useCallback((): void => setMenuVisible(false), []);
 
-  const addChild = () => {
+  const addChild = useCallback((): void => {
     dispatch(createSubject({ parent }));
-  };
+  }, [dispatch, parent]);
 
   const contextMenuItems: IContextualMenuItem[] = [
     {
-      key: "appendChildren",
       iconProps: {
         iconName: "ChildOf",
       },
-      text: "Append child subject",
+      key: "appendChildren",
       onClick: showPanel,
+      text: "Append child subject",
     },
   ];
 

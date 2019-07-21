@@ -21,8 +21,8 @@ export interface CreateSubjectAction<T extends SubjectTypes>
 export const createSubject = <T extends SubjectTypes>(
   props?: CreateSubjectProps<T>,
 ): CreateSubjectAction<T> => ({
-  type: CREATE_SUBJECT,
   subjectId: v4(),
+  type: CREATE_SUBJECT,
   ...props,
 });
 
@@ -31,12 +31,12 @@ export const createSubjectReducer = (
   { subjectType, parent, subjectId }: CreateSubjectAction<SubjectTypes>,
 ): void => {
   const subject: Subject = {
-    type: subjectType || "BaseSubject",
-    name: "Untitled",
+    children: getInitialOrder(),
     created: new Date(),
     description: "",
-    children: getInitialOrder(),
+    name: "Untitled",
     parents: new Set(),
+    type: subjectType || "BaseSubject",
   };
 
   state.dict[subjectId] = subject;

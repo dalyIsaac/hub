@@ -1,3 +1,5 @@
+/* eslint @typescript-eslint/explicit-function-return-type: "off" */
+
 import { createTransform } from "redux-persist";
 import { Subject, SubjectState, SubjectDictState } from "./Subject";
 
@@ -18,14 +20,14 @@ interface PersistSubjectState extends Omit<SubjectState, "dict"> {
 }
 
 const transformSubjects = createTransform<SubjectState, PersistSubjectState>(
-  ({ dict: inboundSubjects, ...everythingElse }, key) => {
+  ({ dict: inboundSubjects, ...everythingElse }, _key) => {
     const dict: PersistSubjectDictState = {};
     for (const [key, s] of Object.entries(inboundSubjects)) {
       dict[key] = { ...s, parents: [...s.parents] };
     }
     return { dict, ...everythingElse };
   },
-  ({ dict: outboundSubjects, ...everythingElse }, key) => {
+  ({ dict: outboundSubjects, ...everythingElse }, _key) => {
     const dict: SubjectDictState = {};
     for (const [
       key,
@@ -35,10 +37,10 @@ const transformSubjects = createTransform<SubjectState, PersistSubjectState>(
       const dueDateDate = dueDate ? new Date(dueDate) : undefined;
       dict[key] = {
         ...s,
-        parents: new Set(parents),
-        created: new Date(created),
         completed: completedDate,
+        created: new Date(created),
         dueDate: dueDateDate,
+        parents: new Set(parents),
       };
     }
     return { dict, ...everythingElse };

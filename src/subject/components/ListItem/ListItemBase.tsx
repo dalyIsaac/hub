@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import {
   getTheme,
   mergeStyleSets,
@@ -29,74 +29,77 @@ export const border = "1px solid " + theme.palette.neutralTertiary;
 
 const styles = mergeStyleSets({
   wrapper: {
+    border,
+    borderRadius: 2,
     display: "grid",
     gridTemplateColumns,
     gridTemplateRows: "auto auto",
-    border,
-    borderRadius: 2,
     marginBottom: 2,
   },
   checkboxWrapper: {
+    alignItems: "center",
     display: "flex",
     flexDirection: "row",
-    alignItems: "center",
   },
   checkbox: {
     margin: 8,
   },
   divider: {
-    gridColumn: "2",
     background: theme.palette.neutralTertiary,
-    width: 1,
-    marginTop: 8,
+    gridColumn: "2",
     marginBottom: 8,
+    marginTop: 8,
+    width: 1,
   },
   button: {
     gridColumn: "3",
   },
   content: {
-    gridRow: "2",
     gridColumn: "1 / 3",
+    gridRow: "2",
     paddingLeft: 8,
     paddingRight: 8,
   },
 });
 
-export default function({
-  onCheckboxChange,
-  key,
-  children,
-  contextMenuItems,
+export default function ListItemBase({
   button,
   checked,
-  label,
+  children,
+  contextMenuItems,
   editable,
+  key,
+  label,
+  onCheckboxChange,
   onEditableBlur,
-}: ListItemBaseProps) {
+}: ListItemBaseProps): JSX.Element {
   const target = useRef(null);
   const [localLabel, _setLocalLabel] = useState(label);
   const [menuVisible, _setMenuVisible] = useState(false);
 
-  useEffect(() => {
+  useEffect((): void => {
     _setLocalLabel(label);
   }, [label]);
 
-  function setCalloutVisible(e: React.MouseEvent<HTMLDivElement>): void {
-    e.preventDefault();
-    _setMenuVisible(!menuVisible);
-  }
+  const setCalloutVisible = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>): void => {
+      e.preventDefault();
+      _setMenuVisible(!menuVisible);
+    },
+    [menuVisible],
+  );
 
-  function setLocalLabel(e: any, newValue?: string): void {
+  const setLocalLabel = useCallback((e: any, newValue?: string): void => {
     _setLocalLabel(newValue || "");
-  }
+  }, []);
 
-  const onBlur = () => {
+  const onBlur = useCallback((): void => {
     if (onEditableBlur) {
       const newLabel = localLabel || "Untitled";
       onEditableBlur(newLabel);
       _setLocalLabel(newLabel);
     }
-  };
+  }, [localLabel, onEditableBlur]);
 
   return (
     <div
@@ -125,7 +128,7 @@ export default function({
         </div>
         <div className={styles.content}>{children}</div>
 
-        {!!button ? <span className={styles.divider} /> : null}
+        {button ? <span className={styles.divider} /> : null}
         <div className={styles.button}>{button || null}</div>
       </div>
 

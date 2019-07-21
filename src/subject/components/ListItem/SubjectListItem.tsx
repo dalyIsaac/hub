@@ -1,8 +1,5 @@
-import React from "react";
-import {
-  IContextualMenuItem,
-  IconButton,
-} from "office-ui-fabric-react";
+import React, { useCallback } from "react";
+import { IContextualMenuItem, IconButton } from "office-ui-fabric-react";
 import { mergeStyleSets } from "@uifabric/styling";
 import { Item } from "../../model/Subject";
 import { useDispatch } from "react-redux";
@@ -24,45 +21,70 @@ const styles = mergeStyleSets({
 function ListItem({ id, parent, subject }: Item): JSX.Element {
   const dispatch = useDispatch();
 
-  const onChange = (e: any, checked?: boolean, level?: number) => {
-    if (checked === true) {
-      dispatch(completeSubject(id, level));
-    } else {
-      dispatch(uncompleteSubject(id));
-    }
-  };
+  const onChange = useCallback(
+    (e: any, checked?: boolean, level?: number): void => {
+      if (checked === true) {
+        dispatch(completeSubject(id, level));
+      } else {
+        dispatch(uncompleteSubject(id));
+      }
+    },
+    [dispatch, id],
+  );
 
-  const onBlur = (newValue: string) =>
-    dispatch(setSubjectName(id, newValue || "Untitled"));
+  const onBlur = useCallback(
+    (newValue: string): void => {
+      dispatch(setSubjectName(id, newValue || "Untitled"));
+    },
+    [dispatch, id],
+  );
+
+  const completeOnClick = useCallback(
+    (e: any, item?: IContextualMenuItem): void => {
+      if (item) {
+        onChange(e, !item.checked, 1);
+      }
+    },
+    [onChange],
+  );
+
+  const completeWithChildrenOnClick = useCallback(
+    (e: any, item?: IContextualMenuItem): void => {
+      if (item) {
+        onChange(e, !item.checked, 2);
+      }
+    },
+    [onChange],
+  );
+
+  const removeChildOnClick = useCallback((): void => {
+    dispatch(removeChild(id, parent!));
+  }, [dispatch, id, parent]);
+
+  const deleteSubjectOnClick = useCallback((): void => {
+    dispatch(deleteSubject(id));
+  }, [dispatch, id]);
 
   const contextItems: IContextualMenuItem[] = [
     {
       key: "complete-1-level",
       text: "Mark as complete",
-      onClick: (e, item) => {
-        if (item) {
-          onChange(e, !item.checked, 1);
-        }
-      },
+      onClick: completeOnClick,
     },
     {
       key: "complete-2-level",
       text: "Mark this and its children as complete",
-      onClick: (e, item) => {
-        if (item) {
-          onChange(e, !item.checked, 2);
-        }
-      },
+      onClick: completeWithChildrenOnClick,
     },
     {
       key: "remove",
       text: "Remove this as a child",
-      onClick: () => dispatch(removeChild(id, parent!)),
+      onClick: removeChildOnClick,
     },
     {
       key: "delete",
       text: "Delete this",
-      onClick: () => dispatch(deleteSubject(id)),
+      onClick: deleteSubjectOnClick,
     },
   ];
 

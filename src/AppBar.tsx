@@ -8,19 +8,19 @@ export const APPBAR_HEIGHT = 48;
 const theme = getTheme();
 const styles = mergeStyleSets({
   appBar: {
+    alignItems: "center",
     backgroundColor: theme.palette.themePrimary,
     boxShadow: "0 6px 20px 0 rgba(0, 0, 0, 0.19)",
-    height: APPBAR_HEIGHT,
     display: "grid",
-    alignItems: "center",
+    height: APPBAR_HEIGHT,
   },
   link: {
     color: theme.palette.black,
     textDecoration: "none",
     selectors: {
       "&:hover": {
-        textDecoration: "none",
         color: theme.palette.neutralLighter,
+        textDecoration: "none",
       },
     },
   },
@@ -29,7 +29,7 @@ const styles = mergeStyleSets({
   },
 });
 
-export default function(): JSX.Element {
+export default function AppBar(): JSX.Element {
   return (
     <div className={styles.appBar}>
       <Link to={"/"} className={styles.link}>
