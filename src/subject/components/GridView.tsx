@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { List, IRectangle, ScrollToMode } from "office-ui-fabric-react";
 import { mergeStyleSets, getTheme } from "@uifabric/styling";
 import { useRef } from "react";
@@ -108,7 +108,7 @@ export default function({ match }: RouteIdProps): JSX.Element {
     }
   }, [order, orderState, match.params.id, subjects]);
 
-  const renderCell = (props?: Item): JSX.Element | undefined => {
+  const renderCell = useCallback((props?: Item): JSX.Element | undefined => {
     if (!props) {
       return;
     }
@@ -136,19 +136,21 @@ export default function({ match }: RouteIdProps): JSX.Element {
         </div>
       </div>
     );
-  };
+  }, []);
 
-  const getItemCountForPage = (
-    itemIndex?: number,
-    surfaceRect?: IRectangle,
-  ): number => {
-    if (itemIndex === 0 && surfaceRect) {
-      columnCount.current = Math.ceil(surfaceRect.width / MIN_COL_WIDTH);
-      columnWidth.current = Math.floor(surfaceRect.width / columnCount.current);
-    }
+  const getItemCountForPage = useCallback(
+    (itemIndex?: number, surfaceRect?: IRectangle): number => {
+      if (itemIndex === 0 && surfaceRect) {
+        columnCount.current = Math.ceil(surfaceRect.width / MIN_COL_WIDTH);
+        columnWidth.current = Math.floor(
+          surfaceRect.width / columnCount.current,
+        );
+      }
 
-    return columnCount.current * ROWS_PER_PAGE;
-  };
+      return columnCount.current * ROWS_PER_PAGE;
+    },
+    [],
+  );
 
   if (!isUndefined(match.params.id) && !(match.params.id in subjects)) {
     return <Redirect to="/" />;
