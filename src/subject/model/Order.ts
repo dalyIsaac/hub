@@ -43,7 +43,7 @@ export function comparator(fields: SortField[], subjects: SubjectDictState) {
     const coeff = desc ? -1 : 1;
     if (!aDefined && !bDefined) {
       return 0;
-    } else if (aDefined && bDefined) {
+    } else if (aDefined && !bDefined) {
       return coeff * 1;
     } else if (!aDefined && bDefined) {
       return coeff * -1;
@@ -57,12 +57,13 @@ export function comparator(fields: SortField[], subjects: SubjectDictState) {
 
   return function(a: string, b: string): number {
     for (const { key, desc, compareLength } of fields) {
-      const result = compare(
-        subjects[a][key],
-        subjects[b][key],
-        desc,
-        compareLength,
-      );
+      let _a: any = subjects[a][key];
+      let _b: any = subjects[b][key];
+      if (key === "children") {
+        _a = (_a as OrderState)["order"];
+        _b = (_b as OrderState)["order"];
+      }
+      const result = compare(_a, _b, desc, compareLength);
       if (result !== 0) {
         return result;
       }

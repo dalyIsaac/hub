@@ -45,6 +45,16 @@ import {
   appendChildReducer,
 } from "./model/AppendChild";
 import { getInitialOrder } from "./model/Order";
+import {
+  SET_FIELDS_ARRAY,
+  SetFieldsArrayAction,
+  setFieldsArrayReducer,
+} from "./model/SetFieldsArray";
+import {
+  SET_FIELDS_DESC,
+  setFieldsDescReducer,
+  SetFieldsDescAction,
+} from "./model/SetFieldsDesc";
 
 const getInitialState = (): SubjectState => ({
   dict: {},
@@ -88,6 +98,12 @@ const subjectReducer = (
         break;
       case APPEND_CHILD_SUBJECT:
         appendChildReducer(draftState, action as AppendChildAction);
+        break;
+      case SET_FIELDS_ARRAY:
+        setFieldsArrayReducer(draftState, action as SetFieldsArrayAction);
+        break;
+      case SET_FIELDS_DESC:
+        setFieldsDescReducer(draftState, action as SetFieldsDescAction);
         break;
       default:
         break;

@@ -8,6 +8,7 @@ import {
   DetailsList,
   IColumn,
   Toggle,
+  Selection,
   SelectionMode,
   IDragDropEvents,
   IDragDropContext,
@@ -17,6 +18,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { createSubject } from "./subject/model/Create";
 import { State } from "./Reducer";
 import { SortField } from "./subject/model/Order";
+import { setFieldsArray } from "./subject/model/SetFieldsArray";
+import { setFieldsDesc } from "./subject/model/SetFieldsDesc";
 
 export const APP_COMMAND_BAR_HEIGHT = 45;
 const BUTTON_HEIGHT = 44;
@@ -47,10 +50,10 @@ export default function({ match }: RouteIdProps): JSX.Element {
   );
   const draggedIndex = useRef(-1);
   const draggedItem = useRef(null);
+  const selection = useRef(new Selection());
 
-  const order = match.params.id
-    ? dict[match.params.id].children.options
-    : rootOrder.options;
+  const order =
+    id && id in dict ? dict[id].children.options : rootOrder.options;
 
   const dismissCallout = () => setShowCallout(false);
   const openCallout = () => setShowCallout(true);
@@ -61,9 +64,27 @@ export default function({ match }: RouteIdProps): JSX.Element {
   const dispatchCreateSubject = () => {
     dispatch(createSubject());
   };
+  const dispatchSetFieldsDesc = (e: any, checked: boolean, key: string) => {
+    dispatch(setFieldsDesc(key, checked, id));
+  };
 
   const insertBeforeItem = (item: any) => {
-    console.log(item);
+    const draggedItems = selection.current.isIndexSelected(draggedIndex.current)
+      ? (selection.current.getSelection() as SortField[])
+      : [draggedItem.current!];
+
+    const items = order.fields.filter(
+      (itm) => draggedItems.indexOf(itm) === -1,
+    );
+    let insertIndex = items.indexOf(item);
+
+    // if dragging/dropping on itself, index will be 0.
+    if (insertIndex === -1) {
+      insertIndex = 0;
+    }
+
+    items.splice(insertIndex, 0, ...draggedItems);
+    dispatch(setFieldsArray(items, id));
   };
 
   const dragDropEvents: IDragDropEvents = {
@@ -128,9 +149,13 @@ export default function({ match }: RouteIdProps): JSX.Element {
       onRender: (item: SortField) => {
         return (
           <Toggle
+            key={item.key}
             defaultChecked={item.desc}
-            onText="Ascending"
-            offText="Descending"
+            offText="Ascending"
+            onText="Descending"
+            onChange={(e, checked) =>
+              dispatchSetFieldsDesc(e, checked!, item.key)
+            }
           />
         );
       },
@@ -156,12 +181,15 @@ export default function({ match }: RouteIdProps): JSX.Element {
         directionalHint={DirectionalHint.bottomCenter}
         isBeakVisible={false}
       >
-        <DetailsList
-          columns={sortColumns}
-          items={order.fields}
-          selectionMode={SelectionMode.none}
-          dragDropEvents={dragDropEvents}
-        />
+        <div onBlur={dismissCallout}>
+          <DetailsList
+            selection={selection.current}
+            columns={sortColumns}
+            items={order.fields}
+            selectionMode={SelectionMode.none}
+            dragDropEvents={dragDropEvents}
+          />
+        </div>
       </Callout>
     </div>
   );
