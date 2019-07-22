@@ -143,7 +143,11 @@ export default function GridView({ id }: GridViewProps): JSX.Element {
   const getItemCountForPage = useCallback(
     (itemIndex?: number, surfaceRect?: IRectangle): number => {
       if (itemIndex === 0 && surfaceRect) {
-        columnCount.current = Math.ceil(surfaceRect.width / MIN_COL_WIDTH);
+        const columns = surfaceRect.width / MIN_COL_WIDTH;
+        columnCount.current =
+          surfaceRect.width > MIN_COL_WIDTH * 1.5
+            ? Math.ceil(columns)
+            : Math.floor(columns);
         columnWidth.current = Math.floor(
           surfaceRect.width / columnCount.current,
         );
