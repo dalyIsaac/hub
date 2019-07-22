@@ -152,15 +152,15 @@ export default function SortButton({
 
   const sortColumns: IColumn[] = [
     {
+      fieldName: "name",
       key: "param",
       name: "Parameter",
-      fieldName: "name",
       minWidth: 150,
     },
     {
+      fieldName: "desc",
       key: "direction",
       name: "Direction",
-      fieldName: "desc",
       minWidth: 150,
       onRender: onRenderDirection,
     },

@@ -1,14 +1,8 @@
-import React, { useState, useCallback, useRef } from "react";
+import React from "react";
 import { mergeStyleSets, getTheme } from "@uifabric/styling";
-import {
-  Text,
-  SearchBox,
-  Dropdown,
-  IDropdownOption,
-  Callout,
-  DirectionalHint,
-} from "office-ui-fabric-react";
+import { Text } from "office-ui-fabric-react";
 import { Link } from "react-router-dom";
+import SearchBar from "./Search/SearchBar";
 
 export const APPBAR_HEIGHT = 48;
 
@@ -46,21 +40,6 @@ const styles = mergeStyleSets({
 });
 
 export default function AppBar(): JSX.Element {
-  const [resultsVisible, setResultsVisible] = useState(false);
-  const target = useRef(null);
-  const onSearch = useCallback((newValue: any): void => {
-    console.log(newValue);
-    setResultsVisible(true);
-  }, []);
-  const dismissResults = useCallback((): void => setResultsVisible(false), []);
-
-  const options: IDropdownOption[] = [
-    { key: "name", text: "Name" },
-    { key: "description", text: "Description" },
-    { key: "childName", text: "Child name" },
-    { key: "childDescription", text: "Child description" },
-  ];
-
   return (
     <div className={styles.appBar}>
       <Link to={"/"} className={styles.link}>
@@ -70,23 +49,7 @@ export default function AppBar(): JSX.Element {
       </Link>
 
       <div className={styles.search}>
-        <Dropdown
-          options={options}
-          defaultSelectedKey="name"
-          className={styles.searchDropdown}
-        />
-        <div ref={target}>
-          <SearchBox placeholder="Search" onSearch={onSearch} />
-        </div>
-        <Callout
-          hidden={!resultsVisible}
-          isBeakVisible={false}
-          target={target}
-          onDismiss={dismissResults}
-          directionalHint={DirectionalHint.bottomRightEdge}
-        >
-          Hello world
-        </Callout>
+        <SearchBar />
       </div>
 
       <div></div>
