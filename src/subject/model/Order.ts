@@ -98,6 +98,16 @@ export function sortItems(
   return items.concat(completedItems);
 }
 
+export function sortAllParents(
+  dict: SubjectDictState,
+  subjectId: string,
+): void {
+  for (const id of dict[subjectId].parents) {
+    const parent = dict[id].children;
+    parent.order = sortItems(dict, parent);
+  }
+}
+
 export const getInitialOrder = (): OrderState => ({
   order: [],
   options: {

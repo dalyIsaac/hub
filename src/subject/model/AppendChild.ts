@@ -1,4 +1,5 @@
 import { SubjectBaseAction, SubjectState } from "./Subject";
+import { sortItems } from "./Order";
 
 export const APPEND_CHILD_SUBJECT = "APPEND_CHILD_SUBJECT";
 
@@ -19,6 +20,8 @@ export const appendChildReducer = (
   state: SubjectState,
   { subjectId, child }: AppendChildAction,
 ): void => {
-  state.dict[subjectId].children.order.push(child);
+  const parentOrder = state.dict[subjectId].children;
+  parentOrder.order.push(child);
+  parentOrder.order = sortItems(state.dict, parentOrder);
   state.dict[child].parents.add(subjectId);
 };

@@ -24,5 +24,7 @@ export const setSeparateCompleteReducer = (
 ): void => {
   const children = subjectId ? state.dict[subjectId].children : state.order;
   children.options.separateCompletedItems = separateCompletedItems;
-  children.order = sortItems(state.dict, children);
+  if (subjectId) {
+    children.order = sortItems(state.dict, children);
+  }
 };

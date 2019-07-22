@@ -1,4 +1,5 @@
 import { SubjectState, SubjectBaseAction } from "./Subject";
+import { sortAllParents } from "./Order";
 
 export const SET_SUBJECT_DESCRIPTION = "SET_SUBJECT_DESCRIPTION";
 
@@ -20,4 +21,5 @@ export const setSubjectDescriptionReducer = (
   { subjectId, description }: SetSubjectDescriptionAction,
 ): void => {
   state.dict[subjectId].description = description;
+  sortAllParents(state.dict, subjectId);
 };

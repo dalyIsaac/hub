@@ -29,7 +29,9 @@ export const setFieldsDescReducer = (
   for (const f of children.options.fields) {
     if (f.key === key) {
       f.desc = desc;
-      children.order = sortItems(state.dict, children);
+      if (subjectId) {
+        children.order = sortItems(state.dict, children);
+      }
       return;
     }
   }

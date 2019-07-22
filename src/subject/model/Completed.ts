@@ -1,4 +1,5 @@
 import { SubjectBaseAction, SubjectState, SubjectDictState } from "./Subject";
+import { sortAllParents } from "./Order";
 
 // Complete subject
 export const COMPLETE_SUBJECT = "COMPLETE_SUBJECT";
@@ -24,6 +25,7 @@ const markAsComplete = (
 ): void => {
   if (dict[subjectId].completed === undefined) {
     dict[subjectId].completed = date;
+    sortAllParents(dict, subjectId);
     if (level > 1) {
       for (const childId of dict[subjectId].children.order) {
         markAsComplete(dict, childId, level - 1, date);
@@ -56,4 +58,5 @@ export const uncompleteSubjectReducer = (
   { subjectId }: UncompleteSubjectAction,
 ): void => {
   state.dict[subjectId].completed = undefined;
+  sortAllParents(state.dict, subjectId);
 };

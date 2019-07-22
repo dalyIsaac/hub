@@ -1,4 +1,5 @@
 import { SubjectState, SubjectBaseAction } from "./Subject";
+import { sortAllParents } from "./Order";
 
 // Set subject due date
 export const SET_SUBJECT_DUE_DATE = "SET_SUBJECT_DUE_DATE";
@@ -21,4 +22,5 @@ export const setSubjectDueDateReducer = (
   { subjectId, date }: SetSubjectDueDateAction,
 ): void => {
   state.dict[subjectId].dueDate = date;
+  sortAllParents(state.dict, subjectId);
 };

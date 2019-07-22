@@ -1,5 +1,6 @@
 import { remove } from "lodash";
 import { SubjectState, SubjectBaseAction } from "./Subject";
+import { sortAllParents } from "./Order";
 
 export const DELETE_SUBJECT = "DELETE_SUBJECT";
 
@@ -25,4 +26,5 @@ export const deleteSubjectReducer = (
   }
   remove(state.order.order, (s): boolean => s === subjectId);
   delete state.dict[subjectId];
+  sortAllParents(state.dict, subjectId);
 };

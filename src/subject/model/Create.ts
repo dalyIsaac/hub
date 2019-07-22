@@ -48,5 +48,4 @@ export const createSubjectReducer = (
     sortItems(state.dict, s.children);
   }
   state.order.order.push(subjectId);
-  sortItems(state.dict, state.order);
 };

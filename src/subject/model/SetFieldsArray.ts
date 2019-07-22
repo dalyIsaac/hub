@@ -24,5 +24,7 @@ export const setFieldsArrayReducer = (
 ): void => {
   const children = subjectId ? state.dict[subjectId].children : state.order;
   children.options.fields = fields;
-  children.order = sortItems(state.dict, children);
+  if (subjectId) {
+    children.order = sortItems(state.dict, children);
+  }
 };

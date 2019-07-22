@@ -44,7 +44,7 @@ import {
   AppendChildAction,
   appendChildReducer,
 } from "./model/AppendChild";
-import { getInitialOrder } from "./model/Order";
+import { getInitialOrder, sortItems } from "./model/Order";
 import {
   SET_FIELDS_ARRAY,
   SetFieldsArrayAction,
@@ -126,6 +126,11 @@ const subjectReducer = (
           break;
         default:
           break;
+      }
+
+      // Prevents redux-persist from being overridden during hydration.
+      if (draftState.order.order.length > 0) {
+        draftState.order.order = sortItems(draftState.dict, draftState.order);
       }
       return draftState;
     },
