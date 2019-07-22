@@ -172,6 +172,7 @@ export default function({ match }: RouteIdProps): JSX.Element {
       iconProps={{ iconName: "Childof" }}
       ariaLabel="Create child subject"
       onClick={dispatchCreateChildSubject}
+      styles={{ root: { height: BUTTON_HEIGHT } }}
     />
   ) : (
     <CommandBarButton
@@ -179,6 +180,7 @@ export default function({ match }: RouteIdProps): JSX.Element {
       iconProps={{ iconName: "Add" }}
       ariaLabel="Create subject"
       onClick={dispatchCreateSubject}
+      styles={{ root: { height: BUTTON_HEIGHT } }}
     />
   );
 
@@ -214,7 +216,7 @@ export default function({ match }: RouteIdProps): JSX.Element {
 
   return (
     <div className={styles.wrapper}>
-      {createSubjectButton}
+      <div>{createSubjectButton}</div>
       <div ref={target}>
         <CommandBarButton
           text="Sort"
