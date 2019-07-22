@@ -9,7 +9,7 @@ import SubjectComponent from "./Subject";
 import { Redirect } from "react-router";
 import { APPBAR_HEIGHT } from "../../AppBar";
 import { RouteIdProps } from "../../Routing";
-import { APP_COMMAND_BAR_HEIGHT } from "../../AppCommandBar";
+import { APP_COMMAND_BAR_HEIGHT } from "../../AppCommandBar/Common";
 import { isUndefined } from "lodash";
 
 const ROWS_PER_PAGE = 3;

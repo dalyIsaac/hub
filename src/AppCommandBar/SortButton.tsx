@@ -1,62 +1,46 @@
-import React, { useState, useRef, useCallback } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import {
-  getTheme,
-  mergeStyleSets,
-  CommandBarButton,
   Callout,
-  DirectionalHint,
   DetailsList,
-  IColumn,
-  Toggle,
-  Selection,
-  SelectionMode,
+  DirectionalHint,
   IDragDropEvents,
   IDragDropContext,
+  Selection,
+  SelectionMode,
+  IColumn,
+  Toggle,
+  mergeStyleSets,
+  getTheme,
+  CommandBarButton,
 } from "office-ui-fabric-react";
-import { RouteIdProps } from "./Routing";
-import { useDispatch, useSelector } from "react-redux";
-import { createSubject } from "./subject/model/Create";
-import { State } from "./Reducer";
-import { SortField } from "./subject/model/Order";
-import { setFieldsArray } from "./subject/model/SetFieldsArray";
-import { setFieldsDesc } from "./subject/model/SetFieldsDesc";
-import { setSeparateComplete } from "./subject/model/SetSeparateComplete";
+import { SortField, SortItemsOptions } from "../subject/model/Order";
+import { useDispatch } from "react-redux";
+import { setFieldsArray } from "../subject/model/SetFieldsArray";
+import { setFieldsDesc } from "../subject/model/SetFieldsDesc";
+import { BUTTON_HEIGHT } from "./Common";
 
-export const APP_COMMAND_BAR_HEIGHT = 45;
-const BUTTON_HEIGHT = 44;
+interface SortCalloutProps {
+  id?: string;
+  order: SortItemsOptions;
+}
 
 const theme = getTheme();
 const styles = mergeStyleSets({
-  wrapper: {
-    alignItems: "center",
-    backgroundColor: theme.palette.white,
-    borderBottom: "1px solid " + theme.palette.neutralQuaternary,
-    boxShadow: "0 6px 20px 0 rgba(0, 0, 0, 0.19)",
-    display: "flex",
-    flexDirection: "row",
-    height: BUTTON_HEIGHT,
-    paddingLeft: 24,
-  },
   dragEnterClass: {
     backgroundColor: theme.palette.neutralLight,
   },
 });
 
-export default function({ match }: RouteIdProps): JSX.Element {
-  const { id } = match.params;
-  const dispatch = useDispatch();
-  const target = useRef(null);
-  const [calloutVisible, setShowCallout] = useState(false);
-  const { dict, order: rootOrder } = useSelector(
-    (state: State) => state.subjects,
-  );
-
-  const order =
-    id && id in dict ? dict[id].children.options : rootOrder.options;
-
+export default function SortButton({
+  id,
+  order,
+}: SortCalloutProps): JSX.Element {
   const draggedIndex = useRef(-1);
   const draggedItem = useRef(null);
   const selection = useRef(new Selection());
+  const target = useRef(null);
+
+  const [calloutVisible, setShowCallout] = useState(false);
 
   const dismissCallout = useCallback((): void => {
     setShowCallout(false);
@@ -65,27 +49,7 @@ export default function({ match }: RouteIdProps): JSX.Element {
     setShowCallout(true);
   }, []);
 
-  const dispatchCreateChildSubject = useCallback((): void => {
-    dispatch(createSubject({ parent: id }));
-  }, [dispatch, id]);
-
-  const dispatchCreateSubject = useCallback((): void => {
-    dispatch(createSubject());
-  }, [dispatch]);
-
-  const dispatchSetFieldsDesc = useCallback(
-    (e: any, checked: boolean, key: string): void => {
-      dispatch(setFieldsDesc(key, checked, id));
-    },
-    [dispatch, id],
-  );
-
-  const dispatchSetSeparateComplete = useCallback(
-    (e: any, checked?: boolean): void => {
-      dispatch(setSeparateComplete(checked!, id));
-    },
-    [dispatch, id],
-  );
+  const dispatch = useDispatch();
 
   const insertBeforeItem = useCallback(
     (item: any): void => {
@@ -157,31 +121,20 @@ export default function({ match }: RouteIdProps): JSX.Element {
   }, []);
 
   const dragDropEvents: IDragDropEvents = {
-    canDrop,
     canDrag,
+    canDrop,
+    onDragEnd,
     onDragEnter,
     onDragLeave,
-    onDrop,
     onDragStart,
-    onDragEnd,
+    onDrop,
   };
 
-  const createSubjectButton = id ? (
-    <CommandBarButton
-      text="Create child subject"
-      iconProps={{ iconName: "Childof" }}
-      ariaLabel="Create child subject"
-      onClick={dispatchCreateChildSubject}
-      styles={{ root: { height: BUTTON_HEIGHT } }}
-    />
-  ) : (
-    <CommandBarButton
-      text="Create subject"
-      iconProps={{ iconName: "Add" }}
-      ariaLabel="Create subject"
-      onClick={dispatchCreateSubject}
-      styles={{ root: { height: BUTTON_HEIGHT } }}
-    />
+  const dispatchSetFieldsDesc = useCallback(
+    (e: any, checked: boolean, key: string): void => {
+      dispatch(setFieldsDesc(key, checked, id));
+    },
+    [dispatch, id],
   );
 
   const onRenderDirection = useCallback(
@@ -194,7 +147,6 @@ export default function({ match }: RouteIdProps): JSX.Element {
         onChange={(e, checked) => dispatchSetFieldsDesc(e, checked!, item.key)}
       />
     ),
-
     [dispatchSetFieldsDesc],
   );
 
@@ -215,8 +167,7 @@ export default function({ match }: RouteIdProps): JSX.Element {
   ];
 
   return (
-    <div className={styles.wrapper}>
-      <div>{createSubjectButton}</div>
+    <React.Fragment>
       <div ref={target}>
         <CommandBarButton
           text="Sort"
@@ -226,13 +177,6 @@ export default function({ match }: RouteIdProps): JSX.Element {
           styles={{ root: { height: BUTTON_HEIGHT } }}
         />
       </div>
-      <Toggle
-        checked={order.separateCompletedItems}
-        offText={"Don't separate completed items"}
-        onText={"Separate completed items"}
-        onChange={dispatchSetSeparateComplete}
-        styles={{ root: { marginBottom: 0, marginLeft: 4, marginRight: 4 } }}
-      />
       <Callout
         target={target.current}
         onDismiss={dismissCallout}
@@ -250,6 +194,6 @@ export default function({ match }: RouteIdProps): JSX.Element {
           />
         </div>
       </Callout>
-    </div>
+    </React.Fragment>
   );
 }

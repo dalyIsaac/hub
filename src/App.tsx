@@ -2,7 +2,7 @@ import React from "react";
 import GridView from "./subject/components/GridView";
 import { Route } from "react-router";
 import AppBar from "./AppBar";
-import AppCommandBar from "./AppCommandBar";
+import AppCommandBar from "./AppCommandBar/AppCommandBar";
 
 const App: React.FC = (): JSX.Element => {
   return (
