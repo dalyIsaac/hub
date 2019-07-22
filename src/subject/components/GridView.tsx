@@ -6,15 +6,13 @@ import { useSelector } from "react-redux";
 import { State } from "../../Reducer";
 import { Item, getItems } from "../model/Subject";
 import SubjectComponent from "./Subject";
-import { Redirect } from "react-router";
 import { APPBAR_HEIGHT } from "../../AppBar";
-import { RouteIdProps } from "../../Routing";
 import { APP_COMMAND_BAR_HEIGHT } from "../../AppCommandBar/Common";
 import { isUndefined } from "lodash";
 
 const ROWS_PER_PAGE = 3;
 const ROW_HEIGHT = 603;
-const MIN_COL_WIDTH = 400;
+export const MIN_COL_WIDTH = 400;
 
 const theme = getTheme();
 // const sidebarListHeight = `100vh - ${APPBAR_HEIGHT + 330 + APP_COMMAND_BAR_HEIGHT}px`;
@@ -63,7 +61,11 @@ const getDiffIndex = (oldOrder: string[], newOrder: string[]): number => {
   return 0;
 };
 
-export default function({ match }: RouteIdProps): JSX.Element {
+interface GridViewProps {
+  id?: string;
+}
+
+export default function GridView({ id }: GridViewProps): JSX.Element {
   const columnCount = useRef(0);
   const columnWidth = useRef(0);
   const gridRef: React.MutableRefObject<List | null> = useRef(null);
@@ -72,19 +74,19 @@ export default function({ match }: RouteIdProps): JSX.Element {
   const { dict: subjects } = state;
 
   const order =
-    !isUndefined(match.params.id) && match.params.id in subjects
-      ? subjects[match.params.id].children.order
+    !isUndefined(id) && id in subjects
+      ? subjects[id].children.order
       : state.order.order;
 
   const [orderState, setOrderState] = useState(order);
 
   useEffect((): void => {
-    if (match.params.id) {
-      document.title = "hub - " + subjects[match.params.id].name;
+    if (id) {
+      document.title = "hub - " + subjects[id].name;
     } else {
       document.title = "hub";
     }
-  }, [match.params.id, subjects]);
+  }, [id, subjects]);
 
   // Scrolls to newly added subjects
   useEffect((): void => {
@@ -96,7 +98,7 @@ export default function({ match }: RouteIdProps): JSX.Element {
       // - the new index doesn't have a parent
       // - the new index has a parent, which matches match.param.id
       const s = subjects[order[index]];
-      if (s.parents.size === 0 || s.parents.has(match.params.id!)) {
+      if (s.parents.size === 0 || s.parents.has(id!)) {
         gridRef.current.scrollToIndex(
           index,
           (): number => ROW_HEIGHT,
@@ -106,7 +108,7 @@ export default function({ match }: RouteIdProps): JSX.Element {
 
       setOrderState(order);
     }
-  }, [order, orderState, match.params.id, subjects]);
+  }, [order, orderState, id, subjects]);
 
   const renderCell = useCallback((props?: Item): JSX.Element | undefined => {
     if (!props) {
@@ -152,26 +154,9 @@ export default function({ match }: RouteIdProps): JSX.Element {
     [],
   );
 
-  if (!isUndefined(match.params.id) && !(match.params.id in subjects)) {
-    return <Redirect to="/" />;
-  }
+  const items = getItems(subjects, order, { parent: id });
 
-  const items = getItems(subjects, order, { parent: match.params.id });
-
-  let sidebar = null;
-  if (match.params.id !== undefined) {
-    sidebar = (
-      <div className={styles.sidebar}>
-        <SubjectComponent
-          subject={subjects[match.params.id]}
-          id={match.params.id}
-          // listHeight={sidebarListHeight}
-        />
-      </div>
-    );
-  }
-
-  const grid = (
+  return (
     <List
       ref={gridRef}
       className={styles.grid}
@@ -181,14 +166,5 @@ export default function({ match }: RouteIdProps): JSX.Element {
       renderedWindowsAhead={4}
       onRenderCell={renderCell}
     />
-  );
-
-  return sidebar ? (
-    <div className={styles.wrapper}>
-      {grid}
-      {sidebar}
-    </div>
-  ) : (
-    grid
   );
 }

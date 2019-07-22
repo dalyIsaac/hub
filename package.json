@@ -4,6 +4,7 @@
   "homepage": "https://dalyIsaac.github.io/hub",
   "private": true,
   "dependencies": {
+    "@rehooks/window-size": "^1.0.2",
     "@uifabric/fluent-theme": "^7.0.2",
     "immer": "^3.1.3",
     "lodash": "^4.17.14",
