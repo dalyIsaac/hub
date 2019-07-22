@@ -102,6 +102,10 @@ export function sortAllParents(
   dict: SubjectDictState,
   subjectId: string,
 ): void {
+  if (!(subjectId in dict)) {
+    return;
+  }
+
   for (const id of dict[subjectId].parents) {
     const parent = dict[id].children;
     parent.order = sortItems(dict, parent);

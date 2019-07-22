@@ -25,6 +25,6 @@ export const deleteSubjectReducer = (
     state.dict[childId].parents.delete(subjectId);
   }
   remove(state.order.order, (s): boolean => s === subjectId);
-  delete state.dict[subjectId];
   sortAllParents(state.dict, subjectId);
+  delete state.dict[subjectId];
 };
