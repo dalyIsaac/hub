@@ -15,7 +15,7 @@ import { getTheme, mergeStyleSets } from "@uifabric/styling";
 
 import { Subject } from "../model/Subject";
 import Name from "./Name";
-import ListView from "./ListView";
+import SimpleListView from "./SimpleListView";
 import { setSubjectName } from "../model/Name";
 import { setSubjectDescription } from "../model/Description";
 import { completeSubject, uncompleteSubject } from "../model/Completed";
@@ -190,15 +190,13 @@ export default function SubjectComponent({
     setDueDateRedux,
   ]);
 
-  const completeSubjectOnClick = useCallback(
-    (): void => {
-      dispatch(completeSubject(id, 2));
-    }, [dispatch, id]
-  )
+  const completeSubjectOnClick = useCallback((): void => {
+    dispatch(completeSubject(id, 2));
+  }, [dispatch, id]);
 
-const deleteSubjectOnClick = useCallback((): void => {
-  dispatch(deleteSubject(id));
-}, [dispatch, id])
+  const deleteSubjectOnClick = useCallback((): void => {
+    dispatch(deleteSubject(id));
+  }, [dispatch, id]);
 
   const completeItem = {
     key: "complete-2-level",
@@ -326,7 +324,7 @@ const deleteSubjectOnClick = useCallback((): void => {
               minHeight: `calc((${listHeight}) + ${AppendChildrenHeight}px)`,
             }}
           >
-            <ListView
+            <SimpleListView
               subjectId={id}
               maxHeight={`calc(${listHeight})`}
               onRenderCell={SubjectListItem}

@@ -32,7 +32,7 @@ const styles = mergeStyleSets({
   },
 });
 
-export default function({
+export default function SimpleListView({
   subjectId,
   maxHeight,
   onRenderCell,
