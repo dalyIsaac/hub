@@ -1,5 +1,5 @@
 import React from "react";
-import { RouteIdProps, getDisplay } from "../../Routing";
+import { SubjectsRouteProps, getDisplay } from "../../Routing";
 import GridView, { MIN_COL_WIDTH } from "./GridView";
 import { isUndefined } from "lodash";
 import useWindowSize from "@rehooks/window-size";
@@ -28,7 +28,7 @@ const styles = mergeStyleSets({
 export default function ResponsiveGridView({
   match,
   location,
-}: RouteComponentProps<RouteIdProps>): JSX.Element {
+}: RouteComponentProps<SubjectsRouteProps>): JSX.Element {
   const { id } = match.params;
   const display = getDisplay(location);
 

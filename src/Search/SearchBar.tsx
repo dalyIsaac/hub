@@ -1,18 +1,14 @@
-import React, { useState, useRef, useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import {
   IDropdownOption,
   Dropdown,
   SearchBox,
-  Callout,
-  getTheme,
   mergeStyleSets,
 } from "office-ui-fabric-react";
-import { DirectionalHint } from "office-ui-fabric-react/lib/components/Callout";
-import { useSelector } from "react-redux";
-import { State } from "../Reducer";
-import ListView from "../subject/components/ListView";
+import { withRouter, RouteComponentProps } from "react-router";
+import { gotoSearch } from "../Routing";
+import { Subject } from "../subject/model/Subject";
 
-const theme = getTheme();
 const styles = mergeStyleSets({
   searchDropdown: {
     width: 150,
@@ -22,43 +18,41 @@ const styles = mergeStyleSets({
   },
 });
 
-export default function SearchBar(): JSX.Element {
-  const [resultsVisible, setResultsVisible] = useState(false);
-  const target = useRef(null);
+export const options: IDropdownOption[] = [
+  { key: "name", text: "Name" },
+  { key: "description", text: "Description" },
+  { key: "childName", text: "Child name" },
+  { key: "childDescription", text: "Child description" },
+];
 
-  const { dict } = useSelector((state: State) => state.subjects);
+function SearchBar({ history }: RouteComponentProps): JSX.Element {
+  const [param, setParam] = useState("name");
 
-  const onSearch = useCallback((newValue: any): void => {
-    setResultsVisible(true);
+  const updateParam = useCallback((e: any, option?: IDropdownOption): void => {
+    const key = option ? option.key : undefined;
+    if (typeof key === "string") {
+      setParam(key);
+    }
   }, []);
-  const dismissResults = useCallback((): void => setResultsVisible(false), []);
 
-  const options: IDropdownOption[] = [
-    { key: "name", text: "Name" },
-    { key: "description", text: "Description" },
-    { key: "childName", text: "Child name" },
-    { key: "childDescription", text: "Child description" },
-  ];
+  const onSearch = useCallback(
+    (query: any): void => {
+      history.push(gotoSearch(param as keyof Subject, query));
+    },
+    [history, param],
+  );
 
   return (
     <React.Fragment>
       <Dropdown
         options={options}
-        defaultSelectedKey="name"
+        defaultSelectedKey={param}
         className={styles.searchDropdown}
+        onChange={updateParam}
       />
-      <div ref={target}>
-        <SearchBox placeholder="Search" onSearch={onSearch} />
-      </div>
-      <Callout
-        hidden={!resultsVisible}
-        isBeakVisible={false}
-        target={target}
-        onDismiss={dismissResults}
-        directionalHint={DirectionalHint.bottomCenter}
-      >
-        <ListView />
-      </Callout>
+      <SearchBox placeholder="Search" onSearch={onSearch} />
     </React.Fragment>
   );
 }
+
+export default withRouter(SearchBar);

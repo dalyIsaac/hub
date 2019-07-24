@@ -5,7 +5,7 @@ import {
   CommandBarButton,
   Toggle,
 } from "office-ui-fabric-react";
-import { RouteIdProps } from "../Routing";
+import { SubjectsRouteProps } from "../Routing";
 import { useDispatch, useSelector } from "react-redux";
 import { createSubject } from "../subject/model/Create";
 import { State } from "../Reducer";
@@ -33,7 +33,7 @@ const styles = mergeStyleSets({
 
 export default function AppCommandBar({
   match,
-}: RouteComponentProps<RouteIdProps>): JSX.Element {
+}: RouteComponentProps<SubjectsRouteProps>): JSX.Element {
   const { id } = match.params;
   const dispatch = useDispatch();
   const { dict, order: rootOrder } = useSelector(
