@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import {
   IDropdownOption,
   Dropdown,
@@ -6,7 +6,7 @@ import {
   mergeStyleSets,
 } from "office-ui-fabric-react";
 import { withRouter, RouteComponentProps } from "react-router";
-import { gotoSearch } from "../Routing";
+import { gotoSearch, SearchRouteProps, getSearchLocation } from "../Routing";
 import { Subject } from "../subject/model/Subject";
 
 const styles = mergeStyleSets({
@@ -25,8 +25,23 @@ export const options: IDropdownOption[] = [
   { key: "childDescription", text: "Child description" },
 ];
 
-function SearchBar({ history }: RouteComponentProps): JSX.Element {
+function SearchBar({
+  history,
+  location,
+}: RouteComponentProps<SearchRouteProps>): JSX.Element {
   const [param, setParam] = useState("name");
+  const [query, setQuery] = useState("");
+
+  useEffect((): void => {
+    try {
+      const [param, query] = getSearchLocation(location);
+      setParam(param);
+      setQuery(query);
+    } catch (error) {
+      setParam("name");
+      setQuery("");
+    }
+  }, [location]);
 
   const updateParam = useCallback((e: any, option?: IDropdownOption): void => {
     const key = option ? option.key : undefined;
@@ -46,11 +61,11 @@ function SearchBar({ history }: RouteComponentProps): JSX.Element {
     <React.Fragment>
       <Dropdown
         options={options}
-        defaultSelectedKey={param}
+        selectedKey={param}
         className={styles.searchDropdown}
         onChange={updateParam}
       />
-      <SearchBox placeholder="Search" onSearch={onSearch} />
+      <SearchBox value={query} placeholder="Search" onSearch={onSearch} />
     </React.Fragment>
   );
 }

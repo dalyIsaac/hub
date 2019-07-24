@@ -2,7 +2,7 @@ import qs from "query-string";
 import { isUndefined } from "util";
 import { Location } from "history";
 import { Subject } from "./subject/model/Subject";
-import { match } from "react-router";
+import { match as Match } from "react-router";
 
 export interface SubjectsRouteProps {
   id?: string;
@@ -42,8 +42,24 @@ export const searchPath = searchBase + "/:param/:query";
 export const gotoSearch = (param: keyof Subject, query: string): string =>
   `${searchBase}/${param}/${query}`;
 
-export const getSearch = (match: match<SearchRouteProps>): [string, string] => {
-  const param = match.params.param.toLowerCase();
-  const query = match.params.query.toLowerCase();
+export const getSearchLocation = (location: Location): [string, string] => {
+  const components = location.pathname.split("/").slice(1);
+  if (components[0] !== "search" || components.length < 3) {
+    throw new Error("This isn't a search path.");
+  }
+  const param = components[1];
+  const query = components[2];
   return [param, query];
+};
+
+export const getSearchMatch = (
+  match: Match<SearchRouteProps>,
+): [string, string] => {
+  try {
+    const param = match.params.param.toLowerCase();
+    const query = match.params.query.toLowerCase();
+    return [param, query];
+  } catch (error) {
+    throw Error("This isn't a search path.");
+  }
 };

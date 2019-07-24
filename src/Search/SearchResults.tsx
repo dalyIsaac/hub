@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { SearchRouteProps, getDisplay, getSearch } from "../Routing";
+import { SearchRouteProps, getDisplay, getSearchMatch } from "../Routing";
 import { RouteComponentProps } from "react-router";
 import { Item, Subject } from "../subject/model/Subject";
 import ListView from "../subject/components/ListView";
@@ -24,7 +24,7 @@ export default function SearchResults({
   location,
 }: RouteComponentProps<SearchRouteProps>): JSX.Element {
   const display = getDisplay(location);
-  const [param, query] = getSearch(match);
+  const [param, query] = getSearchMatch(match);
   const { dict } = useSelector((state: State) => state.subjects);
 
   const condition = useCallback(
