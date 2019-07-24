@@ -5,8 +5,8 @@ import {
   SearchBox,
   mergeStyleSets,
 } from "office-ui-fabric-react";
-import { withRouter, RouteComponentProps } from "react-router";
-import { gotoSearch, SearchRouteProps, getSearchLocation } from "../Routing";
+import { RouteComponentProps } from "react-router";
+import { gotoSearch, SearchRouteProps, getSearchMatch } from "../Routing";
 import { Subject } from "../subject/model/Subject";
 
 const styles = mergeStyleSets({
@@ -21,27 +21,27 @@ const styles = mergeStyleSets({
 export const options: IDropdownOption[] = [
   { key: "name", text: "Name" },
   { key: "description", text: "Description" },
-  { key: "childName", text: "Child name" },
-  { key: "childDescription", text: "Child description" },
+  { key: "childname", text: "Child name" },
+  { key: "childdescription", text: "Child description" },
 ];
 
-function SearchBar({
+export default function SearchBar({
   history,
-  location,
+  match,
 }: RouteComponentProps<SearchRouteProps>): JSX.Element {
   const [param, setParam] = useState("name");
   const [query, setQuery] = useState("");
 
   useEffect((): void => {
     try {
-      const [param, query] = getSearchLocation(location);
+      const [param, query] = getSearchMatch(match);
       setParam(param);
       setQuery(query);
     } catch (error) {
       setParam("name");
       setQuery("");
     }
-  }, [location]);
+  }, [match]);
 
   const updateParam = useCallback((e: any, option?: IDropdownOption): void => {
     const key = option ? option.key : undefined;
@@ -69,5 +69,3 @@ function SearchBar({
     </React.Fragment>
   );
 }
-
-export default withRouter(SearchBar);

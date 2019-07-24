@@ -26,9 +26,6 @@ const styles = mergeStyleSets({
     height: BUTTON_HEIGHT,
     paddingLeft: 24,
   },
-  dragEnterClass: {
-    backgroundColor: theme.palette.neutralLight,
-  },
 });
 
 export default function AppCommandBar({

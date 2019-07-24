@@ -10,9 +10,7 @@ export interface SubjectsRouteProps {
 
 export type DisplayOptions = "grid" | "list";
 
-export const basePath = "/";
 export const subjectBase = "/subjects";
-export const subjectPath = subjectBase + "/:id?";
 
 export const gotoSubject = (display: DisplayOptions, id?: string): string => {
   const url = id ? id : "";
@@ -37,7 +35,6 @@ export interface SearchRouteProps {
 }
 
 export const searchBase = "/search";
-export const searchPath = searchBase + "/:param/:query";
 
 export const gotoSearch = (param: keyof Subject, query: string): string =>
   `${searchBase}/${param}/${query}`;
@@ -63,3 +60,11 @@ export const getSearchMatch = (
     throw Error("This isn't a search path.");
   }
 };
+
+export const Paths = {
+  base: "/",
+  search: searchBase + "/:param/:query",
+  subject: subjectBase + "/:id?",
+};
+
+export const AllPaths = [Paths.search, Paths.subject, Paths.base];

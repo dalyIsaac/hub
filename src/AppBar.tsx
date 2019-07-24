@@ -1,9 +1,9 @@
 import React from "react";
 import { mergeStyleSets, getTheme } from "@uifabric/styling";
 import { Text } from "office-ui-fabric-react";
-import { Link } from "react-router-dom";
+import { Link, RouteComponentProps } from "react-router-dom";
 import SearchBar from "./Search/SearchBar";
-import { basePath } from "./Routing";
+import { SearchRouteProps, Paths } from "./Routing";
 import { APPBAR_HEIGHT } from "./Common";
 
 const theme = getTheme();
@@ -39,17 +39,19 @@ const styles = mergeStyleSets({
   },
 });
 
-export default function AppBar(): JSX.Element {
+export default function AppBar(
+  props: RouteComponentProps<SearchRouteProps>,
+): JSX.Element {
   return (
     <div className={styles.appBar}>
-      <Link to={basePath} className={styles.link}>
+      <Link to={Paths.base} className={styles.link}>
         <Text className={styles.title} variant="xLarge">
           hub
         </Text>
       </Link>
 
       <div className={styles.search}>
-        <SearchBar />
+        <SearchBar {...props} />
       </div>
 
       <div />
