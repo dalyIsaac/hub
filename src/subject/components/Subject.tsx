@@ -24,7 +24,7 @@ import { setSubjectDueDate } from "../model/Date";
 import AppendChildren, { AppendChildrenHeight } from "./AppendChildren";
 import SubjectListItem from "./ListItem/SubjectListItem";
 import { Link } from "react-router-dom";
-import { gridBaseURL } from "../../Routes";
+import { gotoSubject } from "../../Routing";
 
 interface SubjectProps {
   subject: Subject;
@@ -272,7 +272,7 @@ export default function SubjectComponent({
         <div className={styles.headerWrapper}>
           {header}
           {showOpenButton ? (
-            <Link to={`${gridBaseURL}/${id}`} className={styles.headerLink}>
+            <Link to={gotoSubject("grid", id)} className={styles.headerLink}>
               <IconButton
                 styles={{ root: { width: "" } }}
                 className={styles.headerButton}

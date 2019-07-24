@@ -3,7 +3,7 @@ import { mergeStyleSets, getTheme } from "@uifabric/styling";
 import { Text } from "office-ui-fabric-react";
 import { Link } from "react-router-dom";
 import SearchBar from "./Search/SearchBar";
-import { homeBaseURL } from "./Routes";
+import { basePath } from "./Routing";
 
 export const APPBAR_HEIGHT = 48;
 
@@ -43,7 +43,7 @@ const styles = mergeStyleSets({
 export default function AppBar(): JSX.Element {
   return (
     <div className={styles.appBar}>
-      <Link to={homeBaseURL} className={styles.link}>
+      <Link to={basePath} className={styles.link}>
         <Text className={styles.title} variant="xLarge">
           hub
         </Text>
@@ -53,7 +53,7 @@ export default function AppBar(): JSX.Element {
         <SearchBar />
       </div>
 
-      <div></div>
+      <div />
     </div>
   );
 }

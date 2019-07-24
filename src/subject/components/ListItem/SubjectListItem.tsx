@@ -10,7 +10,7 @@ import { removeChild } from "../../model/RemoveChild";
 import ListItemBase from "./ListItemBase";
 import { isUndefined } from "lodash";
 import { setSubjectName } from "../../model/Name";
-import { gridBaseURL } from "../../../Routes";
+import { gotoSubject } from "../../../Routing";
 
 const styles = mergeStyleSets({
   open: {
@@ -91,7 +91,7 @@ function ListItem({ id, parent, subject }: Item): JSX.Element {
 
   const buttonLabel = "Open " + subject.name;
   const button = (
-    <Link to={`${gridBaseURL}/${id}`}>
+    <Link to={gotoSubject("grid", id)}>
       <IconButton
         className={styles.open}
         iconProps={{ iconName: "OpenFile" }}
