@@ -1,11 +1,9 @@
-import qs from "querystring";
-import { match } from "react-router";
+import qs from "query-string";
 import { isUndefined } from "util";
-
-export type RouteIdMatch = match<{ id?: string }>;
+import { Location } from "history";
 
 export interface RouteIdProps {
-  match: RouteIdMatch;
+  id?: string;
 }
 
 export type DisplayOptions = "grid" | "list";
@@ -18,8 +16,8 @@ export const gotoSubject = (display: DisplayOptions, id?: string): string => {
   return url + "?" + qs.stringify({ display });
 };
 
-export const getDisplay = (match: RouteIdMatch): DisplayOptions => {
-  const query = qs.parse(match.path);
+export const getDisplay = (location: Location): DisplayOptions => {
+  const query = qs.parse(location.search);
   const display =
     !isUndefined(query.display) && !Array.isArray(query.display)
       ? query.display

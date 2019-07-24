@@ -36,7 +36,7 @@ export interface Item {
   parent?: string;
 }
 
-interface GetItemsOptions {
+export interface GetItemsOptions {
   parent?: string;
   condition?: (i: Item) => boolean;
 }

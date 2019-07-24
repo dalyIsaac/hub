@@ -57,7 +57,7 @@ export default function SearchBar(): JSX.Element {
         onDismiss={dismissResults}
         directionalHint={DirectionalHint.bottomCenter}
       >
-        <ListView items={Object.values(dict)} />
+        <ListView />
       </Callout>
     </React.Fragment>
   );

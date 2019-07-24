@@ -7,7 +7,7 @@ import { getTheme, mergeStyleSets } from "office-ui-fabric-react";
 import SubjectComponent from "./Subject";
 import { useSelector } from "react-redux";
 import { State } from "../../Reducer";
-import { Redirect } from "react-router";
+import { Redirect, RouteComponentProps } from "react-router";
 import ListView from "./ListView";
 
 const theme = getTheme();
@@ -26,9 +26,10 @@ const styles = mergeStyleSets({
 
 export default function ResponsiveGridView({
   match,
-}: RouteIdProps): JSX.Element {
+  location,
+}: RouteComponentProps<RouteIdProps>): JSX.Element {
   const { id } = match.params;
-  const display = getDisplay(match);
+  const display = getDisplay(location);
 
   const windowSize = useWindowSize();
   const { dict } = useSelector((state: State) => state.subjects);
@@ -38,26 +39,26 @@ export default function ResponsiveGridView({
   }
 
   if (isUndefined(id)) {
-    // TODO: render ListView
-    // if (display === "list") {
-    // return <ListView />
-    // } else {
-    return <GridView />;
-    // }
+    if (display === "list") {
+      return <ListView />;
+    } else {
+      return <GridView />;
+    }
   }
 
   const parentSubject = <SubjectComponent subject={dict[id]} id={id} />;
   if (windowSize.innerWidth > MIN_COL_WIDTH * 2) {
-    if (display === "grid") {
-      return (
-        <div className={styles.wrapper}>
-          <GridView id={id} />
-          <div className={styles.sidebar}>{parentSubject}</div>
-        </div>
-      );
-    } else if (display === "list") {
-      // TODO: render ListView
-    }
+    const options = { parent: id };
+    return (
+      <div className={styles.wrapper}>
+        {display === "grid" ? (
+          <GridView options={options} />
+        ) : (
+          <ListView options={options} />
+        )}
+        <div className={styles.sidebar}>{parentSubject}</div>
+      </div>
+    );
   }
 
   return parentSubject;

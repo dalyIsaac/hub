@@ -12,6 +12,7 @@ import { State } from "../Reducer";
 import { setSeparateComplete } from "../subject/model/SetSeparateComplete";
 import { BUTTON_HEIGHT } from "./Common";
 import SortButton from "./SortButton";
+import { RouteComponentProps } from "react-router";
 
 const theme = getTheme();
 const styles = mergeStyleSets({
@@ -30,7 +31,9 @@ const styles = mergeStyleSets({
   },
 });
 
-export default function AppCommandBar({ match }: RouteIdProps): JSX.Element {
+export default function AppCommandBar({
+  match,
+}: RouteComponentProps<RouteIdProps>): JSX.Element {
   const { id } = match.params;
   const dispatch = useDispatch();
   const { dict, order: rootOrder } = useSelector(

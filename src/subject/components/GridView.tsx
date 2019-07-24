@@ -4,7 +4,7 @@ import { mergeStyleSets, getTheme } from "@uifabric/styling";
 import { useRef } from "react";
 import { useSelector } from "react-redux";
 import { State } from "../../Reducer";
-import { Item, getItems } from "../model/Subject";
+import { Item, getItems, GetItemsOptions } from "../model/Subject";
 import SubjectComponent from "./Subject";
 import { APPBAR_HEIGHT } from "../../AppBar";
 import { APP_COMMAND_BAR_HEIGHT } from "../../AppCommandBar/Common";
@@ -62,10 +62,12 @@ const getDiffIndex = (oldOrder: string[], newOrder: string[]): number => {
 };
 
 interface GridViewProps {
-  id?: string;
+  options?: GetItemsOptions;
 }
 
-export default function GridView({ id }: GridViewProps): JSX.Element {
+export default function GridView({ options }: GridViewProps): JSX.Element {
+  const id = options ? options.parent : undefined;
+
   const columnCount = useRef(0);
   const columnWidth = useRef(0);
   const gridRef: React.MutableRefObject<List | null> = useRef(null);
@@ -158,7 +160,7 @@ export default function GridView({ id }: GridViewProps): JSX.Element {
     [],
   );
 
-  const items = getItems(subjects, order, { parent: id });
+  const items = getItems(subjects, order, options);
 
   return (
     <List

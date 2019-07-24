@@ -1,51 +1,59 @@
 import React, { useCallback } from "react";
 import { IColumn, DetailsList, SelectionMode } from "office-ui-fabric-react";
-import { Subject } from "../model/Subject";
+import { Subject, GetItemsOptions, getItems, Item } from "../model/Subject";
+import { useSelector } from "react-redux";
+import { State } from "../../Reducer";
 
 interface ListViewProps {
-  items: Subject[];
+  options?: GetItemsOptions;
 }
 
-export default function ListView({ items }: ListViewProps): JSX.Element {
+export default function ListView({ options }: ListViewProps): JSX.Element {
+  const renderSubjectString = useCallback(
+    (item: Item, _index?: number, column?: IColumn): string =>
+      item.subject[column!.key as keyof Subject] as string,
+    [],
+  );
+
   const renderDate = useCallback(
-    (subject: Subject, _index?: number, column?: IColumn): string => {
-      const date = subject[column!.key as keyof Subject] as Date;
+    (item: Item, _index?: number, column?: IColumn): string => {
+      const date = item.subject[column!.key as keyof Subject] as Date;
       return date ? date.toLocaleString() : "";
     },
     [],
   );
 
+  const { subjects } = useSelector((state: State) => state);
+  const items = getItems(subjects.dict, subjects.order.order, options);
+
   // TODO: render link button
 
   const columns: IColumn[] = [
     {
-      fieldName: "name",
       key: "name",
       minWidth: 150,
       name: "Name",
+      onRender: renderSubjectString,
     },
     {
-      fieldName: "description",
       key: "description",
       minWidth: 150,
       name: "Description",
+      onRender: renderSubjectString,
     },
     {
-      fieldName: "created",
       key: "created",
       minWidth: 150,
       name: "Created",
       onRender: renderDate,
     },
     {
-      fieldName: "dueDate",
       key: "dueDate",
       minWidth: 150,
       name: "Due date",
       onRender: renderDate,
     },
     {
-      fieldName: "completed",
       key: "completed",
       minWidth: 150,
       name: "Completed",
