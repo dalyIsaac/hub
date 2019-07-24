@@ -1,8 +1,21 @@
 import React, { useCallback } from "react";
-import { IColumn, DetailsList, SelectionMode } from "office-ui-fabric-react";
+import {
+  IColumn,
+  DetailsList,
+  SelectionMode,
+  mergeStyleSets,
+} from "office-ui-fabric-react";
 import { Subject, GetItemsOptions, getItems, Item } from "../model/Subject";
 import { useSelector } from "react-redux";
 import { State } from "../../Reducer";
+import { APP_COMMAND_BAR_HEIGHT } from "../../AppCommandBar/Common";
+import { APPBAR_HEIGHT } from "../../Common";
+
+const styles = mergeStyleSets({
+  detailsList: {
+    height: `calc(100vh - ${APPBAR_HEIGHT}px - ${APP_COMMAND_BAR_HEIGHT}px)`,
+  },
+});
 
 interface ListViewProps {
   options?: GetItemsOptions;
@@ -63,6 +76,7 @@ export default function ListView({ options }: ListViewProps): JSX.Element {
 
   return (
     <DetailsList
+      className={styles.detailsList}
       columns={columns}
       items={items}
       isHeaderVisible={true}

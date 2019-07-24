@@ -17,10 +17,11 @@ const styles = mergeStyleSets({
     gridTemplateColumns: `auto ${MIN_COL_WIDTH}px`,
   },
   sidebar: {
-    gridColumn: "2",
     border: "1px solid " + theme.palette.white,
     borderRadius: 4,
     boxShadow: "0 6px 20px 0 rgba(0, 0, 0, 0.19)",
+    gridColumn: "2",
+    zIndex: 10,
   },
 });
 

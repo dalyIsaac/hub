@@ -4,8 +4,7 @@ import { Text } from "office-ui-fabric-react";
 import { Link } from "react-router-dom";
 import SearchBar from "./Search/SearchBar";
 import { basePath } from "./Routing";
-
-export const APPBAR_HEIGHT = 48;
+import { APPBAR_HEIGHT } from "./Common";
 
 const theme = getTheme();
 const styles = mergeStyleSets({

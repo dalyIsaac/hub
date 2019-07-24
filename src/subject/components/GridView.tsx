@@ -6,16 +6,15 @@ import { useSelector } from "react-redux";
 import { State } from "../../Reducer";
 import { Item, getItems, GetItemsOptions } from "../model/Subject";
 import SubjectComponent from "./Subject";
-import { APPBAR_HEIGHT } from "../../AppBar";
 import { APP_COMMAND_BAR_HEIGHT } from "../../AppCommandBar/Common";
 import { isUndefined } from "lodash";
+import { APPBAR_HEIGHT } from "../../Common";
 
 const ROWS_PER_PAGE = 3;
 const ROW_HEIGHT = 603;
 export const MIN_COL_WIDTH = 400;
 
 const theme = getTheme();
-// const sidebarListHeight = `100vh - ${APPBAR_HEIGHT + 330 + APP_COMMAND_BAR_HEIGHT}px`;
 const styles = mergeStyleSets({
   wrapper: {
     display: "grid",
@@ -38,12 +37,6 @@ const styles = mergeStyleSets({
     border: "1px solid " + theme.palette.neutralTertiary,
     borderRadius: 4,
     boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.2)",
-  },
-  sidebar: {
-    gridColumn: "2",
-    border: "1px solid " + theme.palette.white,
-    borderRadius: 4,
-    boxShadow: "0 6px 20px 0 rgba(0, 0, 0, 0.19)",
   },
 });
 
