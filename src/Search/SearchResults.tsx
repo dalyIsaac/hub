@@ -25,7 +25,9 @@ export default function SearchResults({
 }: RouteComponentProps<SearchRouteProps>): JSX.Element {
   const display = getDisplay(location);
   const [param, query] = getSearchMatch(match);
-  const { dict } = useSelector((state: State) => state.subjects);
+  const { dict, searchSortOptions } = useSelector(
+    (state: State) => state.subjects,
+  );
 
   const condition = useCallback(
     (i: Item): boolean => {
@@ -64,8 +66,8 @@ export default function SearchResults({
   }
 
   if (display === "list") {
-    return <ListView options={{ condition }} />;
+    return <ListView options={{ condition }} sortOptions={searchSortOptions} />;
   } else {
-    return <GridView options={{ condition }} />;
+    return <GridView options={{ condition }} sortOptions={searchSortOptions} />;
   }
 }

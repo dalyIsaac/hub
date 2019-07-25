@@ -9,6 +9,7 @@ import SubjectComponent from "./Subject";
 import { APP_COMMAND_BAR_HEIGHT } from "../../AppCommandBar/Common";
 import { isUndefined } from "lodash";
 import { APPBAR_HEIGHT } from "../../Common";
+import { SortItemsOptions, sortItems } from "../model/Order";
 
 const ROWS_PER_PAGE = 3;
 const ROW_HEIGHT = 603;
@@ -56,9 +57,13 @@ const getDiffIndex = (oldOrder: string[], newOrder: string[]): number => {
 
 interface GridViewProps {
   options?: GetItemsOptions;
+  sortOptions?: SortItemsOptions;
 }
 
-export default function GridView({ options }: GridViewProps): JSX.Element {
+export default function GridView({
+  options,
+  sortOptions,
+}: GridViewProps): JSX.Element {
   const id = options ? options.parent : undefined;
 
   const columnCount = useRef(0);
@@ -153,7 +158,10 @@ export default function GridView({ options }: GridViewProps): JSX.Element {
     [],
   );
 
-  const items = getItems(subjects, order, options);
+  const componentOrder = sortOptions
+    ? sortItems(subjects, { options: sortOptions, order })
+    : order;
+  const items = getItems(subjects, componentOrder, options);
 
   return (
     <List

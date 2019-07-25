@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   IColumn,
   DetailsList,
@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import { State } from "../../Reducer";
 import { APP_COMMAND_BAR_HEIGHT } from "../../AppCommandBar/Common";
 import { APPBAR_HEIGHT } from "../../Common";
+import { SortItemsOptions, sortItems } from "../model/Order";
 
 const styles = mergeStyleSets({
   detailsList: {
@@ -19,9 +20,13 @@ const styles = mergeStyleSets({
 
 interface ListViewProps {
   options?: GetItemsOptions;
+  sortOptions?: SortItemsOptions;
 }
 
-export default function ListView({ options }: ListViewProps): JSX.Element {
+export default function ListView({
+  options,
+  sortOptions,
+}: ListViewProps): JSX.Element {
   const renderSubjectString = useCallback(
     (item: Item, _index?: number, column?: IColumn): string =>
       item.subject[column!.key as keyof Subject] as string,
@@ -37,7 +42,11 @@ export default function ListView({ options }: ListViewProps): JSX.Element {
   );
 
   const { subjects } = useSelector((state: State) => state);
-  const items = getItems(subjects.dict, subjects.order.order, options);
+
+  const componentOrder = sortOptions
+    ? sortItems(subjects.dict, { ...subjects.order, options: sortOptions })
+    : subjects.order.order;
+  const items = getItems(subjects.dict, componentOrder, options);
 
   // TODO: render link button
 
