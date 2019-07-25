@@ -112,43 +112,61 @@ export function sortAllParents(
   }
 }
 
-export const getInitialOrder = (): OrderState => ({
-  order: [],
-  options: {
-    fields: [
-      {
-        key: "created",
-        name: "Date created",
-        desc: false,
-      },
-      {
-        key: "completed",
-        name: "Date completed",
-        desc: false,
-      },
-      {
-        key: "children",
-        name: "Number of children",
-        desc: false,
-        compareLength: true,
-      },
-      {
-        key: "description",
-        name: "Description size",
-        desc: false,
-        compareLength: true,
-      },
-      {
-        key: "dueDate",
-        name: "Due date",
-        desc: false,
-      },
-      {
-        key: "name",
-        name: "Name",
-        desc: false,
-      },
-    ],
-    separateCompletedItems: true,
-  },
+export const getInitialSortItemsOptions = (): SortItemsOptions => ({
+  fields: [
+    {
+      key: "name",
+      name: "Name",
+      desc: false,
+    },
+    {
+      key: "created",
+      name: "Date created",
+      desc: false,
+    },
+    {
+      key: "completed",
+      name: "Date completed",
+      desc: false,
+    },
+    {
+      key: "children",
+      name: "Number of children",
+      desc: false,
+      compareLength: true,
+    },
+    {
+      key: "description",
+      name: "Description size",
+      desc: false,
+      compareLength: true,
+    },
+    {
+      key: "dueDate",
+      name: "Due date",
+      desc: false,
+    },
+  ],
+  separateCompletedItems: true,
 });
+
+export const getInitialOrder = (): OrderState => ({
+  options: getInitialSortItemsOptions(),
+  order: [],
+});
+
+/**
+ * Used to set different sort parameters.
+ */
+export interface SetSortParameters {
+  /**
+   * When set, it corresponds to the GUID of a subject.
+   */
+  subjectId?: string;
+
+  /**
+   * When set to true, the action will affect the `searchSortOptions` attribute
+   * of `subjects`.
+   */
+  setSearchOptions?: boolean;
+}

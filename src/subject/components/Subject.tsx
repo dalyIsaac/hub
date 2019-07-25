@@ -15,7 +15,7 @@ import { getTheme, mergeStyleSets } from "@uifabric/styling";
 
 import { Subject } from "../model/Subject";
 import Name from "./Name";
-import ListView from "./ListView";
+import SimpleListView from "./SimpleListView";
 import { setSubjectName } from "../model/Name";
 import { setSubjectDescription } from "../model/Description";
 import { completeSubject, uncompleteSubject } from "../model/Completed";
@@ -24,6 +24,7 @@ import { setSubjectDueDate } from "../model/Date";
 import AppendChildren, { AppendChildrenHeight } from "./AppendChildren";
 import SubjectListItem from "./ListItem/SubjectListItem";
 import { Link } from "react-router-dom";
+import { gotoSubject } from "../../Routing";
 
 interface SubjectProps {
   subject: Subject;
@@ -190,15 +191,13 @@ export default function SubjectComponent({
     setDueDateRedux,
   ]);
 
-  const completeSubjectOnClick = useCallback(
-    (): void => {
-      dispatch(completeSubject(id, 2));
-    }, [dispatch, id]
-  )
+  const completeSubjectOnClick = useCallback((): void => {
+    dispatch(completeSubject(id, 2));
+  }, [dispatch, id]);
 
-const deleteSubjectOnClick = useCallback((): void => {
-  dispatch(deleteSubject(id));
-}, [dispatch, id])
+  const deleteSubjectOnClick = useCallback((): void => {
+    dispatch(deleteSubject(id));
+  }, [dispatch, id]);
 
   const completeItem = {
     key: "complete-2-level",
@@ -273,7 +272,7 @@ const deleteSubjectOnClick = useCallback((): void => {
         <div className={styles.headerWrapper}>
           {header}
           {showOpenButton ? (
-            <Link to={`/${id}`} className={styles.headerLink}>
+            <Link to={gotoSubject("grid", id)} className={styles.headerLink}>
               <IconButton
                 styles={{ root: { width: "" } }}
                 className={styles.headerButton}
@@ -326,7 +325,7 @@ const deleteSubjectOnClick = useCallback((): void => {
               minHeight: `calc((${listHeight}) + ${AppendChildrenHeight}px)`,
             }}
           >
-            <ListView
+            <SimpleListView
               subjectId={id}
               maxHeight={`calc(${listHeight})`}
               onRenderCell={SubjectListItem}

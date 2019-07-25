@@ -4,18 +4,18 @@ import { mergeStyleSets, getTheme } from "@uifabric/styling";
 import { useRef } from "react";
 import { useSelector } from "react-redux";
 import { State } from "../../Reducer";
-import { Item, getItems } from "../model/Subject";
+import { Item, getItems, GetItemsOptions } from "../model/Subject";
 import SubjectComponent from "./Subject";
-import { APPBAR_HEIGHT } from "../../AppBar";
 import { APP_COMMAND_BAR_HEIGHT } from "../../AppCommandBar/Common";
 import { isUndefined } from "lodash";
+import { APPBAR_HEIGHT } from "../../Common";
+import { SortItemsOptions, sortItems } from "../model/Order";
 
 const ROWS_PER_PAGE = 3;
 const ROW_HEIGHT = 603;
 export const MIN_COL_WIDTH = 400;
 
 const theme = getTheme();
-// const sidebarListHeight = `100vh - ${APPBAR_HEIGHT + 330 + APP_COMMAND_BAR_HEIGHT}px`;
 const styles = mergeStyleSets({
   wrapper: {
     display: "grid",
@@ -39,12 +39,6 @@ const styles = mergeStyleSets({
     borderRadius: 4,
     boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.2)",
   },
-  sidebar: {
-    gridColumn: "2",
-    border: "1px solid " + theme.palette.white,
-    borderRadius: 4,
-    boxShadow: "0 6px 20px 0 rgba(0, 0, 0, 0.19)",
-  },
 });
 
 const getPageHeight = (): number => ROW_HEIGHT * ROWS_PER_PAGE;
@@ -62,10 +56,16 @@ const getDiffIndex = (oldOrder: string[], newOrder: string[]): number => {
 };
 
 interface GridViewProps {
-  id?: string;
+  options?: GetItemsOptions;
+  sortOptions?: SortItemsOptions;
 }
 
-export default function GridView({ id }: GridViewProps): JSX.Element {
+export default function GridView({
+  options,
+  sortOptions,
+}: GridViewProps): JSX.Element {
+  const id = options ? options.parent : undefined;
+
   const columnCount = useRef(0);
   const columnWidth = useRef(0);
   const gridRef: React.MutableRefObject<List | null> = useRef(null);
@@ -158,7 +158,10 @@ export default function GridView({ id }: GridViewProps): JSX.Element {
     [],
   );
 
-  const items = getItems(subjects, order, { parent: id });
+  const componentOrder = sortOptions
+    ? sortItems(subjects, { options: sortOptions, order })
+    : order;
+  const items = getItems(subjects, componentOrder, options);
 
   return (
     <List

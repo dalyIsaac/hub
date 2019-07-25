@@ -1,75 +1,95 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
+import {
+  IColumn,
+  DetailsList,
+  SelectionMode,
+  mergeStyleSets,
+} from "office-ui-fabric-react";
+import { Subject, GetItemsOptions, getItems, Item } from "../model/Subject";
 import { useSelector } from "react-redux";
-import { FocusZone, List, Text } from "office-ui-fabric-react";
-import { mergeStyleSets } from "@uifabric/styling";
 import { State } from "../../Reducer";
-import { getItems, Item } from "../model/Subject";
-
-interface ListViewProps {
-  subjectId: string;
-  maxHeight: number | string;
-
-  /**
-   * If `true`, it gets all the children of the `subjectId`. If `false`, it gets
-   * all the subjects **except** the children of the `subjectId`.
-   */
-  getChildren?: boolean;
-  onRenderCell: (
-    item?: Item,
-    index?: number | undefined,
-    isScrolling?: boolean | undefined,
-  ) => React.ReactNode;
-
-  /**
-   * When true, text is shown if there's no children
-   */
-  notifyNoChildren?: boolean;
-}
+import { APP_COMMAND_BAR_HEIGHT } from "../../AppCommandBar/Common";
+import { APPBAR_HEIGHT } from "../../Common";
+import { SortItemsOptions, sortItems } from "../model/Order";
 
 const styles = mergeStyleSets({
-  list: {
-    overflow: "auto",
+  detailsList: {
+    height: `calc(100vh - ${APPBAR_HEIGHT}px - ${APP_COMMAND_BAR_HEIGHT}px)`,
   },
 });
 
-export default function({
-  subjectId,
-  maxHeight,
-  onRenderCell,
-  getChildren,
-  notifyNoChildren,
+interface ListViewProps {
+  options?: GetItemsOptions;
+  sortOptions?: SortItemsOptions;
+}
+
+export default function ListView({
+  options,
+  sortOptions,
 }: ListViewProps): JSX.Element {
-  const { dict: subjects, order } = useSelector(
-    (state: State) => state.subjects,
+  const renderSubjectString = useCallback(
+    (item: Item, _index?: number, column?: IColumn): string =>
+      item.subject[column!.key as keyof Subject] as string,
+    [],
   );
 
-  let children;
-  if (getChildren) {
-    children = getItems(subjects, subjects[subjectId].children.order, {
-      parent: subjectId,
-    });
-  } else {
-    const childrenSet = new Set(subjects[subjectId].children.order);
-    const condition = (i: Item): boolean =>
-      !childrenSet.has(i.id) && i.id !== subjectId;
-    children = getItems(subjects, order.order, {
-      condition,
-      parent: subjectId,
-    });
-  }
+  const renderDate = useCallback(
+    (item: Item, _index?: number, column?: IColumn): string => {
+      const date = item.subject[column!.key as keyof Subject] as Date;
+      return date ? date.toLocaleString() : "";
+    },
+    [],
+  );
+
+  const { subjects } = useSelector((state: State) => state);
+
+  const componentOrder = sortOptions
+    ? sortItems(subjects.dict, { ...subjects.order, options: sortOptions })
+    : subjects.order.order;
+  const items = getItems(subjects.dict, componentOrder, options);
+
+  // TODO: render link button
+
+  const columns: IColumn[] = [
+    {
+      key: "name",
+      minWidth: 150,
+      name: "Name",
+      onRender: renderSubjectString,
+    },
+    {
+      key: "description",
+      minWidth: 150,
+      name: "Description",
+      onRender: renderSubjectString,
+    },
+    {
+      key: "created",
+      minWidth: 150,
+      name: "Created",
+      onRender: renderDate,
+    },
+    {
+      key: "dueDate",
+      minWidth: 150,
+      name: "Due date",
+      onRender: renderDate,
+    },
+    {
+      key: "completed",
+      minWidth: 150,
+      name: "Completed",
+      onRender: renderDate,
+    },
+  ];
 
   return (
-    <FocusZone className={styles.list} style={{ maxHeight }}>
-      {children.length === 0 && notifyNoChildren ? (
-        <Text>
-          There's nothing here{" "}
-          <span role="img" aria-label="Gust of Wind emoji">
-            💨
-          </span>
-        </Text>
-      ) : (
-        <List items={children} onRenderCell={onRenderCell} />
-      )}
-    </FocusZone>
+    <DetailsList
+      className={styles.detailsList}
+      columns={columns}
+      items={items}
+      isHeaderVisible={true}
+      selectionMode={SelectionMode.none}
+    />
   );
 }

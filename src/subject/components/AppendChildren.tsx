@@ -9,7 +9,7 @@ import {
   DirectionalHint,
   IContextualMenuItem,
 } from "office-ui-fabric-react";
-import ListView from "./ListView";
+import SimpleListView from "./SimpleListView";
 import AppendChildrenListItem from "./ListItem/AppendChildrenListItem";
 import { useDispatch } from "react-redux";
 import { createSubject } from "../model/Create";
@@ -131,7 +131,7 @@ export default function({ parent }: AppendChildrenProps): JSX.Element {
         headerText="Append Children"
         onDismiss={hidePanel}
       >
-        <ListView
+        <SimpleListView
           subjectId={parent}
           notifyNoChildren={true}
           maxHeight={`calc(100vh-${panelHeaderHeight})`}

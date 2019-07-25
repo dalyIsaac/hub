@@ -5,13 +5,20 @@ import {
   CommandBarButton,
   Toggle,
 } from "office-ui-fabric-react";
-import { RouteIdProps } from "../Routing";
+import {
+  SubjectsRouteProps,
+  SearchRouteProps,
+  Paths,
+  subjectBase,
+  searchBase,
+} from "../Routing";
 import { useDispatch, useSelector } from "react-redux";
 import { createSubject } from "../subject/model/Create";
 import { State } from "../Reducer";
 import { setSeparateComplete } from "../subject/model/SetSeparateComplete";
 import { BUTTON_HEIGHT } from "./Common";
 import SortButton from "./SortButton";
+import { RouteComponentProps } from "react-router";
 
 const theme = getTheme();
 const styles = mergeStyleSets({
@@ -25,20 +32,16 @@ const styles = mergeStyleSets({
     height: BUTTON_HEIGHT,
     paddingLeft: 24,
   },
-  dragEnterClass: {
-    backgroundColor: theme.palette.neutralLight,
-  },
 });
 
-export default function AppCommandBar({ match }: RouteIdProps): JSX.Element {
+export default function AppCommandBar({
+  match,
+}: RouteComponentProps<SubjectsRouteProps & SearchRouteProps>): JSX.Element {
   const { id } = match.params;
   const dispatch = useDispatch();
-  const { dict, order: rootOrder } = useSelector(
+  const { dict, order: rootOrder, searchSortOptions } = useSelector(
     (state: State) => state.subjects,
   );
-
-  const order =
-    id && id in dict ? dict[id].children.options : rootOrder.options;
 
   const dispatchCreateChildSubject = useCallback((): void => {
     dispatch(createSubject({ parent: id }));
@@ -50,40 +53,77 @@ export default function AppCommandBar({ match }: RouteIdProps): JSX.Element {
 
   const dispatchSetSeparateComplete = useCallback(
     (e: any, checked?: boolean): void => {
-      dispatch(setSeparateComplete(checked!, id));
+      dispatch(setSeparateComplete(checked!, { subjectId: id }));
     },
     [dispatch, id],
   );
 
-  const createSubjectButton = id ? (
-    <CommandBarButton
-      text="Create child subject"
-      iconProps={{ iconName: "Childof" }}
-      ariaLabel="Create child subject"
-      onClick={dispatchCreateChildSubject}
-      styles={{ root: { height: BUTTON_HEIGHT } }}
-    />
-  ) : (
-    <CommandBarButton
-      text="Create subject"
-      iconProps={{ iconName: "Add" }}
-      ariaLabel="Create subject"
-      onClick={dispatchCreateSubject}
-      styles={{ root: { height: BUTTON_HEIGHT } }}
-    />
+  const dispatchSetSeparateCompleteSearch = useCallback(
+    (e: any, checked?: boolean): void => {
+      dispatch(setSeparateComplete(checked!, { setSearchOptions: true }));
+    },
+    [dispatch],
   );
 
-  return (
-    <div className={styles.wrapper}>
-      <div>{createSubjectButton}</div>
-      <SortButton id={id} order={order} />
+  const components = [];
+
+  if (match.path === Paths.subject || match.path === subjectBase) {
+    const order =
+      id && id in dict ? dict[id].children.options : rootOrder.options;
+
+    const createSubjectButton = id ? (
+      <CommandBarButton
+        text="Create child subject"
+        iconProps={{ iconName: "Childof" }}
+        ariaLabel="Create child subject"
+        onClick={dispatchCreateChildSubject}
+        styles={{ root: { height: BUTTON_HEIGHT } }}
+      />
+    ) : (
+      <CommandBarButton
+        text="Create subject"
+        iconProps={{ iconName: "Add" }}
+        ariaLabel="Create subject"
+        onClick={dispatchCreateSubject}
+        styles={{ root: { height: BUTTON_HEIGHT } }}
+      />
+    );
+
+    components.push(<div key="createSubject">{createSubjectButton}</div>);
+    components.push(
+      <SortButton key="sort" subjectId={id} fields={order.fields} />,
+    );
+
+    components.push(
       <Toggle
+        key="separateComplete"
         checked={order.separateCompletedItems}
         offText={"Don't separate completed items"}
         onText={"Separate completed items"}
         onChange={dispatchSetSeparateComplete}
         styles={{ root: { marginBottom: 0, marginLeft: 4, marginRight: 4 } }}
-      />
-    </div>
-  );
+      />,
+    );
+  } else if (match.path === Paths.search || match.path === searchBase) {
+    components.push(
+      <SortButton
+        key="sort"
+        setSearchOptions={true}
+        fields={searchSortOptions.fields}
+      />,
+    );
+
+    components.push(
+      <Toggle
+        key="separateComplete"
+        checked={searchSortOptions.separateCompletedItems}
+        offText={"Don't separate completed items"}
+        onText={"Separate completed items"}
+        onChange={dispatchSetSeparateCompleteSearch}
+        styles={{ root: { marginBottom: 0, marginLeft: 4, marginRight: 4 } }}
+      />,
+    );
+  }
+
+  return <div className={styles.wrapper}>{components}</div>;
 }

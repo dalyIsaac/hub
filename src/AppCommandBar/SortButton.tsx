@@ -13,15 +13,14 @@ import {
   getTheme,
   CommandBarButton,
 } from "office-ui-fabric-react";
-import { SortField, SortItemsOptions } from "../subject/model/Order";
+import { SortField, SetSortParameters } from "../subject/model/Order";
 import { useDispatch } from "react-redux";
 import { setFieldsArray } from "../subject/model/SetFieldsArray";
 import { setFieldsDesc } from "../subject/model/SetFieldsDesc";
 import { BUTTON_HEIGHT } from "./Common";
 
-interface SortCalloutProps {
-  id?: string;
-  order: SortItemsOptions;
+interface SortCalloutProps extends SetSortParameters {
+  fields: SortField[];
 }
 
 const theme = getTheme();
@@ -32,8 +31,9 @@ const styles = mergeStyleSets({
 });
 
 export default function SortButton({
-  id,
-  order,
+  subjectId,
+  setSearchOptions,
+  fields,
 }: SortCalloutProps): JSX.Element {
   const draggedIndex = useRef(-1);
   const draggedItem = useRef(null);
@@ -59,7 +59,7 @@ export default function SortButton({
         ? (selection.current.getSelection() as SortField[])
         : [draggedItem.current!];
 
-      const items = order.fields.filter(
+      const items = fields.filter(
         (itm): boolean => draggedItems.indexOf(itm) === -1,
       );
       let insertIndex = items.indexOf(item);
@@ -70,9 +70,9 @@ export default function SortButton({
       }
 
       items.splice(insertIndex, 0, ...draggedItems);
-      dispatch(setFieldsArray(items, id));
+      dispatch(setFieldsArray(items, { setSearchOptions, subjectId }));
     },
-    [dispatch, order, id],
+    [dispatch, fields, subjectId, setSearchOptions],
   );
 
   const canDrop = useCallback(
@@ -132,9 +132,9 @@ export default function SortButton({
 
   const dispatchSetFieldsDesc = useCallback(
     (e: any, checked: boolean, key: string): void => {
-      dispatch(setFieldsDesc(key, checked, id));
+      dispatch(setFieldsDesc(key, checked, { setSearchOptions, subjectId }));
     },
-    [dispatch, id],
+    [dispatch, subjectId, setSearchOptions],
   );
 
   const onRenderDirection = useCallback(
@@ -152,15 +152,15 @@ export default function SortButton({
 
   const sortColumns: IColumn[] = [
     {
+      fieldName: "name",
       key: "param",
       name: "Parameter",
-      fieldName: "name",
       minWidth: 150,
     },
     {
+      fieldName: "desc",
       key: "direction",
       name: "Direction",
-      fieldName: "desc",
       minWidth: 150,
       onRender: onRenderDirection,
     },
@@ -188,7 +188,7 @@ export default function SortButton({
           <DetailsList
             selection={selection.current}
             columns={sortColumns}
-            items={order.fields}
+            items={fields}
             selectionMode={SelectionMode.none}
             dragDropEvents={dragDropEvents}
           />

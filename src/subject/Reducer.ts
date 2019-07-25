@@ -44,7 +44,11 @@ import {
   AppendChildAction,
   appendChildReducer,
 } from "./model/AppendChild";
-import { getInitialOrder, sortItems } from "./model/Order";
+import {
+  getInitialOrder,
+  sortItems,
+  getInitialSortItemsOptions,
+} from "./model/Order";
 import {
   SET_FIELDS_ARRAY,
   SetFieldsArrayAction,
@@ -60,10 +64,12 @@ import {
   setSeparateCompleteReducer,
   SetSeparateCompleteAction,
 } from "./model/SetSeparateComplete";
+import { isUndefined } from "lodash";
 
 const getInitialState = (): SubjectState => ({
   dict: {},
   order: getInitialOrder(),
+  searchSortOptions: getInitialSortItemsOptions(),
 });
 
 const subjectReducer = (
@@ -131,6 +137,10 @@ const subjectReducer = (
       // Prevents redux-persist from being overridden during hydration.
       if (draftState.order.order.length > 0) {
         draftState.order.order = sortItems(draftState.dict, draftState.order);
+      }
+      // Adds new `searchSortOptions` if it wasn't already in the state
+      if (isUndefined(draftState.searchSortOptions)) {
+        draftState.searchSortOptions = getInitialSortItemsOptions();
       }
       return draftState;
     },

@@ -1,6 +1,6 @@
 import { BaseAction } from "../../Common";
 import { isUndefined } from "lodash";
-import { OrderState } from "./Order";
+import { OrderState, SortItemsOptions } from "./Order";
 
 export type BaseSubject = "BaseSubject";
 
@@ -24,6 +24,7 @@ export interface SubjectDictState {
 export interface SubjectState {
   dict: SubjectDictState;
   order: OrderState;
+  searchSortOptions: SortItemsOptions;
 }
 
 export interface SubjectBaseAction extends BaseAction {
@@ -36,7 +37,7 @@ export interface Item {
   parent?: string;
 }
 
-interface GetItemsOptions {
+export interface GetItemsOptions {
   parent?: string;
   condition?: (i: Item) => boolean;
 }
