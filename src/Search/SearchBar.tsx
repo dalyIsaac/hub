@@ -10,11 +10,16 @@ import { gotoSearch, SearchRouteProps, getSearchMatch } from "../Routing";
 import { Subject } from "../subject/model/Subject";
 
 const styles = mergeStyleSets({
+  search: {
+    display: "flex",
+    flexDirection: "row",
+    // width: "calc(100vw / 3)",
+  },
+  searchBox: {
+    flexGrow: 1,
+  },
   searchDropdown: {
     width: 150,
-  },
-  title: {
-    paddingLeft: 24,
   },
 });
 
@@ -58,14 +63,19 @@ export default function SearchBar({
   );
 
   return (
-    <React.Fragment>
+    <div className={styles.search}>
       <Dropdown
         options={options}
         selectedKey={param}
         className={styles.searchDropdown}
         onChange={updateParam}
       />
-      <SearchBox value={query} placeholder="Search" onSearch={onSearch} />
-    </React.Fragment>
+      <SearchBox
+        className={styles.searchBox}
+        value={query}
+        placeholder="Search"
+        onSearch={onSearch}
+      />
+    </div>
   );
 }

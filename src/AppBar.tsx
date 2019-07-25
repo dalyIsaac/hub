@@ -12,9 +12,9 @@ const styles = mergeStyleSets({
     alignItems: "center",
     backgroundColor: theme.palette.themePrimary,
     boxShadow: "0 6px 20px 0 rgba(0, 0, 0, 0.19)",
-    display: "flex",
+    display: "grid",
+    gridTemplateColumns: "150px minmax(200px, auto) 150px",
     height: APPBAR_HEIGHT,
-    justifyContent: "space-between",
   },
   link: {
     color: theme.palette.black,
@@ -25,11 +25,6 @@ const styles = mergeStyleSets({
         textDecoration: "none",
       },
     },
-  },
-  search: {
-    display: "flex",
-    flexDirection: "row",
-    width: "calc(100vw / 3)",
   },
   searchDropdown: {
     width: 150,
@@ -50,11 +45,9 @@ export default function AppBar(
         </Text>
       </Link>
 
-      <div className={styles.search}>
-        <SearchBar {...props} />
-      </div>
+      <SearchBar {...props} />
 
-      <div />
+      <div></div>
     </div>
   );
 }
