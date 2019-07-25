@@ -10,6 +10,7 @@ import {
   SearchRouteProps,
   Paths,
   subjectBase,
+  searchBase,
 } from "../Routing";
 import { useDispatch, useSelector } from "react-redux";
 import { createSubject } from "../subject/model/Create";
@@ -38,7 +39,7 @@ export default function AppCommandBar({
 }: RouteComponentProps<SubjectsRouteProps & SearchRouteProps>): JSX.Element {
   const { id } = match.params;
   const dispatch = useDispatch();
-  const { dict, order: rootOrder } = useSelector(
+  const { dict, order: rootOrder, searchSortOptions } = useSelector(
     (state: State) => state.subjects,
   );
 
@@ -52,9 +53,16 @@ export default function AppCommandBar({
 
   const dispatchSetSeparateComplete = useCallback(
     (e: any, checked?: boolean): void => {
-      dispatch(setSeparateComplete(checked!, id));
+      dispatch(setSeparateComplete(checked!, { subjectId: id }));
     },
     [dispatch, id],
+  );
+
+  const dispatchSetSeparateCompleteSearch = useCallback(
+    (e: any, checked?: boolean): void => {
+      dispatch(setSeparateComplete(checked!, { setSearchOptions: true }));
+    },
+    [dispatch],
   );
 
   const components = [];
@@ -82,7 +90,9 @@ export default function AppCommandBar({
     );
 
     components.push(<div key="createSubject">{createSubjectButton}</div>);
-    components.push(<SortButton key="sort" id={id} order={order} />);
+    components.push(
+      <SortButton key="sort" subjectId={id} fields={order.fields} />,
+    );
 
     components.push(
       <Toggle
@@ -91,6 +101,25 @@ export default function AppCommandBar({
         offText={"Don't separate completed items"}
         onText={"Separate completed items"}
         onChange={dispatchSetSeparateComplete}
+        styles={{ root: { marginBottom: 0, marginLeft: 4, marginRight: 4 } }}
+      />,
+    );
+  } else if (match.path === Paths.search || match.path === searchBase) {
+    components.push(
+      <SortButton
+        key="sort"
+        setSearchOptions={true}
+        fields={searchSortOptions.fields}
+      />,
+    );
+
+    components.push(
+      <Toggle
+        key="separateComplete"
+        checked={searchSortOptions.separateCompletedItems}
+        offText={"Don't separate completed items"}
+        onText={"Separate completed items"}
+        onChange={dispatchSetSeparateCompleteSearch}
         styles={{ root: { marginBottom: 0, marginLeft: 4, marginRight: 4 } }}
       />,
     );
