@@ -12,6 +12,8 @@ import {
   mergeStyleSets,
   getTheme,
   CommandBarButton,
+  Icon,
+  Text,
 } from "office-ui-fabric-react";
 import { SortField, SetSortParameters } from "../subject/model/Order";
 import { useDispatch } from "react-redux";
@@ -27,6 +29,27 @@ const theme = getTheme();
 const styles = mergeStyleSets({
   dragEnterClass: {
     backgroundColor: theme.palette.neutralLight,
+  },
+  gripperWrapper: {
+    alignItems: "center",
+    display: "flex",
+    flexDirection: "row",
+    height: "100%",
+    justifyContent: "center",
+    width: "100%",
+    selectors: {
+      "&:hover": {
+        cursor: "pointer",
+      },
+    },
+  },
+  wrapper: {
+    alignItems: "center",
+    display: "flex",
+    flexDirection: "row",
+    height: "100%",
+    paddingLeft: 2,
+    width: "100%",
   },
 });
 
@@ -137,31 +160,61 @@ export default function SortButton({
     [dispatch, subjectId, setSearchOptions],
   );
 
+  const onRenderGripper = useCallback(
+    (): JSX.Element => (
+      <div className={styles.gripperWrapper}>
+        <Icon iconName="GripperBarHorizontal" />
+      </div>
+    ),
+    [],
+  );
+
+  const onRenderName = useCallback(
+    (item: SortField): JSX.Element => (
+      <div className={styles.wrapper}>
+        <Text>{item.name}</Text>
+      </div>
+    ),
+    [],
+  );
+
   const onRenderDirection = useCallback(
     (item: SortField): JSX.Element => (
-      <Toggle
-        key={item.key}
-        defaultChecked={item.desc}
-        offText="Ascending"
-        onText="Descending"
-        onChange={(e, checked) => dispatchSetFieldsDesc(e, checked!, item.key)}
-      />
+      <div className={styles.wrapper}>
+        <Toggle
+          styles={{ root: { margin: 0 } }}
+          key={item.key}
+          defaultChecked={item.desc}
+          offText="Ascending"
+          onText="Descending"
+          onChange={(e, checked) =>
+            dispatchSetFieldsDesc(e, checked!, item.key)
+          }
+        />
+      </div>
     ),
     [dispatchSetFieldsDesc],
   );
 
   const sortColumns: IColumn[] = [
     {
+      key: "gripper",
+      minWidth: 20,
+      name: "",
+      onRender: onRenderGripper,
+    },
+    {
       fieldName: "name",
       key: "param",
-      name: "Parameter",
       minWidth: 150,
+      name: "Parameter",
+      onRender: onRenderName,
     },
     {
       fieldName: "desc",
       key: "direction",
-      name: "Direction",
       minWidth: 150,
+      name: "Direction",
       onRender: onRenderDirection,
     },
   ];
