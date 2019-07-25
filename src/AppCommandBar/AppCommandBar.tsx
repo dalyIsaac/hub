@@ -5,7 +5,12 @@ import {
   CommandBarButton,
   Toggle,
 } from "office-ui-fabric-react";
-import { SubjectsRouteProps } from "../Routing";
+import {
+  SubjectsRouteProps,
+  SearchRouteProps,
+  Paths,
+  subjectBase,
+} from "../Routing";
 import { useDispatch, useSelector } from "react-redux";
 import { createSubject } from "../subject/model/Create";
 import { State } from "../Reducer";
@@ -30,15 +35,12 @@ const styles = mergeStyleSets({
 
 export default function AppCommandBar({
   match,
-}: RouteComponentProps<SubjectsRouteProps>): JSX.Element {
+}: RouteComponentProps<SubjectsRouteProps & SearchRouteProps>): JSX.Element {
   const { id } = match.params;
   const dispatch = useDispatch();
   const { dict, order: rootOrder } = useSelector(
     (state: State) => state.subjects,
   );
-
-  const order =
-    id && id in dict ? dict[id].children.options : rootOrder.options;
 
   const dispatchCreateChildSubject = useCallback((): void => {
     dispatch(createSubject({ parent: id }));
@@ -55,35 +57,44 @@ export default function AppCommandBar({
     [dispatch, id],
   );
 
-  const createSubjectButton = id ? (
-    <CommandBarButton
-      text="Create child subject"
-      iconProps={{ iconName: "Childof" }}
-      ariaLabel="Create child subject"
-      onClick={dispatchCreateChildSubject}
-      styles={{ root: { height: BUTTON_HEIGHT } }}
-    />
-  ) : (
-    <CommandBarButton
-      text="Create subject"
-      iconProps={{ iconName: "Add" }}
-      ariaLabel="Create subject"
-      onClick={dispatchCreateSubject}
-      styles={{ root: { height: BUTTON_HEIGHT } }}
-    />
-  );
+  const components = [];
 
-  return (
-    <div className={styles.wrapper}>
-      <div>{createSubjectButton}</div>
-      <SortButton id={id} order={order} />
+  if (match.path === Paths.subject || match.path === subjectBase) {
+    const order =
+      id && id in dict ? dict[id].children.options : rootOrder.options;
+
+    const createSubjectButton = id ? (
+      <CommandBarButton
+        text="Create child subject"
+        iconProps={{ iconName: "Childof" }}
+        ariaLabel="Create child subject"
+        onClick={dispatchCreateChildSubject}
+        styles={{ root: { height: BUTTON_HEIGHT } }}
+      />
+    ) : (
+      <CommandBarButton
+        text="Create subject"
+        iconProps={{ iconName: "Add" }}
+        ariaLabel="Create subject"
+        onClick={dispatchCreateSubject}
+        styles={{ root: { height: BUTTON_HEIGHT } }}
+      />
+    );
+
+    components.push(<div key="createSubject">{createSubjectButton}</div>);
+    components.push(<SortButton key="sort" id={id} order={order} />);
+
+    components.push(
       <Toggle
+        key="separateComplete"
         checked={order.separateCompletedItems}
         offText={"Don't separate completed items"}
         onText={"Separate completed items"}
         onChange={dispatchSetSeparateComplete}
         styles={{ root: { marginBottom: 0, marginLeft: 4, marginRight: 4 } }}
-      />
-    </div>
-  );
+      />,
+    );
+  }
+
+  return <div className={styles.wrapper}>{components}</div>;
 }

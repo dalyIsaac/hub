@@ -10,7 +10,7 @@ const App: React.FC = (): JSX.Element => {
   return (
     <div>
       <Route path={AllPaths} component={AppBar} />
-      <Route path={Paths.subject} component={AppCommandBar} />
+      <Route path={AllPaths} component={AppCommandBar} />
       <Switch>
         <Route path={Paths.subject} component={ResponsiveGridView} />
         <Route path={Paths.search} component={SearchResults} />
