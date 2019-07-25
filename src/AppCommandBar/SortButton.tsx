@@ -70,7 +70,7 @@ export default function SortButton({
       }
 
       items.splice(insertIndex, 0, ...draggedItems);
-      dispatch(setFieldsArray(items, id));
+      dispatch(setFieldsArray(items, { subjectId: id }));
     },
     [dispatch, order, id],
   );
@@ -132,7 +132,7 @@ export default function SortButton({
 
   const dispatchSetFieldsDesc = useCallback(
     (e: any, checked: boolean, key: string): void => {
-      dispatch(setFieldsDesc(key, checked, id));
+      dispatch(setFieldsDesc(key, checked, { subjectId: id }));
     },
     [dispatch, id],
   );

@@ -1,30 +1,39 @@
-import { SortField, sortItems } from "./Order";
+import { SortField, sortItems, SetSortParameters } from "./Order";
 import { SubjectState } from "./Subject";
 import { BaseAction } from "../../Common";
 
 export const SET_FIELDS_ARRAY = "SET_FIELDS_ARRAY";
 
 export interface SetFieldsArrayAction extends BaseAction {
-  subjectId?: string;
+  parameters: SetSortParameters;
   fields: SortField[];
 }
 
 export const setFieldsArray = (
   fields: SortField[],
-  subjectId?: string,
+  parameters: SetSortParameters,
 ): SetFieldsArrayAction => ({
   fields,
-  subjectId,
+  parameters,
   type: SET_FIELDS_ARRAY,
 });
 
 export const setFieldsArrayReducer = (
   state: SubjectState,
-  { subjectId, fields }: SetFieldsArrayAction,
+  { parameters: { subjectId, setSearchOptions }, fields }: SetFieldsArrayAction,
 ): void => {
-  const children = subjectId ? state.dict[subjectId].children : state.order;
-  children.options.fields = fields;
+  let options;
+  if (setSearchOptions) {
+    options = state.searchSortOptions;
+  } else if (subjectId) {
+    options = state.dict[subjectId].children.options;
+  } else {
+    options = state.order.options;
+  }
+
+  options.fields = fields;
   if (subjectId) {
+    const children = state.dict[subjectId].children;
     children.order = sortItems(state.dict, children);
   }
 };
