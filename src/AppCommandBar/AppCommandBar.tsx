@@ -111,12 +111,13 @@ export default function AppCommandBar({
       />
     );
 
+    leftComponents.push(<div key="createSubject">{createSubjectButton}</div>);
+
     if (display === "grid") {
-      leftComponents.push(<div key="createSubject">{createSubjectButton}</div>);
+      leftComponents.push(
+        <SortButton key="sort" subjectId={id} fields={order.fields} />,
+      );
     }
-    leftComponents.push(
-      <SortButton key="sort" subjectId={id} fields={order.fields} />,
-    );
 
     leftComponents.push(
       <Toggle
