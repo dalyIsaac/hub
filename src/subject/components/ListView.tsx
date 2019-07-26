@@ -6,7 +6,6 @@ import {
   mergeStyleSets,
   getTheme,
   IconButton,
-  ScrollToMode,
   IDetailsList,
 } from "office-ui-fabric-react";
 import { Subject, GetItemsOptions, getItems, Item } from "../model/Subject";
@@ -27,12 +26,11 @@ import { setFieldsArray } from "../model/SetFieldsArray";
 import { setFieldsDesc } from "../model/SetFieldsDesc";
 import { getDiffIndex } from "./View";
 
-const theme = getTheme();
 const styles = mergeStyleSets({
   detailsList: {
     height: `calc(100vh - ${APPBAR_HEIGHT}px - ${APP_COMMAND_BAR_HEIGHT}px)`,
   },
-  openButton: {
+  rowButton: {
     selectors: {
       "&:active": {
         filter: "brightness(80%)",
@@ -43,6 +41,10 @@ const styles = mergeStyleSets({
         outline: "none",
       },
     },
+  },
+  rowButtonWrapper: {
+    display: "flex",
+    flexDirection: "row",
   },
 });
 
@@ -118,17 +120,26 @@ function ListView({
 
   const renderOpenButton = useCallback((item: Item): JSX.Element => {
     const openLabel = "Open " + item.subject.name;
+    const editLabel = "Edit " + item.subject.name;
     return (
-      <Link to={gotoSubject("list", item.id)}>
-        <IconButton
-          primary
+      <div className={styles.rowButtonWrapper}>
+                <IconButton
           styles={{ root: { width: "" } }}
-          className={styles.openButton}
-          iconProps={{ iconName: "OpenFile" }}
-          title={openLabel}
-          ariaLabel={openLabel}
+          className={styles.rowButton}
+          iconProps={{ iconName: "Edit" }}
+          title={editLabel}
+          ariaLabel={editLabel}
         />
-      </Link>
+        <Link to={gotoSubject("list", item.id)}>
+          <IconButton
+            styles={{ root: { width: "" } }}
+            className={styles.rowButton}
+            iconProps={{ iconName: "OpenFile" }}
+            title={openLabel}
+            ariaLabel={openLabel}
+          />
+        </Link>
+      </div>
     );
   }, []);
 
@@ -201,7 +212,7 @@ function ListView({
 
   columns.push({
     key: "openButton",
-    minWidth: 24,
+    minWidth: 80,
     name: "",
     onRender: renderOpenButton,
   });
