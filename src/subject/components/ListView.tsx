@@ -8,7 +8,7 @@ import {
   IconButton,
 } from "office-ui-fabric-react";
 import { Subject, GetItemsOptions, getItems, Item } from "../model/Subject";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { State } from "../../Reducer";
 import { APP_COMMAND_BAR_HEIGHT } from "../../AppCommandBar/Common";
 import { APPBAR_HEIGHT } from "../../Common";
@@ -17,9 +17,11 @@ import {
   sortItems,
   SortField,
   SortFieldKey,
+  SetSortParameters,
 } from "../model/Order";
 import { gotoSubject } from "../../Routing";
 import { Link, RouteComponentProps, withRouter } from "react-router-dom";
+import { setFieldsArray } from "../model/SetFieldsArray";
 
 const theme = getTheme();
 const styles = mergeStyleSets({
@@ -58,6 +60,11 @@ function ListView({
     [],
   );
 
+  const renderChildren = useCallback(
+    (item: Item): string => item.subject.children.order.length.toLocaleString(),
+    [],
+  );
+
   const renderDate = useCallback(
     (item: Item, _index?: number, column?: IColumn): string => {
       const date = item.subject[column!.key as keyof Subject] as Date;
@@ -90,29 +97,11 @@ function ListView({
   );
 
   const columnsDict: Partial<{ [key in SortFieldKey]: IColumn }> = {
-    name: {
-      key: "name",
+    children: {
+      key: "children",
       minWidth: 150,
-      name: "Name",
-      onRender: renderSubjectString,
-    },
-    description: {
-      key: "description",
-      minWidth: 150,
-      name: "Description",
-      onRender: renderSubjectString,
-    },
-    created: {
-      key: "created",
-      minWidth: 150,
-      name: "Date created",
-      onRender: renderDate,
-    },
-    dueDate: {
-      key: "dueDate",
-      minWidth: 150,
-      name: "Due date",
-      onRender: renderDate,
+      name: "Number of children",
+      onRender: renderChildren,
     },
     completed: {
       key: "completed",
@@ -120,12 +109,38 @@ function ListView({
       name: "Completed",
       onRender: renderDate,
     },
+    created: {
+      key: "created",
+      minWidth: 150,
+      name: "Date created",
+      onRender: renderDate,
+    },
+    description: {
+      key: "description",
+      minWidth: 150,
+      name: "Description",
+      onRender: renderSubjectString,
+    },
+    dueDate: {
+      key: "dueDate",
+      minWidth: 150,
+      name: "Due date",
+      onRender: renderDate,
+    },
+    name: {
+      key: "name",
+      minWidth: 150,
+      name: "Name",
+      onRender: renderSubjectString,
+    },
   };
 
   const { subjects } = useSelector((state: State) => state);
+  const dispatch = useDispatch();
 
-  let componentOrder;
-  let sortFields;
+  let componentOrder: string[];
+  let sortFields: SortField[];
+  let reorderParams: SetSortParameters;
 
   if (sortOptions) {
     componentOrder = sortItems(subjects.dict, {
@@ -133,13 +148,26 @@ function ListView({
       options: sortOptions,
     });
     sortFields = sortOptions.fields;
+    reorderParams = { setSearchOptions: true };
   } else if (id) {
     componentOrder = subjects.dict[id].children.order;
     sortFields = subjects.dict[id].children.options.fields;
+    reorderParams = { subjectId: id };
   } else {
     componentOrder = subjects.order.order;
     sortFields = subjects.order.options.fields;
+    reorderParams = {};
   }
+
+  const reorder = useCallback(
+    (draggedIndex: number, targetIndex: number): void => {
+      const dragged = sortFields[draggedIndex];
+      const fields = sortFields.filter((_, index) => index !== draggedIndex);
+      fields.splice(targetIndex, 0, dragged);
+      dispatch(setFieldsArray(fields, reorderParams));
+    },
+    [sortFields, dispatch, reorderParams],
+  );
 
   const items = getItems(subjects.dict, componentOrder, options);
   const columns: IColumn[] = [];
@@ -165,6 +193,11 @@ function ListView({
       isHeaderVisible={true}
       selectionMode={SelectionMode.none}
       onItemInvoked={invoke}
+      columnReorderOptions={{
+        frozenColumnCountFromEnd: 1,
+        frozenColumnCountFromStart: 0,
+        handleColumnReorder: reorder,
+      }}
     />
   );
 }
