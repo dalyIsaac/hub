@@ -22,6 +22,7 @@ import {
 import { gotoSubject } from "../../Routing";
 import { Link, RouteComponentProps, withRouter } from "react-router-dom";
 import { setFieldsArray } from "../model/SetFieldsArray";
+import { setFieldsDesc } from "../model/SetFieldsDesc";
 
 const theme = getTheme();
 const styles = mergeStyleSets({
@@ -52,7 +53,46 @@ function ListView({
   options,
   sortOptions,
 }: ListViewProps & RouteComponentProps): JSX.Element {
+  const { subjects } = useSelector((state: State) => state);
+  const dispatch = useDispatch();
+
   const id = options ? options.parent : undefined;
+
+  let componentOrder: string[];
+  let sortFields: SortField[];
+  let reorderParams: SetSortParameters;
+
+  if (sortOptions) {
+    componentOrder = sortItems(subjects.dict, {
+      ...subjects.order,
+      options: sortOptions,
+    });
+    sortFields = sortOptions.fields;
+    reorderParams = { setSearchOptions: true };
+  } else if (id) {
+    componentOrder = subjects.dict[id].children.order;
+    sortFields = subjects.dict[id].children.options.fields;
+    reorderParams = { subjectId: id };
+  } else {
+    componentOrder = subjects.order.order;
+    sortFields = subjects.order.options.fields;
+    reorderParams = {};
+  }
+
+  const dispatchSetFieldsDesc = useCallback(
+    (e?: any, column?: IColumn): void => {
+      if (column!.key !== "openButton") {
+        dispatch(
+          setFieldsDesc(
+            column!.key,
+            !column!.isSortedDescending,
+            reorderParams,
+          ),
+        );
+      }
+    },
+    [dispatch, reorderParams],
+  );
 
   const renderSubjectString = useCallback(
     (item: Item, _index?: number, column?: IColumn): string =>
@@ -135,30 +175,6 @@ function ListView({
     },
   };
 
-  const { subjects } = useSelector((state: State) => state);
-  const dispatch = useDispatch();
-
-  let componentOrder: string[];
-  let sortFields: SortField[];
-  let reorderParams: SetSortParameters;
-
-  if (sortOptions) {
-    componentOrder = sortItems(subjects.dict, {
-      ...subjects.order,
-      options: sortOptions,
-    });
-    sortFields = sortOptions.fields;
-    reorderParams = { setSearchOptions: true };
-  } else if (id) {
-    componentOrder = subjects.dict[id].children.order;
-    sortFields = subjects.dict[id].children.options.fields;
-    reorderParams = { subjectId: id };
-  } else {
-    componentOrder = subjects.order.order;
-    sortFields = subjects.order.options.fields;
-    reorderParams = {};
-  }
-
   const reorder = useCallback(
     (draggedIndex: number, targetIndex: number): void => {
       const dragged = sortFields[draggedIndex];
@@ -174,6 +190,8 @@ function ListView({
   for (const field of sortFields) {
     const current = columnsDict[field.key];
     if (current) {
+      current.isSorted = true;
+      current.isSortedDescending = field.desc;
       columns.push(current);
     }
   }
@@ -187,6 +205,7 @@ function ListView({
 
   return (
     <DetailsList
+      onColumnHeaderClick={dispatchSetFieldsDesc}
       className={styles.detailsList}
       columns={columns}
       items={items}
