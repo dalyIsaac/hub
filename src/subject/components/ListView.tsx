@@ -14,7 +14,7 @@ import { APP_COMMAND_BAR_HEIGHT } from "../../AppCommandBar/Common";
 import { APPBAR_HEIGHT } from "../../Common";
 import { SortItemsOptions, sortItems } from "../model/Order";
 import { gotoSubject } from "../../Routing";
-import { Link } from "react-router-dom";
+import { Link, RouteComponentProps, withRouter } from "react-router-dom";
 
 const theme = getTheme();
 const styles = mergeStyleSets({
@@ -40,10 +40,11 @@ interface ListViewProps {
   sortOptions?: SortItemsOptions;
 }
 
-export default function ListView({
+function ListView({
+  history,
   options,
   sortOptions,
-}: ListViewProps): JSX.Element {
+}: ListViewProps & RouteComponentProps): JSX.Element {
   const renderSubjectString = useCallback(
     (item: Item, _index?: number, column?: IColumn): string =>
       item.subject[column!.key as keyof Subject] as string,
@@ -80,6 +81,13 @@ export default function ListView({
       </Link>
     );
   }, []);
+
+  const invoke = useCallback(
+    (item: Item): void => {
+      history.push(gotoSubject("list", item.id));
+    },
+    [history],
+  );
 
   const columns: IColumn[] = [
     {
@@ -127,6 +135,9 @@ export default function ListView({
       items={items}
       isHeaderVisible={true}
       selectionMode={SelectionMode.none}
+      onItemInvoked={invoke}
     />
   );
 }
+
+export default withRouter(ListView);
