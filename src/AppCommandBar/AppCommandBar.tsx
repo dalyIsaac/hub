@@ -44,6 +44,7 @@ const styles = mergeStyleSets({
     height: BUTTON_HEIGHT,
     justifyContent: "space-between",
     paddingLeft: 24,
+    paddingRight: 24,
   },
 });
 
@@ -153,13 +154,34 @@ export default function AppCommandBar({
   }
 
   rightComponents.push(
-    <Toggle
+    <CommandBarButton
       key="toggleView"
-      checked={display === "list"}
-      offText="Grid view"
-      onText="List view"
-      onChange={toggleView}
-      styles={{ root: { marginBottom: 0, marginLeft: 4, marginRight: 4 } }}
+      ariaLabel="Toggle view"
+      iconProps={{
+        iconName: display === "list" ? "BulletedListText" : "GridViewMedium",
+      }}
+      text={display === "list" ? "List" : "Grid"}
+      styles={{
+        root: { background: theme.palette.white, height: BUTTON_HEIGHT },
+      }}
+      menuProps={{
+        directionalHintFixed: true,
+        items: [
+          display === "list"
+            ? {
+                iconProps: { iconName: "GridViewMedium" },
+                key: "gridButton",
+                onClick: toggleView,
+                text: "Grid",
+              }
+            : {
+                iconProps: { iconName: "BulletedListText" },
+                key: "listButton",
+                onClick: toggleView,
+                text: "List",
+              },
+        ],
+      }}
     />,
   );
 
