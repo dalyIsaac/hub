@@ -10,6 +10,7 @@ import { APP_COMMAND_BAR_HEIGHT } from "../../AppCommandBar/Common";
 import { isUndefined } from "lodash";
 import { APPBAR_HEIGHT } from "../../Common";
 import { SortItemsOptions, sortItems } from "../model/Order";
+import { getDiffIndex } from "./View";
 
 const ROWS_PER_PAGE = 3;
 const ROW_HEIGHT = 603;
@@ -42,18 +43,6 @@ const styles = mergeStyleSets({
 });
 
 const getPageHeight = (): number => ROW_HEIGHT * ROWS_PER_PAGE;
-
-const getDiffIndex = (oldOrder: string[], newOrder: string[]): number => {
-  for (let i = 0; i < newOrder.length; i++) {
-    const newEl = newOrder[i];
-    const oldEl = oldOrder[i];
-
-    if (newEl !== oldEl) {
-      return i;
-    }
-  }
-  return 0;
-};
 
 interface GridViewProps {
   options?: GetItemsOptions;

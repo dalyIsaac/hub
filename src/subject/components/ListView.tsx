@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useRef, useEffect, useState } from "react";
 import {
   IColumn,
   DetailsList,
@@ -6,6 +6,8 @@ import {
   mergeStyleSets,
   getTheme,
   IconButton,
+  ScrollToMode,
+  IDetailsList,
 } from "office-ui-fabric-react";
 import { Subject, GetItemsOptions, getItems, Item } from "../model/Subject";
 import { useSelector, useDispatch } from "react-redux";
@@ -23,6 +25,7 @@ import { gotoSubject } from "../../Routing";
 import { Link, RouteComponentProps, withRouter } from "react-router-dom";
 import { setFieldsArray } from "../model/SetFieldsArray";
 import { setFieldsDesc } from "../model/SetFieldsDesc";
+import { getDiffIndex } from "./View";
 
 const theme = getTheme();
 const styles = mergeStyleSets({
@@ -203,8 +206,34 @@ function ListView({
     onRender: renderOpenButton,
   });
 
+  const [orderState, setOrderState] = useState(componentOrder);
+  const listRef: React.MutableRefObject<IDetailsList | null> = useRef(null);
+
+  // Scrolls to newly added subjects
+  useEffect((): void => {
+    if (
+      listRef.current &&
+      orderState !== componentOrder &&
+      componentOrder.length > 0
+    ) {
+      // Gets the index to scroll to
+      const index = getDiffIndex(orderState, componentOrder);
+
+      // Scroll to the index if either:
+      // - the new index doesn't have a parent
+      // - the new index has a parent, which matches match.param.id
+      const s = subjects.dict[componentOrder[index]];
+      if (s.parents.size === 0 || s.parents.has(id!)) {
+        listRef.current.focusIndex(index);
+      }
+
+      setOrderState(componentOrder);
+    }
+  }, [componentOrder, orderState, id, subjects]);
+
   return (
     <DetailsList
+      componentRef={listRef}
       onColumnHeaderClick={dispatchSetFieldsDesc}
       className={styles.detailsList}
       columns={columns}
