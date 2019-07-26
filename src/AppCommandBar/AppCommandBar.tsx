@@ -11,6 +11,8 @@ import {
   Paths,
   subjectBase,
   searchBase,
+  getDisplay,
+  updateDisplay,
 } from "../Routing";
 import { useDispatch, useSelector } from "react-redux";
 import { createSubject } from "../subject/model/Create";
@@ -22,6 +24,16 @@ import { RouteComponentProps } from "react-router";
 
 const theme = getTheme();
 const styles = mergeStyleSets({
+  leftWrapper: {
+    alignItems: "center",
+    display: "flex",
+    flexDirection: "row",
+  },
+  rightWrapper: {
+    alignItems: "center",
+    display: "flex",
+    flexDirection: "row-reverse",
+  },
   wrapper: {
     alignItems: "center",
     backgroundColor: theme.palette.white,
@@ -30,15 +42,20 @@ const styles = mergeStyleSets({
     display: "flex",
     flexDirection: "row",
     height: BUTTON_HEIGHT,
+    justifyContent: "space-between",
     paddingLeft: 24,
   },
 });
 
 export default function AppCommandBar({
   match,
+  location,
+  history,
 }: RouteComponentProps<SubjectsRouteProps & SearchRouteProps>): JSX.Element {
   const { id } = match.params;
   const dispatch = useDispatch();
+  const display = getDisplay(location);
+
   const { dict, order: rootOrder, searchSortOptions } = useSelector(
     (state: State) => state.subjects,
   );
@@ -65,7 +82,12 @@ export default function AppCommandBar({
     [dispatch],
   );
 
-  const components = [];
+  const toggleView = useCallback((): void => {
+    history.push(updateDisplay(location, display === "grid" ? "list" : "grid"));
+  }, [display, history, location]);
+
+  const leftComponents: JSX.Element[] = [];
+  const rightComponents: JSX.Element[] = [];
 
   if (match.path === Paths.subject || match.path === subjectBase) {
     const order =
@@ -89,12 +111,12 @@ export default function AppCommandBar({
       />
     );
 
-    components.push(<div key="createSubject">{createSubjectButton}</div>);
-    components.push(
+    leftComponents.push(<div key="createSubject">{createSubjectButton}</div>);
+    leftComponents.push(
       <SortButton key="sort" subjectId={id} fields={order.fields} />,
     );
 
-    components.push(
+    leftComponents.push(
       <Toggle
         key="separateComplete"
         checked={order.separateCompletedItems}
@@ -105,7 +127,7 @@ export default function AppCommandBar({
       />,
     );
   } else if (match.path === Paths.search || match.path === searchBase) {
-    components.push(
+    leftComponents.push(
       <SortButton
         key="sort"
         setSearchOptions={true}
@@ -113,7 +135,7 @@ export default function AppCommandBar({
       />,
     );
 
-    components.push(
+    leftComponents.push(
       <Toggle
         key="separateComplete"
         checked={searchSortOptions.separateCompletedItems}
@@ -125,5 +147,21 @@ export default function AppCommandBar({
     );
   }
 
-  return <div className={styles.wrapper}>{components}</div>;
+  rightComponents.push(
+    <Toggle
+      key="toggleView"
+      checked={display === "list"}
+      offText="Grid view"
+      onText="List view"
+      onChange={toggleView}
+      styles={{ root: { marginBottom: 0, marginLeft: 4, marginRight: 4 } }}
+    />,
+  );
+
+  return (
+    <div className={styles.wrapper}>
+      <div className={styles.leftWrapper}>{leftComponents}</div>
+      <div className={styles.rightWrapper}>{rightComponents}</div>
+    </div>
+  );
 }
