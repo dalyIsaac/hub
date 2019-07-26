@@ -29,6 +29,11 @@ export const getDisplay = (location: Location): DisplayOptions => {
   return "grid";
 };
 
+export const updateDisplay = (
+  location: Location,
+  display: DisplayOptions,
+): string => `${location.pathname}?display=${display}`;
+
 export interface SearchRouteProps {
   param: string;
   query: string;

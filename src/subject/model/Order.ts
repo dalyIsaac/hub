@@ -1,8 +1,10 @@
 import { Subject, SubjectDictState } from "./Subject";
 import { isUndefined } from "lodash";
 
+export type SortFieldKey = keyof Omit<Subject, "parents">;
+
 export interface SortField {
-  key: keyof Omit<Subject, "parents">;
+  key: SortFieldKey;
   name: string;
   desc: boolean;
   compareLength?: boolean;
