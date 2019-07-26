@@ -12,7 +12,12 @@ import { useSelector } from "react-redux";
 import { State } from "../../Reducer";
 import { APP_COMMAND_BAR_HEIGHT } from "../../AppCommandBar/Common";
 import { APPBAR_HEIGHT } from "../../Common";
-import { SortItemsOptions, sortItems } from "../model/Order";
+import {
+  SortItemsOptions,
+  sortItems,
+  SortField,
+  SortFieldKey,
+} from "../model/Order";
 import { gotoSubject } from "../../Routing";
 import { Link, RouteComponentProps, withRouter } from "react-router-dom";
 
@@ -45,6 +50,8 @@ function ListView({
   options,
   sortOptions,
 }: ListViewProps & RouteComponentProps): JSX.Element {
+  const id = options ? options.parent : undefined;
+
   const renderSubjectString = useCallback(
     (item: Item, _index?: number, column?: IColumn): string =>
       item.subject[column!.key as keyof Subject] as string,
@@ -58,13 +65,6 @@ function ListView({
     },
     [],
   );
-
-  const { subjects } = useSelector((state: State) => state);
-
-  const componentOrder = sortOptions
-    ? sortItems(subjects.dict, { ...subjects.order, options: sortOptions })
-    : subjects.order.order;
-  const items = getItems(subjects.dict, componentOrder, options);
 
   const renderOpenButton = useCallback((item: Item): JSX.Element => {
     const openLabel = "Open " + item.subject.name;
@@ -89,44 +89,73 @@ function ListView({
     [history],
   );
 
-  const columns: IColumn[] = [
-    {
+  const columnsDict: Partial<{ [key in SortFieldKey]: IColumn }> = {
+    name: {
       key: "name",
       minWidth: 150,
       name: "Name",
       onRender: renderSubjectString,
     },
-    {
+    description: {
       key: "description",
       minWidth: 150,
       name: "Description",
       onRender: renderSubjectString,
     },
-    {
+    created: {
       key: "created",
       minWidth: 150,
-      name: "Created",
+      name: "Date created",
       onRender: renderDate,
     },
-    {
+    dueDate: {
       key: "dueDate",
       minWidth: 150,
       name: "Due date",
       onRender: renderDate,
     },
-    {
+    completed: {
       key: "completed",
       minWidth: 150,
       name: "Completed",
       onRender: renderDate,
     },
-    {
-      key: "openButton",
-      minWidth: 24,
-      name: "",
-      onRender: renderOpenButton,
-    },
-  ];
+  };
+
+  const { subjects } = useSelector((state: State) => state);
+
+  let componentOrder;
+  let sortFields;
+
+  if (sortOptions) {
+    componentOrder = sortItems(subjects.dict, {
+      ...subjects.order,
+      options: sortOptions,
+    });
+    sortFields = sortOptions.fields;
+  } else if (id) {
+    componentOrder = subjects.dict[id].children.order;
+    sortFields = subjects.dict[id].children.options.fields;
+  } else {
+    componentOrder = subjects.order.order;
+    sortFields = subjects.order.options.fields;
+  }
+
+  const items = getItems(subjects.dict, componentOrder, options);
+  const columns: IColumn[] = [];
+  for (const field of sortFields) {
+    const current = columnsDict[field.key];
+    if (current) {
+      columns.push(current);
+    }
+  }
+
+  columns.push({
+    key: "openButton",
+    minWidth: 24,
+    name: "",
+    onRender: renderOpenButton,
+  });
 
   return (
     <DetailsList

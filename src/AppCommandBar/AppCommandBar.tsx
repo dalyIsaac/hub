@@ -111,7 +111,9 @@ export default function AppCommandBar({
       />
     );
 
-    leftComponents.push(<div key="createSubject">{createSubjectButton}</div>);
+    if (display === "grid") {
+      leftComponents.push(<div key="createSubject">{createSubjectButton}</div>);
+    }
     leftComponents.push(
       <SortButton key="sort" subjectId={id} fields={order.fields} />,
     );
@@ -127,13 +129,15 @@ export default function AppCommandBar({
       />,
     );
   } else if (match.path === Paths.search || match.path === searchBase) {
-    leftComponents.push(
-      <SortButton
-        key="sort"
-        setSearchOptions={true}
-        fields={searchSortOptions.fields}
-      />,
-    );
+    if (display === "grid") {
+      leftComponents.push(
+        <SortButton
+          key="sort"
+          setSearchOptions={true}
+          fields={searchSortOptions.fields}
+        />,
+      );
+    }
 
     leftComponents.push(
       <Toggle
