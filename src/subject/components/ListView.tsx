@@ -4,8 +4,6 @@ import {
   DetailsList,
   SelectionMode,
   mergeStyleSets,
-  getTheme,
-  IconButton,
   IDetailsList,
 } from "office-ui-fabric-react";
 import { Subject, GetItemsOptions, getItems, Item } from "../model/Subject";
@@ -21,30 +19,15 @@ import {
   SetSortParameters,
 } from "../model/Order";
 import { gotoSubject } from "../../Routing";
-import { Link, RouteComponentProps, withRouter } from "react-router-dom";
+import { RouteComponentProps, withRouter } from "react-router-dom";
 import { setFieldsArray } from "../model/SetFieldsArray";
 import { setFieldsDesc } from "../model/SetFieldsDesc";
 import { getDiffIndex } from "./View";
+import ListViewButtons from "./ListViewButtons";
 
 const styles = mergeStyleSets({
   detailsList: {
     height: `calc(100vh - ${APPBAR_HEIGHT}px - ${APP_COMMAND_BAR_HEIGHT}px)`,
-  },
-  rowButton: {
-    selectors: {
-      "&:active": {
-        filter: "brightness(80%)",
-        outline: "none",
-      },
-      "&:hover": {
-        filter: "brightness(90%)",
-        outline: "none",
-      },
-    },
-  },
-  rowButtonWrapper: {
-    display: "flex",
-    flexDirection: "row",
   },
 });
 
@@ -118,30 +101,12 @@ function ListView({
     [],
   );
 
-  const renderOpenButton = useCallback((item: Item): JSX.Element => {
-    const openLabel = "Open " + item.subject.name;
-    const editLabel = "Edit " + item.subject.name;
-    return (
-      <div className={styles.rowButtonWrapper}>
-                <IconButton
-          styles={{ root: { width: "" } }}
-          className={styles.rowButton}
-          iconProps={{ iconName: "Edit" }}
-          title={editLabel}
-          ariaLabel={editLabel}
-        />
-        <Link to={gotoSubject("list", item.id)}>
-          <IconButton
-            styles={{ root: { width: "" } }}
-            className={styles.rowButton}
-            iconProps={{ iconName: "OpenFile" }}
-            title={openLabel}
-            ariaLabel={openLabel}
-          />
-        </Link>
-      </div>
-    );
-  }, []);
+  const renderOpenButton = useCallback(
+    (item: Item): JSX.Element => {
+      return <ListViewButtons item={item} />;
+    },
+    [],
+  );
 
   const invoke = useCallback(
     (item: Item): void => {
