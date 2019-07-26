@@ -3,27 +3,12 @@ import { SubjectsRouteProps, getDisplay } from "../../Routing";
 import GridView, { MIN_COL_WIDTH } from "./GridView";
 import { isUndefined } from "lodash";
 import useWindowSize from "@rehooks/window-size";
-import { getTheme, mergeStyleSets } from "office-ui-fabric-react";
 import SubjectComponent from "./Subject";
 import { useSelector } from "react-redux";
 import { State } from "../../Reducer";
 import { Redirect, RouteComponentProps } from "react-router";
 import ListView from "./ListView";
-
-const theme = getTheme();
-const styles = mergeStyleSets({
-  wrapper: {
-    display: "grid",
-    gridTemplateColumns: `auto ${MIN_COL_WIDTH}px`,
-  },
-  sidebar: {
-    border: "1px solid " + theme.palette.white,
-    borderRadius: 4,
-    boxShadow: "0 6px 20px 0 rgba(0, 0, 0, 0.19)",
-    gridColumn: "2",
-    zIndex: 10,
-  },
-});
+import ViewWithSidebar from "./ViewWithSidebar";
 
 export default function ResponsiveGridView({
   match,
@@ -51,14 +36,16 @@ export default function ResponsiveGridView({
   if (windowSize.innerWidth > MIN_COL_WIDTH * 2) {
     const options = { parent: id };
     return (
-      <div className={styles.wrapper}>
-        {display === "grid" ? (
-          <GridView options={options} />
-        ) : (
-          <ListView options={options} />
-        )}
-        <div className={styles.sidebar}>{parentSubject}</div>
-      </div>
+      <ViewWithSidebar
+        viewComponent={
+          display === "grid" ? (
+            <GridView options={options} />
+          ) : (
+            <ListView options={options} />
+          )
+        }
+        sidebarComponent={parentSubject}
+      />
     );
   }
 
