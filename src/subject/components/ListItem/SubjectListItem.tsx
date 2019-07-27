@@ -43,7 +43,7 @@ function ListItem({ id, parent, subject }: Item): JSX.Element {
   const completeOnClick = useCallback(
     (e: any, item?: IContextualMenuItem): void => {
       if (item) {
-        onChange(e, !item.checked, 1);
+        onChange(e, true, 1);
       }
     },
     [onChange],
@@ -52,7 +52,16 @@ function ListItem({ id, parent, subject }: Item): JSX.Element {
   const completeWithChildrenOnClick = useCallback(
     (e: any, item?: IContextualMenuItem): void => {
       if (item) {
-        onChange(e, !item.checked, 2);
+        onChange(e, true, 2);
+      }
+    },
+    [onChange],
+  );
+
+  const uncompleteOnClick = useCallback(
+    (e: any, item?: IContextualMenuItem): void => {
+      if (item) {
+        onChange(e, false);
       }
     },
     [onChange],
@@ -66,26 +75,43 @@ function ListItem({ id, parent, subject }: Item): JSX.Element {
     dispatch(deleteSubject(id));
   }, [dispatch, id]);
 
-  const contextItems: IContextualMenuItem[] = [
+  const completeContextItems = [
     {
+      iconProps: { iconName: "Completed" },
       key: "complete-1-level",
-      text: "Mark as complete",
       onClick: completeOnClick,
+      text: "Mark as complete",
     },
     {
+      iconProps: { iconName: "CompletedSolid" },
       key: "complete-2-level",
-      text: "Mark this and its children as complete",
       onClick: completeWithChildrenOnClick,
+      text: "Mark this and its children as complete",
     },
+  ];
+
+  const uncompleteContextItems = [
     {
+      iconProps: { iconName: "Blocked2" },
+      key: "uncomplete",
+      onClick: uncompleteOnClick,
+      text: "Mark as incomplete",
+    },
+  ];
+
+  const contextItems: IContextualMenuItem[] = [
+    ...(subject.completed ? uncompleteContextItems : completeContextItems),
+    {
+      iconProps: { iconName: "Remove" },
       key: "remove",
-      text: "Remove this as a child",
       onClick: removeChildOnClick,
+      text: "Remove this as a child",
     },
     {
+      iconProps: { iconName: "Delete" },
       key: "delete",
-      text: "Delete this",
       onClick: deleteSubjectOnClick,
+      text: "Delete this",
     },
   ];
 

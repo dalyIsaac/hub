@@ -55,6 +55,15 @@ export default function ListViewContextMenu({
     [onChange],
   );
 
+  const uncompleteOnClick = useCallback(
+    (e: any, item?: IContextualMenuItem): void => {
+      if (item) {
+        onChange(e, false);
+      }
+    },
+    [onChange],
+  );
+
   const deleteSubjectOnClick = useCallback((): void => {
     dispatch(deleteSubject(id));
   }, [dispatch, id]);
@@ -63,23 +72,40 @@ export default function ListViewContextMenu({
     onEditClick(item);
   }, [item, onEditClick]);
 
-  const contextItems: IContextualMenuItem[] = [
+  const completeContextItems = [
     {
-      key: "edit",
-      onClick: editClick,
-      text: "Edit",
-    },
-    {
+      iconProps: { iconName: "Completed" },
       key: "complete-1-level",
       onClick: completeOnClick,
       text: "Mark as complete",
     },
     {
+      iconProps: { iconName: "CompletedSolid" },
       key: "complete-2-level",
       onClick: completeWithChildrenOnClick,
       text: "Mark this and its children as complete",
     },
+  ];
+
+  const uncompleteContextItems = [
     {
+      iconProps: { iconName: "Blocked2" },
+      key: "uncomplete",
+      onClick: uncompleteOnClick,
+      text: "Mark as incomplete",
+    },
+  ];
+
+  const contextItems: IContextualMenuItem[] = [
+    {
+      iconProps: { iconName: "Edit" },
+      key: "edit",
+      onClick: editClick,
+      text: "Edit",
+    },
+    ...(item.subject.completed ? uncompleteContextItems : completeContextItems),
+    {
+      iconProps: { iconName: "Delete" },
       key: "delete",
       onClick: deleteSubjectOnClick,
       text: "Delete this",
