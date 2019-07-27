@@ -7,7 +7,7 @@ import SubjectComponent from "./Subject";
 import { useSelector } from "react-redux";
 import { State } from "../../Reducer";
 import { Redirect, RouteComponentProps } from "react-router";
-import ListView from "./ListView";
+import ListView from "./ListView/ListView";
 import ViewWithSidebar from "./ViewWithSidebar";
 
 export default function ResponsiveGridView({

@@ -9,24 +9,24 @@ import {
   getTheme,
   Modal,
 } from "office-ui-fabric-react";
-import { Subject, GetItemsOptions, getItems, Item } from "../model/Subject";
+import { Subject, GetItemsOptions, getItems, Item } from "../../model/Subject";
 import { useSelector, useDispatch } from "react-redux";
-import { State } from "../../Reducer";
-import { APP_COMMAND_BAR_HEIGHT } from "../../AppCommandBar/Common";
-import { APPBAR_HEIGHT } from "../../Common";
+import { State } from "../../../Reducer";
+import { APP_COMMAND_BAR_HEIGHT } from "../../../AppCommandBar/Common";
+import { APPBAR_HEIGHT } from "../../../Common";
 import {
   SortItemsOptions,
   sortItems,
   SortField,
   SortFieldKey,
   SetSortParameters,
-} from "../model/Order";
-import { gotoSubject } from "../../Routing";
+} from "../../model/Order";
+import { gotoSubject } from "../../../Routing";
 import { RouteComponentProps, withRouter, Link } from "react-router-dom";
-import { setFieldsArray } from "../model/SetFieldsArray";
-import { setFieldsDesc } from "../model/SetFieldsDesc";
-import { getDiffIndex } from "./View";
-import SubjectComponent from "./Subject";
+import { setFieldsArray } from "../../model/SetFieldsArray";
+import { setFieldsDesc } from "../../model/SetFieldsDesc";
+import { getDiffIndex } from "../View";
+import SubjectComponent from "../Subject";
 
 const theme = getTheme();
 const styles = mergeStyleSets({
