@@ -5,6 +5,9 @@ import {
   SelectionMode,
   mergeStyleSets,
   IDetailsList,
+  IconButton,
+  getTheme,
+  Modal,
 } from "office-ui-fabric-react";
 import { Subject, GetItemsOptions, getItems, Item } from "../model/Subject";
 import { useSelector, useDispatch } from "react-redux";
@@ -19,15 +22,37 @@ import {
   SetSortParameters,
 } from "../model/Order";
 import { gotoSubject } from "../../Routing";
-import { RouteComponentProps, withRouter } from "react-router-dom";
+import { RouteComponentProps, withRouter, Link } from "react-router-dom";
 import { setFieldsArray } from "../model/SetFieldsArray";
 import { setFieldsDesc } from "../model/SetFieldsDesc";
 import { getDiffIndex } from "./View";
-import ListViewButtons from "./ListViewButtons";
+import SubjectComponent from "./Subject";
 
+const theme = getTheme();
 const styles = mergeStyleSets({
   detailsList: {
     height: `calc(100vh - ${APPBAR_HEIGHT}px - ${APP_COMMAND_BAR_HEIGHT}px)`,
+  },
+  rowButton: {
+    selectors: {
+      "&:active": {
+        filter: "brightness(80%)",
+        outline: "none",
+      },
+      "&:hover": {
+        filter: "brightness(90%)",
+        outline: "none",
+      },
+    },
+  },
+  rowButtonWrapper: {
+    display: "flex",
+    flexDirection: "row",
+  },
+  subjectWrapper: {
+    backgroundColor: theme.palette.white,
+    border: "1px solid " + theme.palette.neutralTertiary,
+    borderRadius: 4,
   },
 });
 
@@ -101,11 +126,55 @@ function ListView({
     [],
   );
 
-  const renderOpenButton = useCallback(
+  const [currentItem, setCurrentItem] = useState<Item | null>(null);
+  const dismissModal = useCallback((): void => {
+    setCurrentItem(null);
+  }, []);
+  const openModal = useCallback((item: Item): void => {
+    setCurrentItem(item);
+  }, []);
+
+  // Update currentItem
+  useEffect((): void => {
+    if (currentItem) {
+      if (currentItem.id in subjects.dict) {
+        const subject = subjects.dict[currentItem.id];
+        if (subject !== currentItem.subject) {
+          setCurrentItem({ ...currentItem, subject });
+        }
+      } else {
+        setCurrentItem(null);
+      }
+    }
+  }, [subjects.dict, currentItem]);
+
+  const renderButtons = useCallback(
     (item: Item): JSX.Element => {
-      return <ListViewButtons item={item} />;
+      const openLabel = "Open " + item.subject.name;
+      const editLabel = "Edit " + item.subject.name;
+      return (
+        <div className={styles.rowButtonWrapper}>
+          <IconButton
+            onClick={(): void => openModal(item)}
+            styles={{ root: { width: "" } }}
+            className={styles.rowButton}
+            iconProps={{ iconName: "Edit" }}
+            title={editLabel}
+            ariaLabel={editLabel}
+          />
+          <Link to={gotoSubject("list", item.id)}>
+            <IconButton
+              styles={{ root: { width: "" } }}
+              className={styles.rowButton}
+              iconProps={{ iconName: "OpenFile" }}
+              title={openLabel}
+              ariaLabel={openLabel}
+            />
+          </Link>
+        </div>
+      );
     },
-    [],
+    [openModal],
   );
 
   const invoke = useCallback(
@@ -179,11 +248,15 @@ function ListView({
     key: "openButton",
     minWidth: 80,
     name: "",
-    onRender: renderOpenButton,
+    onRender: renderButtons,
   });
 
   const [orderState, setOrderState] = useState(componentOrder);
   const listRef: React.MutableRefObject<IDetailsList | null> = useRef(null);
+
+  if (currentItem && !(currentItem.id in subjects.dict)) {
+    setCurrentItem(null);
+  }
 
   // Scrolls to newly added subjects
   useEffect((): void => {
@@ -205,24 +278,50 @@ function ListView({
 
       setOrderState(componentOrder);
     }
-  }, [componentOrder, orderState, id, subjects]);
+  }, [componentOrder, currentItem, id, orderState, subjects.dict]);
+
+  const getKey = useCallback((item: Item): string => item.id, []);
 
   return (
-    <DetailsList
-      componentRef={listRef}
-      onColumnHeaderClick={dispatchSetFieldsDesc}
-      className={styles.detailsList}
-      columns={columns}
-      items={items}
-      isHeaderVisible={true}
-      selectionMode={SelectionMode.none}
-      onItemInvoked={invoke}
-      columnReorderOptions={{
-        frozenColumnCountFromEnd: 1,
-        frozenColumnCountFromStart: 0,
-        handleColumnReorder: reorder,
-      }}
-    />
+    <React.Fragment>
+      <DetailsList
+        getKey={getKey}
+        componentRef={listRef}
+        onColumnHeaderClick={dispatchSetFieldsDesc}
+        className={styles.detailsList}
+        columns={columns}
+        items={items}
+        isHeaderVisible={true}
+        selectionMode={SelectionMode.none}
+        onItemInvoked={invoke}
+        columnReorderOptions={{
+          frozenColumnCountFromEnd: 1,
+          frozenColumnCountFromStart: 0,
+          handleColumnReorder: reorder,
+        }}
+      />
+      <Modal
+        isOpen={!!currentItem}
+        onDismiss={dismissModal}
+        styles={{
+          main: {
+            backgroundColor: "none",
+            border: "1px solid transparent",
+            borderRadius: 4,
+          },
+        }}
+      >
+        <div className={styles.subjectWrapper}>
+          {currentItem ? (
+            <SubjectComponent
+              id={currentItem.id}
+              subject={currentItem.subject}
+              showOpenButton={true}
+            />
+          ) : null}
+        </div>
+      </Modal>
+    </React.Fragment>
   );
 }
 

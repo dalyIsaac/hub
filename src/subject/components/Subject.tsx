@@ -268,9 +268,7 @@ export default function SubjectComponent({
 
   return (
     <FocusZone>
-      <Stack
-        verticalAlign={"center"}
-      >
+      <Stack verticalAlign={"center"}>
         <div className={styles.headerWrapper}>
           {header}
           {showOpenButton ? (
