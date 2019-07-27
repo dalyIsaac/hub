@@ -27,6 +27,9 @@ import { setFieldsArray } from "../../model/SetFieldsArray";
 import { setFieldsDesc } from "../../model/SetFieldsDesc";
 import { getDiffIndex } from "../View";
 import SubjectComponent from "../Subject";
+import ListViewContextMenu, {
+  ListViewContextMenuProps,
+} from "./ListViewContextMenu";
 
 const theme = getTheme();
 const styles = mergeStyleSets({
@@ -288,6 +291,33 @@ function ListView({
 
   const getKey = useCallback((item: Item): string => item.id, []);
 
+  const [
+    contextMenuProps,
+    updateContextMenuProps,
+  ] = useState<ListViewContextMenuProps | null>(null);
+  const dismissContextMenu = useCallback((): void => {
+    updateContextMenuProps(null);
+  }, []);
+  const onItemContextMenu = useCallback(
+    (item?: Item, index?: number, ev?: Event): boolean => {
+      if (item && ev) {
+        updateContextMenuProps({
+          ev,
+          item,
+          onDismiss: dismissContextMenu,
+          onEditClick: setCurrentItem,
+        });
+
+        // stops ev.preventDefault()
+        return false;
+      } else {
+        // runs ev.preventDefault()
+        return true;
+      }
+    },
+    [dismissContextMenu],
+  );
+
   return (
     <React.Fragment>
       <DetailsList
@@ -300,12 +330,14 @@ function ListView({
         isHeaderVisible={true}
         selectionMode={SelectionMode.none}
         onItemInvoked={invoke}
+        onItemContextMenu={onItemContextMenu}
         columnReorderOptions={{
           frozenColumnCountFromEnd: 1,
           frozenColumnCountFromStart: 0,
           handleColumnReorder: reorder,
         }}
       />
+      {contextMenuProps && <ListViewContextMenu {...contextMenuProps} />}
       <Modal
         isOpen={!!currentItem}
         onDismiss={dismissModal}
