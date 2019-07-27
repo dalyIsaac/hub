@@ -76,11 +76,13 @@ const styles = mergeStyleSets({
     marginLeft: 0,
     marginRight: -1,
     marginTop: -1,
+    outline: "none",
     zIndex: 2,
   },
   headerLink: {
     gridColumn: "2",
     gridRow: "1",
+    outline: "none",
   },
   body: {
     padding: 10,

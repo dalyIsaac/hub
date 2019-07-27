@@ -186,38 +186,44 @@ function ListView({
 
   const columnsDict: Partial<{ [key in SortFieldKey]: IColumn }> = {
     children: {
+      isResizable: true,
       key: "children",
-      minWidth: 150,
-      name: "Number of children",
+      minWidth: 100,
+      name: "# Children",
       onRender: renderChildren,
     },
     completed: {
+      isResizable: true,
       key: "completed",
       minWidth: 150,
       name: "Completed",
       onRender: renderDate,
     },
     created: {
+      isResizable: true,
       key: "created",
       minWidth: 150,
       name: "Date created",
       onRender: renderDate,
     },
     description: {
+      isResizable: true,
       key: "description",
-      minWidth: 150,
+      minWidth: 100,
       name: "Description",
       onRender: renderSubjectString,
     },
     dueDate: {
+      isResizable: true,
       key: "dueDate",
       minWidth: 150,
       name: "Due date",
       onRender: renderDate,
     },
     name: {
+      isResizable: true,
       key: "name",
-      minWidth: 150,
+      minWidth: 100,
       name: "Name",
       onRender: renderSubjectString,
     },
