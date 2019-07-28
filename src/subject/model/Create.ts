@@ -5,7 +5,7 @@ import {
   SubjectBaseAction,
 } from "./Subject";
 import { v4 } from "uuid";
-import { sortItems, getInitialOrder } from "./Order";
+import { sortItems, getInitialOrder } from "../../Order";
 
 export const CREATE_SUBJECT = "CREATE_SUBJECT";
 

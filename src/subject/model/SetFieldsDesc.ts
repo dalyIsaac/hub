@@ -1,6 +1,6 @@
 import { SubjectState } from "./Subject";
 import { BaseAction } from "../../Common";
-import { sortItems, SetSortParameters } from "./Order";
+import { sortItems, SetSortParameters } from "../../Order";
 
 export const SET_FIELDS_DESC = "SET_FIELDS_DESC";
 

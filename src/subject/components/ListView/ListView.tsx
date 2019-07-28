@@ -20,7 +20,7 @@ import {
   SortField,
   SortFieldKey,
   SetSortParameters,
-} from "../../model/Order";
+} from "../../../Order";
 import { gotoSubject } from "../../../Routing";
 import { RouteComponentProps, withRouter, Link } from "react-router-dom";
 import { setFieldsArray } from "../../model/SetFieldsArray";

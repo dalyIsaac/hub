@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
 import * as serviceWorker from "./ServiceWorker";
-import { createStore } from "redux";
+import { createStore, Reducer } from "redux";
 import { Provider } from "react-redux";
 import { composeWithDevTools } from "redux-devtools-extension";
 import { initializeIcons } from "@uifabric/icons";
@@ -20,7 +20,7 @@ const persistConfig = {
   transforms: [transformSubjects],
 };
 
-const persistedReducer = persistReducer(persistConfig, rootReducer);
+const persistedReducer = persistReducer(persistConfig, rootReducer as Reducer);
 const store = createStore(persistedReducer, composeWithDevTools());
 const persistor = persistStore(store);
 

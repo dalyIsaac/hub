@@ -1,4 +1,4 @@
-import { SortField, sortItems, SetSortParameters } from "./Order";
+import { SortField, sortItems, SetSortParameters } from "../../Order";
 import { SubjectState } from "./Subject";
 import { BaseAction } from "../../Common";
 

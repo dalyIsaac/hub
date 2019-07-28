@@ -9,7 +9,7 @@ import SubjectComponent from "./Subject";
 import { APP_COMMAND_BAR_HEIGHT } from "../../AppCommandBar/Common";
 import { isUndefined } from "lodash";
 import { APPBAR_HEIGHT } from "../../Common";
-import { SortItemsOptions, sortItems } from "../model/Order";
+import { SortItemsOptions, sortItems } from "../../Order";
 import { getDiffIndex } from "./View";
 
 const ROWS_PER_PAGE = 3;
