@@ -1,5 +1,12 @@
-import React from "react";
-import { Nav, getTheme, mergeStyleSets } from "office-ui-fabric-react";
+import React, { useCallback } from "react";
+import {
+  Nav,
+  getTheme,
+  mergeStyleSets,
+  INavLinkGroup,
+} from "office-ui-fabric-react";
+import { useDispatch } from "react-redux";
+import { createView } from "../model/Create";
 
 const theme = getTheme();
 const styles = mergeStyleSets({
@@ -14,69 +21,55 @@ const styles = mergeStyleSets({
 });
 
 export default function ViewsNav(): JSX.Element {
+  const dispatch = useDispatch();
+
+  const dispatchCreateView = useCallback((): void => {
+    dispatch(createView());
+    // TODO: navigate to new view
+  }, [dispatch]);
+
+  const groups: INavLinkGroup[] = [
+    {
+      links: [
+        {
+          name: "Home",
+          url: "http://example.com",
+          links: [
+            {
+              name: "Activity",
+              url: "http://msn.com",
+              key: "key1",
+              target: "_blank",
+            },
+            {
+              name: "MSN",
+              url: "http://msn.com",
+              disabled: true,
+              icon: "News",
+              key: "key2",
+              target: "_blank",
+            },
+          ],
+          isExpanded: true,
+        },
+      ],
+    },
+  ];
+
+  groups[0].links.push({
+    icon: "Add",
+    key: "createView",
+    name: "Create view",
+    onClick: dispatchCreateView,
+    url: "",
+  });
+
   return (
     <Nav
       selectedKey="key3"
       expandButtonAriaLabel="Expand or collapse"
       className={styles.nav}
-      groups={[
-        {
-          links: [
-            {
-              name: "Home",
-              url: "http://example.com",
-              links: [
-                {
-                  name: "Activity",
-                  url: "http://msn.com",
-                  key: "key1",
-                  target: "_blank",
-                },
-                {
-                  name: "MSN",
-                  url: "http://msn.com",
-                  disabled: true,
-                  key: "key2",
-                  target: "_blank",
-                },
-              ],
-              isExpanded: true,
-            },
-            {
-              name: "Documents",
-              url: "http://example.com",
-              key: "key3",
-              isExpanded: true,
-              target: "_blank",
-            },
-            {
-              name: "Pages",
-              url: "http://msn.com",
-              key: "key4",
-              target: "_blank",
-            },
-            {
-              name: "Notebook",
-              url: "http://msn.com",
-              key: "key5",
-              disabled: true,
-            },
-            {
-              name: "Communication and Media",
-              url: "http://msn.com",
-              key: "key6",
-              target: "_blank",
-            },
-            {
-              name: "News",
-              url: "http://cnn.com",
-              icon: "News",
-              key: "key7",
-              target: "_blank",
-            },
-          ],
-        },
-      ]}
+      groups={groups}
     />
   );
 }

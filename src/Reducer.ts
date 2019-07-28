@@ -5,8 +5,8 @@ import { ViewState } from "./views/model/View";
 import viewReducer, { initialViewState } from "./views/Reducer";
 
 export interface State {
-  readonly subjects: SubjectState;
-  readonly views: ViewState;
+  subjects: SubjectState;
+  views: ViewState;
 }
 
 const getInitialState = (): State => ({
