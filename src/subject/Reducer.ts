@@ -73,8 +73,11 @@ export const initialSubjectState = (): SubjectState => ({
   searchSortOptions: getInitialSortItemsOptions(),
 });
 
-const subjectReducer = (state: State, action: Action): State =>
-  produce(
+// TODO: check if https://github.com/rt2zz/redux-persist/pull/915 is
+// distributed. The spread is used since for some reason the NPM package doesn't
+// contain the spread from the pull request.
+const subjectReducer = (state: State, action: Action): State => ({
+  ...produce(
     state,
     (draftState): State => {
       const { subjects } = draftState;
@@ -137,6 +140,7 @@ const subjectReducer = (state: State, action: Action): State =>
       }
       return draftState;
     },
-  );
+  ),
+});
 
 export default subjectReducer;

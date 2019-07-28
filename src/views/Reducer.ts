@@ -8,13 +8,17 @@ export const initialViewState = (): ViewState => ({
   order: [],
 });
 
-const viewReducer = (state: State, action: Action): State =>
-  produce(
+// TODO: check if https://github.com/rt2zz/redux-persist/pull/915 is
+// distributed. The spread is used since for some reason the NPM package doesn't
+// contain the spread from the pull request.
+const viewReducer = (state: State, action: Action): State => ({
+  ...produce(
     state,
     (draftState): State => {
       const { views } = draftState;
       return draftState;
     },
-  );
+  ),
+});
 
 export default viewReducer;
