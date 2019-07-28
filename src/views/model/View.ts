@@ -1,9 +1,15 @@
 import { OrderState } from "../../Order";
 
-export interface View extends OrderState {
+export interface View {
   name: string;
+  children: OrderState;
+}
+
+export interface ViewDictState {
+  [key: string]: View;
 }
 
 export interface ViewState {
-  [key: string]: View;
+  dict: ViewDictState;
+  order: string[];
 }
