@@ -65,68 +65,61 @@ import {
   SetSeparateCompleteAction,
 } from "./model/SetSeparateComplete";
 import { isUndefined } from "lodash";
+import { State } from "../Reducer";
 
-const getInitialState = (): SubjectState => ({
+export const initialSubjectState = (): SubjectState => ({
   dict: {},
   order: getInitialOrder(),
   searchSortOptions: getInitialSortItemsOptions(),
 });
 
-const subjectReducer = (
-  state: SubjectState = getInitialState(),
-  action: Action,
-): SubjectState =>
+const subjectReducer = (state: State, action: Action): State =>
   produce(
     state,
-    (draftState): SubjectState => {
+    (draftState): State => {
+      const { subjects } = draftState;
       switch (action.type) {
         case SET_SUBJECT_NAME:
-          setSubjectNameReducer(draftState, action as SetSubjectNameAction);
+          setSubjectNameReducer(subjects, action as SetSubjectNameAction);
           break;
         case SET_SUBJECT_DESCRIPTION:
           setSubjectDescriptionReducer(
-            draftState,
+            subjects,
             action as SetSubjectDescriptionAction,
           );
           break;
         case COMPLETE_SUBJECT:
-          completeSubjectReducer(draftState, action as CompleteSubjectAction);
+          completeSubjectReducer(subjects, action as CompleteSubjectAction);
           break;
         case UNCOMPLETE_SUBJECT:
-          uncompleteSubjectReducer(
-            draftState,
-            action as UncompleteSubjectAction,
-          );
+          uncompleteSubjectReducer(subjects, action as UncompleteSubjectAction);
           break;
         case DELETE_SUBJECT:
-          deleteSubjectReducer(draftState, action as DeleteSubjectAction);
+          deleteSubjectReducer(subjects, action as DeleteSubjectAction);
           break;
         case SET_SUBJECT_DUE_DATE:
-          setSubjectDueDateReducer(
-            draftState,
-            action as SetSubjectDueDateAction,
-          );
+          setSubjectDueDateReducer(subjects, action as SetSubjectDueDateAction);
           break;
         case CREATE_SUBJECT:
-          createSubjectReducer(draftState, action as CreateSubjectAction<
+          createSubjectReducer(subjects, action as CreateSubjectAction<
             SubjectTypes
           >);
           break;
         case REMOVE_CHILD_SUBJECT:
-          removeChildReducer(draftState, action as RemoveChildAction);
+          removeChildReducer(subjects, action as RemoveChildAction);
           break;
         case APPEND_CHILD_SUBJECT:
-          appendChildReducer(draftState, action as AppendChildAction);
+          appendChildReducer(subjects, action as AppendChildAction);
           break;
         case SET_FIELDS_ARRAY:
-          setFieldsArrayReducer(draftState, action as SetFieldsArrayAction);
+          setFieldsArrayReducer(subjects, action as SetFieldsArrayAction);
           break;
         case SET_FIELDS_DESC:
-          setFieldsDescReducer(draftState, action as SetFieldsDescAction);
+          setFieldsDescReducer(subjects, action as SetFieldsDescAction);
           break;
         case SET_SEPARATE_COMPLETE:
           setSeparateCompleteReducer(
-            draftState,
+            subjects,
             action as SetSeparateCompleteAction,
           );
           break;
@@ -135,12 +128,12 @@ const subjectReducer = (
       }
 
       // Prevents redux-persist from being overridden during hydration.
-      if (draftState.order.order.length > 0) {
-        draftState.order.order = sortItems(draftState.dict, draftState.order);
+      if (subjects.order.order.length > 0) {
+        subjects.order.order = sortItems(subjects.dict, subjects.order);
       }
       // Adds new `searchSortOptions` if it wasn't already in the state
-      if (isUndefined(draftState.searchSortOptions)) {
-        draftState.searchSortOptions = getInitialSortItemsOptions();
+      if (isUndefined(subjects.searchSortOptions)) {
+        subjects.searchSortOptions = getInitialSortItemsOptions();
       }
       return draftState;
     },

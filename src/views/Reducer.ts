@@ -1,19 +1,18 @@
 import { ViewState } from "./model/View";
 import { Action } from "redux";
 import produce from "immer";
+import { State } from "../Reducer";
 
-const getInitialState = (): ViewState => ({
+export const initialViewState = (): ViewState => ({
   dict: {},
   order: [],
 });
 
-const viewReducer = (
-  state: ViewState = getInitialState(),
-  action: Action,
-): ViewState =>
+const viewReducer = (state: State, action: Action): State =>
   produce(
     state,
-    (draftState): ViewState => {
+    (draftState): State => {
+      const { views } = draftState;
       return draftState;
     },
   );
