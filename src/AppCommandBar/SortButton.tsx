@@ -15,7 +15,7 @@ import {
   Icon,
   Text,
 } from "office-ui-fabric-react";
-import { SortField, SetSortParameters } from "../subject/model/Order";
+import { SortField, SetSortParameters } from "../Order";
 import { useDispatch } from "react-redux";
 import { setFieldsArray } from "../subject/model/SetFieldsArray";
 import { setFieldsDesc } from "../subject/model/SetFieldsDesc";

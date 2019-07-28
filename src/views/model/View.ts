@@ -1,4 +1,4 @@
-import { OrderState } from "../../subject/model/Order";
+import { OrderState } from "../../Order";
 
 export interface View extends OrderState {
   name: string;

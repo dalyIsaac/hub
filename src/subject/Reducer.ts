@@ -48,7 +48,7 @@ import {
   getInitialOrder,
   sortItems,
   getInitialSortItemsOptions,
-} from "./model/Order";
+} from "../Order";
 import {
   SET_FIELDS_ARRAY,
   SetFieldsArrayAction,
