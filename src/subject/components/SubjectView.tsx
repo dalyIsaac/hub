@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { SubjectsRouteProps } from "../Routing";
 import { getDisplay } from "../../Display";
 import GridView, { MIN_COL_WIDTH } from "./GridView";
@@ -10,6 +10,91 @@ import { State } from "../../Reducer";
 import { Redirect, RouteComponentProps } from "react-router";
 import ListView from "./ListView/ListView";
 import ViewWithSidebar from "./ViewWithSidebar";
+import { GetItemsOptions, getItems, Item } from "../model/Subject";
+import {
+  SortItemsOptions,
+  sortItems,
+  SortField,
+  SetSortParameters,
+} from "../../Order";
+
+export interface SubjectViewHookProps {
+  options?: GetItemsOptions;
+  sortOptions?: SortItemsOptions;
+}
+
+interface UseSubjectView {
+  /**
+   * Array of the items to render.
+   */
+  items: Item[];
+
+  /**
+   * Array of the `id`s of the items to render.
+   */
+  componentOrder: string[];
+
+  /**
+   * Array of the `id`s of the items to render, stored in React state. This
+   * should be used for scrolling to newly added subjects.
+   */
+  currentOrder: string[];
+
+  /**
+   * Sets `currentOrder` in React state.
+   */
+  setCurrentOrder: React.Dispatch<React.SetStateAction<string[]>>;
+
+  /**
+   * Array of the sort fields.
+   */
+  sortFields: SortField[];
+
+  /**
+   * Arguments to be passed to reducers for reordering items.
+   */
+  reorderParams: SetSortParameters;
+}
+
+export function useSubjectView({
+  options,
+  sortOptions,
+}: SubjectViewHookProps): UseSubjectView {
+  const id = options ? options.parent : undefined;
+  const { subjects } = useSelector((state: State) => state);
+
+  let componentOrder: string[];
+  let sortFields: SortField[];
+  let reorderParams: SetSortParameters;
+
+  if (sortOptions) {
+    componentOrder = sortItems(subjects.dict, {
+      ...subjects.order,
+      options: sortOptions,
+    });
+    sortFields = sortOptions.fields;
+    reorderParams = { setSearchOptions: true };
+  } else if (id) {
+    componentOrder = subjects.dict[id].children.order;
+    sortFields = subjects.dict[id].children.options.fields;
+    reorderParams = { subjectId: id };
+  } else {
+    componentOrder = subjects.order.order;
+    sortFields = subjects.order.options.fields;
+    reorderParams = {};
+  }
+  const [currentOrder, setOrder] = useState(componentOrder);
+  const items = getItems(subjects.dict, componentOrder, options);
+
+  return {
+    componentOrder,
+    currentOrder,
+    items,
+    reorderParams,
+    setCurrentOrder: setOrder,
+    sortFields,
+  };
+}
 
 export default function SubjectView({
   match,

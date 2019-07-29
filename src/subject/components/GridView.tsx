@@ -1,16 +1,15 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useCallback } from "react";
 import { List, IRectangle, ScrollToMode } from "office-ui-fabric-react";
 import { mergeStyleSets, getTheme } from "@uifabric/styling";
 import { useRef } from "react";
 import { useSelector } from "react-redux";
 import { State } from "../../Reducer";
-import { Item, getItems, GetItemsOptions } from "../model/Subject";
+import { Item } from "../model/Subject";
 import SubjectComponent from "./Subject";
 import { APP_COMMAND_BAR_HEIGHT } from "../../AppCommandBar/Common";
-import { isUndefined } from "lodash";
 import { APPBAR_HEIGHT } from "../../Common";
-import { SortItemsOptions, sortItems } from "../../Order";
 import { getDiffIndex } from "./View";
+import { useSubjectView, SubjectViewHookProps } from "./SubjectView";
 
 const ROWS_PER_PAGE = 3;
 const ROW_HEIGHT = 603;
@@ -44,49 +43,35 @@ const styles = mergeStyleSets({
 
 const getPageHeight = (): number => ROW_HEIGHT * ROWS_PER_PAGE;
 
-interface GridViewProps {
-  options?: GetItemsOptions;
-  sortOptions?: SortItemsOptions;
-}
-
-export default function GridView({
-  options,
-  sortOptions,
-}: GridViewProps): JSX.Element {
-  const id = options ? options.parent : undefined;
+export default function GridView(props: SubjectViewHookProps): JSX.Element {
+  const id = props.options ? props.options.parent : undefined;
+  const { subjects } = useSelector((state: State) => state);
 
   const columnCount = useRef(0);
   const columnWidth = useRef(0);
   const gridRef: React.MutableRefObject<List | null> = useRef(null);
 
-  const state = useSelector((state: State) => state.subjects);
-  const { dict: subjects } = state;
-
-  const order =
-    !isUndefined(id) && id in subjects
-      ? subjects[id].children.order
-      : state.order.order;
-
-  const [orderState, setOrderState] = useState(order);
-
-  useEffect((): void => {
-    if (id) {
-      document.title = "hub - " + subjects[id].name;
-    } else {
-      document.title = "hub";
-    }
-  }, [id, subjects]);
+  const {
+    items,
+    componentOrder,
+    currentOrder,
+    setCurrentOrder,
+  } = useSubjectView(props);
 
   // Scrolls to newly added subjects
   useEffect((): void => {
-    if (gridRef.current && orderState !== order && order.length > 0) {
+    if (
+      gridRef.current &&
+      currentOrder !== componentOrder &&
+      componentOrder.length > 0
+    ) {
       // Gets the index to scroll to
-      const index = getDiffIndex(orderState, order);
+      const index = getDiffIndex(currentOrder, componentOrder);
 
       // Scroll to the index if either:
       // - the new index doesn't have a parent
       // - the new index has a parent, which matches match.param.id
-      const s = subjects[order[index]];
+      const s = subjects.dict[componentOrder[index]];
       if (s.parents.size === 0 || s.parents.has(id!)) {
         gridRef.current.scrollToIndex(
           index,
@@ -95,9 +80,9 @@ export default function GridView({
         );
       }
 
-      setOrderState(order);
+      setCurrentOrder(componentOrder);
     }
-  }, [order, orderState, id, subjects]);
+  }, [componentOrder, currentOrder, setCurrentOrder, id, subjects]);
 
   const renderCell = useCallback((props?: Item): JSX.Element | undefined => {
     if (!props) {
@@ -146,11 +131,6 @@ export default function GridView({
     },
     [],
   );
-
-  const componentOrder = sortOptions
-    ? sortItems(subjects, { options: sortOptions, order })
-    : order;
-  const items = getItems(subjects, componentOrder, options);
 
   return (
     <List

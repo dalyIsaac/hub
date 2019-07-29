@@ -38,7 +38,14 @@ export interface Item {
 }
 
 export interface GetItemsOptions {
+  /**
+   * Should only be used for `/subjects/:id` routes.
+   */
   parent?: string;
+
+  /**
+   * Should only be used for searching.
+   */
   condition?: (i: Item) => boolean;
 }
 

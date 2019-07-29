@@ -9,18 +9,12 @@ import {
   getTheme,
   Modal,
 } from "office-ui-fabric-react";
-import { Subject, GetItemsOptions, getItems, Item } from "../../model/Subject";
+import { Subject, GetItemsOptions, Item } from "../../model/Subject";
 import { useSelector, useDispatch } from "react-redux";
 import { State } from "../../../Reducer";
 import { APP_COMMAND_BAR_HEIGHT } from "../../../AppCommandBar/Common";
 import { APPBAR_HEIGHT } from "../../../Common";
-import {
-  SortItemsOptions,
-  sortItems,
-  SortField,
-  SortFieldKey,
-  SetSortParameters,
-} from "../../../Order";
+import { SortItemsOptions, SortFieldKey } from "../../../Order";
 import { gotoSubject } from "../../Routing";
 import { RouteComponentProps, withRouter, Link } from "react-router-dom";
 import { setFieldsArray } from "../../model/SetFieldsArray";
@@ -30,6 +24,7 @@ import SubjectComponent from "../Subject";
 import ListViewContextMenu, {
   ListViewContextMenuProps,
 } from "./ListViewContextMenu";
+import { useSubjectView } from "../SubjectView";
 
 const theme = getTheme();
 const styles = mergeStyleSets({
@@ -69,31 +64,18 @@ function ListView({
   options,
   sortOptions,
 }: ListViewProps & RouteComponentProps): JSX.Element {
+  const id = options ? options.parent : undefined;
   const { subjects } = useSelector((state: State) => state);
   const dispatch = useDispatch();
 
-  const id = options ? options.parent : undefined;
-
-  let componentOrder: string[];
-  let sortFields: SortField[];
-  let reorderParams: SetSortParameters;
-
-  if (sortOptions) {
-    componentOrder = sortItems(subjects.dict, {
-      ...subjects.order,
-      options: sortOptions,
-    });
-    sortFields = sortOptions.fields;
-    reorderParams = { setSearchOptions: true };
-  } else if (id) {
-    componentOrder = subjects.dict[id].children.order;
-    sortFields = subjects.dict[id].children.options.fields;
-    reorderParams = { subjectId: id };
-  } else {
-    componentOrder = subjects.order.order;
-    sortFields = subjects.order.options.fields;
-    reorderParams = {};
-  }
+  const {
+    items,
+    componentOrder,
+    currentOrder,
+    setCurrentOrder,
+    reorderParams,
+    sortFields,
+  } = useSubjectView({ options, sortOptions });
 
   const dispatchSetFieldsDesc = useCallback(
     (e?: any, column?: IColumn): void => {
@@ -110,6 +92,34 @@ function ListView({
     [dispatch, reorderParams],
   );
 
+  // The Subject shown in the modal
+  const [modalItem, setModalItem] = useState<Item | null>(null);
+  const dismissModal = useCallback((): void => {
+    setModalItem(null);
+  }, []);
+  const openModal = useCallback((item: Item): void => {
+    setModalItem(item);
+  }, []);
+
+  if (modalItem && !(modalItem.id in subjects.dict)) {
+    setModalItem(null);
+  }
+
+  // Update modalItem
+  useEffect((): void => {
+    if (modalItem) {
+      if (modalItem.id in subjects.dict) {
+        const subject = subjects.dict[modalItem.id];
+        if (subject !== modalItem.subject) {
+          setModalItem({ ...modalItem, subject });
+        }
+      } else {
+        setModalItem(null);
+      }
+    }
+  }, [subjects.dict, modalItem]);
+
+  //#region Render
   const renderSubjectString = useCallback(
     (item: Item, _index?: number, column?: IColumn): string =>
       item.subject[column!.key as keyof Subject] as string,
@@ -128,28 +138,6 @@ function ListView({
     },
     [],
   );
-
-  const [currentItem, setCurrentItem] = useState<Item | null>(null);
-  const dismissModal = useCallback((): void => {
-    setCurrentItem(null);
-  }, []);
-  const openModal = useCallback((item: Item): void => {
-    setCurrentItem(item);
-  }, []);
-
-  // Update currentItem
-  useEffect((): void => {
-    if (currentItem) {
-      if (currentItem.id in subjects.dict) {
-        const subject = subjects.dict[currentItem.id];
-        if (subject !== currentItem.subject) {
-          setCurrentItem({ ...currentItem, subject });
-        }
-      } else {
-        setCurrentItem(null);
-      }
-    }
-  }, [subjects.dict, currentItem]);
 
   const renderButtons = useCallback(
     (item: Item): JSX.Element => {
@@ -179,8 +167,9 @@ function ListView({
     },
     [openModal],
   );
+  //#endregion
 
-  const invoke = useCallback(
+  const onItemInvoked = useCallback(
     (item: Item): void => {
       history.push(gotoSubject("list", item.id));
     },
@@ -242,7 +231,6 @@ function ListView({
     [sortFields, dispatch, reorderParams],
   );
 
-  const items = getItems(subjects.dict, componentOrder, options);
   const columns: IColumn[] = [];
   for (const field of sortFields) {
     const current = columnsDict[field.key];
@@ -260,22 +248,17 @@ function ListView({
     onRender: renderButtons,
   });
 
-  const [orderState, setOrderState] = useState(componentOrder);
   const listRef: React.MutableRefObject<IDetailsList | null> = useRef(null);
-
-  if (currentItem && !(currentItem.id in subjects.dict)) {
-    setCurrentItem(null);
-  }
 
   // Scrolls to newly added subjects
   useEffect((): void => {
     if (
       listRef.current &&
-      orderState !== componentOrder &&
+      currentOrder !== componentOrder &&
       componentOrder.length > 0
     ) {
       // Gets the index to scroll to
-      const index = getDiffIndex(orderState, componentOrder);
+      const index = getDiffIndex(currentOrder, componentOrder);
 
       // Scroll to the index if either:
       // - the new index doesn't have a parent
@@ -285,9 +268,9 @@ function ListView({
         listRef.current.focusIndex(index);
       }
 
-      setOrderState(componentOrder);
+      setCurrentOrder(componentOrder);
     }
-  }, [componentOrder, currentItem, id, orderState, subjects.dict]);
+  }, [componentOrder, id, currentOrder, subjects, setCurrentOrder]);
 
   const getKey = useCallback((item: Item): string => item.id, []);
 
@@ -305,7 +288,7 @@ function ListView({
           ev,
           item,
           onDismiss: dismissContextMenu,
-          onEditClick: setCurrentItem,
+          onEditClick: setModalItem,
         });
 
         // stops ev.preventDefault()
@@ -329,7 +312,7 @@ function ListView({
         items={items}
         isHeaderVisible={true}
         selectionMode={SelectionMode.none}
-        onItemInvoked={invoke}
+        onItemInvoked={onItemInvoked}
         onItemContextMenu={onItemContextMenu}
         columnReorderOptions={{
           frozenColumnCountFromEnd: 1,
@@ -339,7 +322,7 @@ function ListView({
       />
       {contextMenuProps && <ListViewContextMenu {...contextMenuProps} />}
       <Modal
-        isOpen={!!currentItem}
+        isOpen={!!modalItem}
         onDismiss={dismissModal}
         styles={{
           main: {
@@ -350,10 +333,10 @@ function ListView({
         }}
       >
         <div className={styles.subjectWrapper}>
-          {currentItem ? (
+          {modalItem ? (
             <SubjectComponent
-              id={currentItem.id}
-              subject={currentItem.subject}
+              id={modalItem.id}
+              subject={modalItem.subject}
               showOpenButton={true}
             />
           ) : null}
