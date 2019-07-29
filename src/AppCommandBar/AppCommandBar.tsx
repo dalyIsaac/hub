@@ -12,10 +12,7 @@ import { setSeparateComplete } from "../subject/model/SetSeparateComplete";
 import { BUTTON_HEIGHT } from "./Common";
 import SortButton from "./SortButton";
 import { RouteComponentProps } from "react-router";
-import {
-  SubjectsRouteProps,
-  subjectBase,
-} from "../subject/Routing";
+import { SubjectsRouteProps, subjectBase } from "../subject/Routing";
 import { getDisplay, updateDisplay } from "../Display";
 import { SearchRouteProps, searchBase } from "../Search/Routing";
 import { Paths } from "../Routing";
@@ -43,6 +40,8 @@ const styles = mergeStyleSets({
     justifyContent: "space-between",
     paddingLeft: 24,
     paddingRight: 24,
+    position: "relative",
+    zIndex: 10,
   },
 });
 
