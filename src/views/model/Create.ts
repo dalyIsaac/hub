@@ -15,8 +15,8 @@ export const createView = (): CreateViewAction => ({
 const getUntitledName = (orderSet: Set<string>): string => {
   let i = 1;
   let name = `Untitled${i}`;
-  console.log(name in orderSet);
-  while (name in orderSet) {
+  console.log(name);
+  while (orderSet.has(name)) {
     i++;
     name = `Untitled${i}`;
   }

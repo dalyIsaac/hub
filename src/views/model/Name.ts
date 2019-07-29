@@ -20,7 +20,9 @@ export const updateViewNameReducer = (
   { views }: State,
   { name, viewId }: UpdateViewNameAction,
 ): void => {
-  if (!(name in views.dict)) {
-    views.dict[viewId].name = name;
+  if (!views.orderSet.has(name)) {
+    const view = views.dict[viewId];
+    views.orderSet.delete(view.name);
+    view.name = name;
   }
 };

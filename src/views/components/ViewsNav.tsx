@@ -77,7 +77,7 @@ export default function ViewsNav({
     viewGroup.links!.push({
       key: viewId,
       name: v.name,
-      url: "#" + gotoView(v.name),
+      url: "#" + gotoView(viewId),
     });
   }
 
