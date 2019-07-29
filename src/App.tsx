@@ -8,6 +8,7 @@ import SearchResults from "./Search/SearchResults";
 import { mergeStyleSets } from "@uifabric/styling";
 import ViewsNav from "./views/components/ViewsNav";
 import { subjectBase } from "./subject/Routing";
+import View from "./views/components/View";
 
 const styles = mergeStyleSets({
   main: {
@@ -30,6 +31,7 @@ const App: React.FC = (): JSX.Element => {
           <Switch>
             <Route path={Paths.subject} component={SubjectView} />
             <Route path={Paths.search} component={SearchResults} />
+            <Route path={Paths.view} component={View} />
             <Redirect to={subjectBase} />
           </Switch>
         </div>

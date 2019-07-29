@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import {
   Nav,
   getTheme,
@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { createView } from "../model/Create";
 import { State } from "../../Reducer";
 import { RouteComponentProps } from "react-router";
-import { ViewRouteProps } from "../Routing";
+import { ViewRouteProps, gotoView } from "../Routing";
 import { SubjectsRouteProps, subjectBase } from "../../subject/Routing";
 
 const theme = getTheme();
@@ -31,13 +31,20 @@ export default function ViewsNav({
   history,
 }: RouteComponentProps<SubjectsRouteProps & ViewRouteProps>): JSX.Element {
   const dispatch = useDispatch();
+  const [gotoNewView, setGotoNewView] = useState(false);
+  const { views } = useSelector((state: State) => state);
 
   const dispatchCreateView = useCallback((): void => {
     dispatch(createView());
-    // TODO: navigate to new view
+    setGotoNewView(true);
   }, [dispatch]);
 
-  const { views } = useSelector((state: State) => state);
+  useEffect((): void => {
+    if (gotoNewView) {
+      setGotoNewView(false);
+      history.push(gotoView(views.order[views.order.length - 1]));
+    }
+  }, [gotoNewView, history, views]);
 
   const viewGroup: INavLink = {
     isExpanded: true,
@@ -51,7 +58,7 @@ export default function ViewsNav({
     viewGroup.links!.push({
       key: name,
       name,
-      url: "", // TODO: generate URL
+      url: "#" + gotoView(name),
     });
   }
 
