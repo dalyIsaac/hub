@@ -16,6 +16,7 @@ import {
 export const initialViewState = (): ViewState => ({
   dict: {},
   order: [],
+  orderSet: new Set(),
 });
 
 // TODO: check if https://github.com/rt2zz/redux-persist/pull/915 is

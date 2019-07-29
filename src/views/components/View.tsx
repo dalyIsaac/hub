@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useEffect } from "react";
-import { RouteComponentProps } from "react-router";
+import { RouteComponentProps, Redirect } from "react-router";
 import { ViewRouteProps } from "../Routing";
 import { useSelector, useDispatch } from "react-redux";
 import { State } from "../../Reducer";
@@ -11,6 +11,7 @@ import { mergeStyleSets } from "@uifabric/styling";
 import TitleInput from "../../TitleInput";
 import { Paths } from "../../Routing";
 import { updateViewName } from "../model/Name";
+import { Location } from "history";
 
 const styles = mergeStyleSets({
   title: {
@@ -24,20 +25,17 @@ const styles = mergeStyleSets({
   },
 });
 
-export default function View({
-  match,
-  history,
-  location,
-}: RouteComponentProps<ViewRouteProps>): JSX.Element {
-  const { viewId } = match.params;
+interface ViewProps {
+  location: Location;
+  viewId: string;
+}
+
+function ViewComponent({ location, viewId }: ViewProps): JSX.Element {
   const { views } = useSelector((state: State) => state);
   const dispatch = useDispatch();
 
-  if (isUndefined(viewId) || !(viewId in views.dict)) {
-    history.push(Paths.base);
-  }
-
-  const view = views.dict[viewId!];
+  const view =
+    viewId && viewId in views.dict ? views.dict[viewId] : { name: "" };
 
   const [localName, setLocalName] = useState(view.name);
   const updateName = useCallback((): void => {
@@ -77,4 +75,17 @@ export default function View({
       {viewComponent}
     </div>
   );
+}
+
+export default function View({
+  match,
+  location,
+}: RouteComponentProps<ViewRouteProps>): JSX.Element {
+  const { views } = useSelector((state: State) => state);
+  const { viewId } = match.params;
+
+  if (isUndefined(viewId) || !(viewId in views.dict)) {
+    return <Redirect to={Paths.base} />;
+  }
+  return <ViewComponent viewId={viewId} location={location} />;
 }

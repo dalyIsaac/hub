@@ -1,6 +1,6 @@
 import { State } from "../../Reducer";
 import { getInitialOrder } from "../../Order";
-import { ViewDictState, ViewBaseAction } from "./View";
+import { ViewBaseAction } from "./View";
 import { v4 } from "uuid";
 
 export const CREATE_VIEW = "CREATE_VIEW";
@@ -12,10 +12,11 @@ export const createView = (): CreateViewAction => ({
   viewId: v4(),
 });
 
-const getUntitledName = (dict: ViewDictState): string => {
+const getUntitledName = (orderSet: Set<string>): string => {
   let i = 1;
   let name = `Untitled${i}`;
-  while (name in dict) {
+  console.log(name in orderSet);
+  while (name in orderSet) {
     i++;
     name = `Untitled${i}`;
   }
@@ -26,7 +27,9 @@ export const createViewReducer = (
   state: State,
   { viewId }: CreateViewAction,
 ): void => {
-  const name = getUntitledName(state.views.dict);
+  const name = getUntitledName(state.views.orderSet);
   state.views.dict[viewId] = { children: getInitialOrder(), name };
   state.views.order.push(viewId);
+  state.views.orderSet.add(name);
+  console.log(state.views.orderSet);
 };

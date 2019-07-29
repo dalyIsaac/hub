@@ -16,6 +16,7 @@ export interface ViewDictState {
 export interface ViewState {
   dict: ViewDictState;
   order: string[];
+  orderSet: Set<string>;
 }
 
 export interface ViewBaseAction extends BaseAction {
