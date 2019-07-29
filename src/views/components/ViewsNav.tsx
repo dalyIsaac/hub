@@ -12,6 +12,7 @@ import { State } from "../../Reducer";
 import { RouteComponentProps } from "react-router";
 import { ViewRouteProps, gotoView } from "../Routing";
 import { SubjectsRouteProps, subjectBase } from "../../subject/Routing";
+import { Paths } from "../../Routing";
 
 const theme = getTheme();
 const styles = mergeStyleSets({
@@ -27,12 +28,29 @@ const styles = mergeStyleSets({
 
 export default function ViewsNav({
   match,
-  location,
   history,
 }: RouteComponentProps<SubjectsRouteProps & ViewRouteProps>): JSX.Element {
   const dispatch = useDispatch();
   const [gotoNewView, setGotoNewView] = useState(false);
+  const [selectedKey, setSelectedKey] = useState("");
   const { views } = useSelector((state: State) => state);
+
+  const allSubjects = "allSubjects";
+
+  useEffect((): void => {
+    if (match.url === subjectBase) {
+      setSelectedKey(allSubjects);
+    } else if (match.path === Paths.view) {
+      const { name } = match.params;
+      if (!name || !(name in views.dict)) {
+        history.push(Paths.base);
+      } else {
+        setSelectedKey(name);
+      }
+    } else {
+      setSelectedKey("");
+    }
+  }, [match, history, views.dict]);
 
   const dispatchCreateView = useCallback((): void => {
     dispatch(createView());
@@ -66,7 +84,7 @@ export default function ViewsNav({
     {
       links: [
         {
-          key: "allSubjects",
+          key: allSubjects,
           name: "All subjects",
           url: "#" + subjectBase,
         },
@@ -84,7 +102,7 @@ export default function ViewsNav({
 
   return (
     <Nav
-      selectedKey="key3"
+      selectedKey={selectedKey}
       expandButtonAriaLabel="Expand or collapse"
       className={styles.nav}
       groups={groups}

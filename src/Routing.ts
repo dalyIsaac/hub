@@ -9,4 +9,5 @@ export const Paths = {
   view: viewBase + "/:name",
 };
 
-export const AllPaths = [Paths.search, Paths.subject, Paths.base, Paths.view];
+// !Make sure that Paths.base is always last
+export const AllPaths = [Paths.search, Paths.subject, Paths.view, Paths.base];
