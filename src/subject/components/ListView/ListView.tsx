@@ -21,7 +21,7 @@ import {
   SortFieldKey,
   SetSortParameters,
 } from "../../../Order";
-import { gotoSubject } from "../../../Routing";
+import { gotoSubject } from "../../Routing";
 import { RouteComponentProps, withRouter, Link } from "react-router-dom";
 import { setFieldsArray } from "../../model/SetFieldsArray";
 import { setFieldsDesc } from "../../model/SetFieldsDesc";

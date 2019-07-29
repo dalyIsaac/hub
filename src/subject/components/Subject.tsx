@@ -24,7 +24,7 @@ import { setSubjectDueDate } from "../model/Date";
 import AppendChildren, { AppendChildrenHeight } from "./AppendChildren";
 import SubjectListItem from "./ListItem/SubjectListItem";
 import { Link } from "react-router-dom";
-import { gotoSubject } from "../../Routing";
+import { gotoSubject } from "../Routing";
 
 interface SubjectProps {
   subject: Subject;

@@ -10,7 +10,7 @@ import { removeChild } from "../../model/RemoveChild";
 import ListItemBase from "./ListItemBase";
 import { isUndefined } from "lodash";
 import { setSubjectName } from "../../model/Name";
-import { gotoSubject } from "../../../Routing";
+import { gotoSubject } from "../../Routing";
 
 const styles = mergeStyleSets({
   open: {

@@ -1,5 +1,5 @@
 import React from "react";
-import { SubjectsRouteProps, getDisplay } from "../../Routing";
+import { SubjectsRouteProps, getDisplay } from "../Routing";
 import GridView, { MIN_COL_WIDTH } from "./GridView";
 import { isUndefined } from "lodash";
 import useWindowSize from "@rehooks/window-size";
