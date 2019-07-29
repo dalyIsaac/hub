@@ -3,7 +3,8 @@ import { mergeStyleSets, getTheme } from "@uifabric/styling";
 import { Text } from "office-ui-fabric-react";
 import { Link, RouteComponentProps } from "react-router-dom";
 import SearchBar from "./Search/SearchBar";
-import { SearchRouteProps, getDisplay, gotoSubject } from "./Routing";
+import { SearchRouteProps } from "./Search/Routing";
+import { getDisplay, gotoSubject } from "./subject/Routing";
 import { APPBAR_HEIGHT } from "./Common";
 
 const theme = getTheme();

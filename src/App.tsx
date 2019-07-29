@@ -3,10 +3,11 @@ import { Route, Switch, Redirect } from "react-router";
 import AppBar from "./AppBar";
 import AppCommandBar from "./AppCommandBar/AppCommandBar";
 import SubjectView from "./subject/components/SubjectView";
-import { AllPaths, subjectBase, Paths } from "./Routing";
+import { AllPaths, Paths } from "./Routing";
 import SearchResults from "./Search/SearchResults";
 import { mergeStyleSets } from "@uifabric/styling";
 import ViewsNav from "./views/components/ViewsNav";
+import { subjectBase } from "./subject/Routing";
 
 const styles = mergeStyleSets({
   main: {
@@ -24,7 +25,7 @@ const App: React.FC = (): JSX.Element => {
       <Route path={AllPaths} component={AppBar} />
       <Route path={AllPaths} component={AppCommandBar} />
       <div className={styles.wrapper}>
-        <ViewsNav />
+        <Route path={AllPaths} component={ViewsNav} />
         <div className={styles.main}>
           <Switch>
             <Route path={Paths.subject} component={SubjectView} />

@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { Item } from "../../model/Subject";
-import { gotoSubject } from "../../../Routing";
+import { gotoSubject } from "../../Routing";
 import SubjectComponent from "../Subject";
 import { Link } from "react-router-dom";
 import {

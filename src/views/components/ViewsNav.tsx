@@ -4,9 +4,14 @@ import {
   getTheme,
   mergeStyleSets,
   INavLinkGroup,
+  INavLink,
 } from "office-ui-fabric-react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { createView } from "../model/Create";
+import { State } from "../../Reducer";
+import { RouteComponentProps } from "react-router";
+import { ViewRouteProps } from "../Routing";
+import { SubjectsRouteProps, subjectBase } from "../../subject/Routing";
 
 const theme = getTheme();
 const styles = mergeStyleSets({
@@ -20,7 +25,11 @@ const styles = mergeStyleSets({
   },
 });
 
-export default function ViewsNav(): JSX.Element {
+export default function ViewsNav({
+  match,
+  location,
+  history,
+}: RouteComponentProps<SubjectsRouteProps & ViewRouteProps>): JSX.Element {
   const dispatch = useDispatch();
 
   const dispatchCreateView = useCallback((): void => {
@@ -28,41 +37,43 @@ export default function ViewsNav(): JSX.Element {
     // TODO: navigate to new view
   }, [dispatch]);
 
+  const { views } = useSelector((state: State) => state);
+
+  const viewGroup: INavLink = {
+    isExpanded: true,
+    key: "views",
+    links: [],
+    name: "Views",
+    url: "",
+  };
+
+  for (const name of views.order) {
+    viewGroup.links!.push({
+      key: name,
+      name,
+      url: "", // TODO: generate URL
+    });
+  }
+
   const groups: INavLinkGroup[] = [
     {
       links: [
         {
-          name: "Home",
-          url: "http://example.com",
-          links: [
-            {
-              name: "Activity",
-              url: "http://msn.com",
-              key: "key1",
-              target: "_blank",
-            },
-            {
-              name: "MSN",
-              url: "http://msn.com",
-              disabled: true,
-              icon: "News",
-              key: "key2",
-              target: "_blank",
-            },
-          ],
-          isExpanded: true,
+          key: "allSubjects",
+          name: "All subjects",
+          url: "#" + subjectBase,
+        },
+        viewGroup,
+        {
+          icon: "Add",
+          key: "createView",
+          name: "Create view",
+          onClick: dispatchCreateView,
+          url: "",
         },
       ],
     },
   ];
-
-  groups[0].links.push({
-    icon: "Add",
-    key: "createView",
-    name: "Create view",
-    onClick: dispatchCreateView,
-    url: "",
-  });
 
   return (
     <Nav

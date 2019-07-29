@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { SearchRouteProps, getDisplay, getSearchMatch } from "../Routing";
+import { SearchRouteProps, getSearchMatch } from "./Routing";
 import { RouteComponentProps } from "react-router";
 import { Item, Subject } from "../subject/model/Subject";
 import ListView from "../subject/components/ListView/ListView";
@@ -8,6 +8,7 @@ import { Text } from "office-ui-fabric-react";
 import { options } from "./SearchBar";
 import { useSelector } from "react-redux";
 import { State } from "../Reducer";
+import { getDisplay } from "../subject/Routing";
 
 const searchParams = new Set(
   options.reduce(

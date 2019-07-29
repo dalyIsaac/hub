@@ -5,15 +5,6 @@ import {
   CommandBarButton,
   Toggle,
 } from "office-ui-fabric-react";
-import {
-  SubjectsRouteProps,
-  SearchRouteProps,
-  Paths,
-  subjectBase,
-  searchBase,
-  getDisplay,
-  updateDisplay,
-} from "../Routing";
 import { useDispatch, useSelector } from "react-redux";
 import { createSubject } from "../subject/model/Create";
 import { State } from "../Reducer";
@@ -21,6 +12,14 @@ import { setSeparateComplete } from "../subject/model/SetSeparateComplete";
 import { BUTTON_HEIGHT } from "./Common";
 import SortButton from "./SortButton";
 import { RouteComponentProps } from "react-router";
+import {
+  getDisplay,
+  SubjectsRouteProps,
+  updateDisplay,
+  subjectBase,
+} from "../subject/Routing";
+import { SearchRouteProps, searchBase } from "../Search/Routing";
+import { Paths } from "../Routing";
 
 const theme = getTheme();
 const styles = mergeStyleSets({
