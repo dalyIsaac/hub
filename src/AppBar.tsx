@@ -4,7 +4,8 @@ import { Text } from "office-ui-fabric-react";
 import { Link, RouteComponentProps } from "react-router-dom";
 import SearchBar from "./Search/SearchBar";
 import { SearchRouteProps } from "./Search/Routing";
-import { getDisplay, gotoSubject } from "./subject/Routing";
+import { gotoSubject } from "./subject/Routing";
+import { getDisplay } from "./Display";
 import { APPBAR_HEIGHT } from "./Common";
 
 const theme = getTheme();

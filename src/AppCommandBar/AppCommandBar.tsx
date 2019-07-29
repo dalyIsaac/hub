@@ -13,11 +13,10 @@ import { BUTTON_HEIGHT } from "./Common";
 import SortButton from "./SortButton";
 import { RouteComponentProps } from "react-router";
 import {
-  getDisplay,
   SubjectsRouteProps,
-  updateDisplay,
   subjectBase,
 } from "../subject/Routing";
+import { getDisplay, updateDisplay } from "../Display";
 import { SearchRouteProps, searchBase } from "../Search/Routing";
 import { Paths } from "../Routing";
 

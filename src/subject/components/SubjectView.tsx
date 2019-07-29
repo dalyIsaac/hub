@@ -1,5 +1,6 @@
 import React from "react";
-import { SubjectsRouteProps, getDisplay } from "../Routing";
+import { SubjectsRouteProps } from "../Routing";
+import { getDisplay } from "../../Display";
 import GridView, { MIN_COL_WIDTH } from "./GridView";
 import { isUndefined } from "lodash";
 import useWindowSize from "@rehooks/window-size";
@@ -10,7 +11,7 @@ import { Redirect, RouteComponentProps } from "react-router";
 import ListView from "./ListView/ListView";
 import ViewWithSidebar from "./ViewWithSidebar";
 
-export default function ResponsiveGridView({
+export default function SubjectView({
   match,
   location,
 }: RouteComponentProps<SubjectsRouteProps>): JSX.Element {
