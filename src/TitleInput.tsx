@@ -4,7 +4,7 @@ import { getTheme, mergeStyleSets } from "@uifabric/styling";
 import { FontSizes } from "@uifabric/fluent-theme/lib/fluent/FluentType";
 
 interface NameProps {
-  className: string;
+  className?: string;
   value: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
@@ -33,7 +33,7 @@ const styles = mergeStyleSets({
   },
 });
 
-export default function Name({
+export default function TitleInput({
   value,
   className,
   onBlur,

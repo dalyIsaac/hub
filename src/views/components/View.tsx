@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import { RouteComponentProps, Redirect } from "react-router";
 import { ViewRouteProps } from "../Routing";
 import { useSelector } from "react-redux";
@@ -7,6 +7,20 @@ import { isUndefined } from "lodash";
 import GridView from "../../subject/components/GridView";
 import ListView from "../../subject/components/ListView/ListView";
 import { getDisplay } from "../../Display";
+import { mergeStyleSets } from "@uifabric/styling";
+import TitleInput from "../../TitleInput";
+
+const styles = mergeStyleSets({
+  title: {
+    padding: 10,
+  },
+  wrapper: {
+    display: "flex",
+    height: "100%",
+    padding: 5,
+    width: "100%",
+  },
+});
 
 export default function View({
   match,
@@ -14,6 +28,18 @@ export default function View({
 }: RouteComponentProps<ViewRouteProps>): JSX.Element {
   const { name } = match.params;
   const { views } = useSelector((state: State) => state);
+  const [localName, setLocalName] = useState(name || "");
+
+  const onChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>): void => {
+      setLocalName(e.target.value);
+    },
+    [],
+  );
+
+  const updateName = useCallback((): void => {
+    // TODO
+  }, []);
 
   if (isUndefined(name) || !(name in views.dict)) {
     return <Redirect to="/" />;
@@ -29,5 +55,15 @@ export default function View({
       <ListView options={options} />
     );
 
-  return <div>{viewComponent}</div>;
+  return (
+    <div className={styles.wrapper}>
+      <TitleInput
+        className={styles.title}
+        value={localName}
+        onChange={onChange}
+        onBlur={updateName}
+      />
+      {viewComponent}
+    </div>
+  );
 }
