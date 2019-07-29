@@ -21,6 +21,7 @@ import {
 export interface SubjectViewHookProps {
   options?: GetItemsOptions;
   sortOptions?: SortItemsOptions;
+  order?: string[];
 }
 
 interface UseSubjectView {
@@ -60,8 +61,12 @@ export function useSubjectView({
   options,
   sortOptions,
 }: SubjectViewHookProps): UseSubjectView {
-  const id = options ? options.parent : undefined;
-  const { subjects } = useSelector((state: State) => state);
+  let id;
+  let name;
+  if (options) {
+    ({ parent: id, name } = options);
+  }
+  const { subjects, views } = useSelector((state: State) => state);
 
   let componentOrder: string[];
   let sortFields: SortField[];
@@ -78,6 +83,10 @@ export function useSubjectView({
     componentOrder = subjects.dict[id].children.order;
     sortFields = subjects.dict[id].children.options.fields;
     reorderParams = { subjectId: id };
+  } else if (name) {
+    componentOrder = views.dict[name].order;
+    sortFields = views.dict[name].options.fields;
+    reorderParams = {};
   } else {
     componentOrder = subjects.order.order;
     sortFields = subjects.order.options.fields;
