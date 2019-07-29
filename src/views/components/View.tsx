@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { RouteComponentProps, Redirect } from "react-router";
+import { RouteComponentProps } from "react-router";
 import { ViewRouteProps } from "../Routing";
 import { useSelector } from "react-redux";
 import { State } from "../../Reducer";
@@ -9,6 +9,7 @@ import ListView from "../../subject/components/ListView/ListView";
 import { getDisplay } from "../../Display";
 import { mergeStyleSets } from "@uifabric/styling";
 import TitleInput from "../../TitleInput";
+import { Paths } from "../../Routing";
 
 const styles = mergeStyleSets({
   title: {
@@ -24,11 +25,19 @@ const styles = mergeStyleSets({
 
 export default function View({
   match,
+  history,
   location,
 }: RouteComponentProps<ViewRouteProps>): JSX.Element {
-  const { name } = match.params;
+  const { viewId } = match.params;
   const { views } = useSelector((state: State) => state);
-  const [localName, setLocalName] = useState(name || "");
+
+  if (isUndefined(viewId) || !(viewId in views.dict)) {
+    history.push(Paths.base);
+  }
+
+  const view = views.dict[viewId!];
+
+  const [localName, setLocalName] = useState(view.name);
 
   const onChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -41,13 +50,9 @@ export default function View({
     // TODO
   }, []);
 
-  if (isUndefined(name) || !(name in views.dict)) {
-    return <Redirect to="/" />;
-  }
-
   const display = getDisplay(location);
 
-  const options = { name };
+  const options = { viewId };
   const viewComponent =
     display === "grid" ? (
       <GridView options={options} />

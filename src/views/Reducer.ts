@@ -2,7 +2,11 @@ import { ViewState } from "./model/View";
 import { Action } from "redux";
 import produce from "immer";
 import { State } from "../Reducer";
-import { createViewReducer, CREATE_VIEW } from "./model/Create";
+import {
+  createViewReducer,
+  CREATE_VIEW,
+  CreateViewAction,
+} from "./model/Create";
 
 export const initialViewState = (): ViewState => ({
   dict: {},
@@ -23,7 +27,7 @@ const viewReducer = (state: State, action: Action): State => ({
 
       switch (action.type) {
         case CREATE_VIEW:
-          createViewReducer(draftState);
+          createViewReducer(draftState, action as CreateViewAction);
           break;
 
         default:

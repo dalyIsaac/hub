@@ -62,9 +62,9 @@ export function useSubjectView({
   sortOptions,
 }: SubjectViewHookProps): UseSubjectView {
   let id;
-  let name;
+  let viewId;
   if (options) {
-    ({ parent: id, name } = options);
+    ({ parent: id, viewId } = options);
   }
   const { subjects, views } = useSelector((state: State) => state);
 
@@ -83,9 +83,9 @@ export function useSubjectView({
     componentOrder = subjects.dict[id].children.order;
     sortFields = subjects.dict[id].children.options.fields;
     reorderParams = { subjectId: id };
-  } else if (name) {
-    componentOrder = views.dict[name].order;
-    sortFields = views.dict[name].options.fields;
+  } else if (viewId) {
+    componentOrder = views.dict[viewId].children.order;
+    sortFields = views.dict[viewId].children.options.fields;
     reorderParams = {};
   } else {
     componentOrder = subjects.order.order;

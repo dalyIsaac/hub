@@ -39,9 +39,9 @@ export interface Item {
 
 export interface GetItemsOptions {
   /**
-   * Should only be used for `/views/:name` routes.
+   * Should only be used for `/views/:viewId` routes.
    */
-  name?: string;
+  viewId?: string;
 
   /**
    * Should only be used for `/subjects/:id` routes.
