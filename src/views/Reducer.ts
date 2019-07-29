@@ -7,6 +7,11 @@ import {
   CREATE_VIEW,
   CreateViewAction,
 } from "./model/Create";
+import {
+  UPDATE_VIEW_NAME,
+  updateViewNameReducer,
+  UpdateViewNameAction,
+} from "./model/Name";
 
 export const initialViewState = (): ViewState => ({
   dict: {},
@@ -29,7 +34,9 @@ const viewReducer = (state: State, action: Action): State => ({
         case CREATE_VIEW:
           createViewReducer(draftState, action as CreateViewAction);
           break;
-
+        case UPDATE_VIEW_NAME:
+          updateViewNameReducer(draftState, action as UpdateViewNameAction);
+          break;
         default:
           break;
       }

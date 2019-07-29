@@ -1,7 +1,7 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import { RouteComponentProps } from "react-router";
 import { ViewRouteProps } from "../Routing";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { State } from "../../Reducer";
 import { isUndefined } from "lodash";
 import GridView from "../../subject/components/GridView";
@@ -10,6 +10,7 @@ import { getDisplay } from "../../Display";
 import { mergeStyleSets } from "@uifabric/styling";
 import TitleInput from "../../TitleInput";
 import { Paths } from "../../Routing";
+import { updateViewName } from "../model/Name";
 
 const styles = mergeStyleSets({
   title: {
@@ -30,6 +31,7 @@ export default function View({
 }: RouteComponentProps<ViewRouteProps>): JSX.Element {
   const { viewId } = match.params;
   const { views } = useSelector((state: State) => state);
+  const dispatch = useDispatch();
 
   if (isUndefined(viewId) || !(viewId in views.dict)) {
     history.push(Paths.base);
@@ -38,6 +40,14 @@ export default function View({
   const view = views.dict[viewId!];
 
   const [localName, setLocalName] = useState(view.name);
+  const updateName = useCallback((): void => {
+    if (viewId) {
+      dispatch(updateViewName(viewId, localName));
+    }
+  }, [viewId, dispatch, localName]);
+  useEffect((): void => {
+    setLocalName(view.name);
+  }, [view.name]);
 
   const onChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -45,10 +55,6 @@ export default function View({
     },
     [],
   );
-
-  const updateName = useCallback((): void => {
-    // TODO
-  }, []);
 
   const display = getDisplay(location);
 
