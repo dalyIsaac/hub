@@ -64,7 +64,7 @@ function ListView({
   options,
   sortOptions,
 }: ListViewProps & RouteComponentProps): JSX.Element {
-  const id = options ? options.parent : undefined;
+  const parentId = options ? options.parentId : undefined;
   const { subjects } = useSelector((state: State) => state);
   const dispatch = useDispatch();
 
@@ -264,13 +264,13 @@ function ListView({
       // - the new index doesn't have a parent
       // - the new index has a parent, which matches match.param.id
       const s = subjects.dict[componentOrder[index]];
-      if (s.parents.size === 0 || s.parents.has(id!)) {
+      if (s.parents.size === 0 || s.parents.has(parentId!)) {
         listRef.current.focusIndex(index);
       }
 
       setCurrentOrder(componentOrder);
     }
-  }, [componentOrder, id, currentOrder, subjects, setCurrentOrder]);
+  }, [componentOrder, parentId, currentOrder, subjects, setCurrentOrder]);
 
   const getKey = useCallback((item: Item): string => item.id, []);
 

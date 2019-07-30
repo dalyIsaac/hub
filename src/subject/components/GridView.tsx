@@ -44,7 +44,7 @@ const styles = mergeStyleSets({
 const getPageHeight = (): number => ROW_HEIGHT * ROWS_PER_PAGE;
 
 export default function GridView(props: SubjectViewHookProps): JSX.Element {
-  const id = props.options ? props.options.parent : undefined;
+  const subjectId = props.options ? props.options.parentId : undefined;
   const { subjects } = useSelector((state: State) => state);
 
   const columnCount = useRef(0);
@@ -72,7 +72,7 @@ export default function GridView(props: SubjectViewHookProps): JSX.Element {
       // - the new index doesn't have a parent
       // - the new index has a parent, which matches match.param.id
       const s = subjects.dict[componentOrder[index]];
-      if (s.parents.size === 0 || s.parents.has(id!)) {
+      if (s.parents.size === 0 || s.parents.has(subjectId!)) {
         gridRef.current.scrollToIndex(
           index,
           (): number => ROW_HEIGHT,
@@ -82,7 +82,7 @@ export default function GridView(props: SubjectViewHookProps): JSX.Element {
 
       setCurrentOrder(componentOrder);
     }
-  }, [componentOrder, currentOrder, setCurrentOrder, id, subjects]);
+  }, [componentOrder, currentOrder, setCurrentOrder, subjectId, subjects]);
 
   const renderCell = useCallback((props?: Item): JSX.Element | undefined => {
     if (!props) {

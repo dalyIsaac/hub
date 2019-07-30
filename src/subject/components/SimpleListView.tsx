@@ -46,7 +46,7 @@ export default function SimpleListView({
   let children;
   if (getChildren) {
     children = getItems(subjects, subjects[subjectId].children.order, {
-      parent: subjectId,
+      parentId: subjectId,
     });
   } else {
     const childrenSet = new Set(subjects[subjectId].children.order);
@@ -54,7 +54,7 @@ export default function SimpleListView({
       !childrenSet.has(i.id) && i.id !== subjectId;
     children = getItems(subjects, order.order, {
       condition,
-      parent: subjectId,
+      parentId: subjectId,
     });
   }
 

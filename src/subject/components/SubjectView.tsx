@@ -61,10 +61,10 @@ export function useSubjectView({
   options,
   sortOptions,
 }: SubjectViewHookProps): UseSubjectView {
-  let id;
+  let parentId;
   let viewId;
   if (options) {
-    ({ parent: id, viewId } = options);
+    ({ parentId, viewId } = options);
   }
   const { subjects, views } = useSelector((state: State) => state);
 
@@ -79,10 +79,10 @@ export function useSubjectView({
     });
     sortFields = sortOptions.fields;
     reorderParams = { setSearchOptions: true };
-  } else if (id) {
-    componentOrder = subjects.dict[id].children.order;
-    sortFields = subjects.dict[id].children.options.fields;
-    reorderParams = { subjectId: id };
+  } else if (parentId) {
+    componentOrder = subjects.dict[parentId].children.order;
+    sortFields = subjects.dict[parentId].children.options.fields;
+    reorderParams = { subjectId: parentId };
   } else if (viewId) {
     componentOrder = views.dict[viewId].children.order;
     sortFields = views.dict[viewId].children.options.fields;
@@ -94,6 +94,7 @@ export function useSubjectView({
   }
   const [currentOrder, setOrder] = useState(componentOrder);
   const items = getItems(subjects.dict, componentOrder, options);
+  console.log({ componentOrder });
 
   return {
     componentOrder,
@@ -129,7 +130,7 @@ export default function SubjectView({
 
   const parentSubject = <SubjectComponent subject={dict[id]} id={id} />;
   if (windowSize.innerWidth > MIN_COL_WIDTH * 2) {
-    const options = { parent: id };
+    const options = { parentId: id };
     return (
       <ViewWithSidebar
         viewComponent={

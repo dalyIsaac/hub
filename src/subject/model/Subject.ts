@@ -46,7 +46,7 @@ export interface GetItemsOptions {
   /**
    * Should only be used for `/subjects/:id` routes.
    */
-  parent?: string;
+  parentId?: string;
 
   /**
    * Should only be used for searching.
@@ -60,7 +60,7 @@ export function getItems(
   options?: GetItemsOptions,
 ): Item[] {
   const items = [];
-  const parent = options ? options.parent : undefined;
+  const parent = options ? options.parentId : undefined;
   for (const id of order) {
     const current = { id, parent, subject: subjects[id] };
     if (
