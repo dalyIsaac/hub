@@ -288,6 +288,7 @@ export default function SubjectComponent({
 
         <div className={styles.body}>
           <TitleInput
+            textAlign="center"
             className={styles.title}
             value={name}
             onChange={setNameLocal}
