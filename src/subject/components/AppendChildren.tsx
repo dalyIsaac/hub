@@ -89,7 +89,7 @@ export default function({ parent }: AppendChildrenProps): JSX.Element {
   const hideMenu = useCallback((): void => setMenuVisible(false), []);
 
   const addChild = useCallback((): void => {
-    dispatch(createSubject({ parent }));
+    dispatch(createSubject({ parentId: parent }));
   }, [dispatch, parent]);
 
   const contextMenuItems: IContextualMenuItem[] = [

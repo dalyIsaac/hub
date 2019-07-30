@@ -109,7 +109,7 @@ export default function SubjectView({
   match,
   location,
 }: RouteComponentProps<SubjectsRouteProps>): JSX.Element {
-  const { id } = match.params;
+  const { parentId: id } = match.params;
   const display = getDisplay(location);
 
   const windowSize = useWindowSize();

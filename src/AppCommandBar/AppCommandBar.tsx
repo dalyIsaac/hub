@@ -45,12 +45,14 @@ const styles = mergeStyleSets({
   },
 });
 
+const commandBarStyles = { root: { height: BUTTON_HEIGHT } };
+
 export default function AppCommandBar({
   match,
   location,
   history,
 }: RouteComponentProps<SubjectsRouteProps & SearchRouteProps>): JSX.Element {
-  const { id } = match.params;
+  const { parentId } = match.params;
   const dispatch = useDispatch();
   const display = getDisplay(location);
 
@@ -59,8 +61,8 @@ export default function AppCommandBar({
   );
 
   const dispatchCreateChildSubject = useCallback((): void => {
-    dispatch(createSubject({ parent: id }));
-  }, [dispatch, id]);
+    dispatch(createSubject({ parentId }));
+  }, [dispatch, parentId]);
 
   const dispatchCreateSubject = useCallback((): void => {
     dispatch(createSubject());
@@ -68,9 +70,9 @@ export default function AppCommandBar({
 
   const dispatchSetSeparateComplete = useCallback(
     (e: any, checked?: boolean): void => {
-      dispatch(setSeparateComplete(checked!, { subjectId: id }));
+      dispatch(setSeparateComplete(checked!, { subjectId: parentId }));
     },
-    [dispatch, id],
+    [dispatch, parentId],
   );
 
   const dispatchSetSeparateCompleteSearch = useCallback(
@@ -89,15 +91,17 @@ export default function AppCommandBar({
 
   if (match.path === Paths.subject || match.path === subjectBase) {
     const order =
-      id && id in dict ? dict[id].children.options : rootOrder.options;
+      parentId && parentId in dict
+        ? dict[parentId].children.options
+        : rootOrder.options;
 
-    const createSubjectButton = id ? (
+    const createSubjectButton = parentId ? (
       <CommandBarButton
         text="Create child subject"
         iconProps={{ iconName: "Childof" }}
         ariaLabel="Create child subject"
         onClick={dispatchCreateChildSubject}
-        styles={{ root: { height: BUTTON_HEIGHT } }}
+        styles={commandBarStyles}
       />
     ) : (
       <CommandBarButton
@@ -105,7 +109,7 @@ export default function AppCommandBar({
         iconProps={{ iconName: "Add" }}
         ariaLabel="Create subject"
         onClick={dispatchCreateSubject}
-        styles={{ root: { height: BUTTON_HEIGHT } }}
+        styles={commandBarStyles}
       />
     );
 
@@ -113,7 +117,7 @@ export default function AppCommandBar({
 
     if (display === "grid") {
       leftComponents.push(
-        <SortButton key="sort" subjectId={id} fields={order.fields} />,
+        <SortButton key="sort" subjectId={parentId} fields={order.fields} />,
       );
     }
 

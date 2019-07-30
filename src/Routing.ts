@@ -5,7 +5,7 @@ import { viewBase } from "./views/Routing";
 export const Paths = {
   base: "/",
   search: searchBase + "/:param/:query",
-  subject: subjectBase + "/:id?",
+  subject: subjectBase + "/:parentId?",
   view: viewBase + "/:viewId",
 };
 

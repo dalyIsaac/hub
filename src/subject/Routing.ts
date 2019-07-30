@@ -2,7 +2,7 @@ import qs from "query-string";
 import { DisplayOptions } from "../Display";
 
 export interface SubjectsRouteProps {
-  id?: string;
+  parentId?: string;
 }
 
 export const subjectBase = "/subjects";
