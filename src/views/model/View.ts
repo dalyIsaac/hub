@@ -1,7 +1,10 @@
 import { OrderState } from "../../Order";
 import { BaseAction } from "../../Common";
 
-export type View = OrderState;
+export interface View {
+  name: string;
+  children: OrderState;
+}
 
 export interface ViewDictState {
   /**
@@ -13,8 +16,9 @@ export interface ViewDictState {
 export interface ViewState {
   dict: ViewDictState;
   order: string[];
+  orderSet: Set<string>;
 }
 
 export interface ViewBaseAction extends BaseAction {
-  viewName: string;
+  viewId: string;
 }

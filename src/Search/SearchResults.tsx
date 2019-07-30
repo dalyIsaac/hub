@@ -8,7 +8,7 @@ import { Text } from "office-ui-fabric-react";
 import { options } from "./SearchBar";
 import { useSelector } from "react-redux";
 import { State } from "../Reducer";
-import { getDisplay } from "../subject/Routing";
+import { getDisplay } from "../Display";
 
 const searchParams = new Set(
   options.reduce(

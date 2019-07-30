@@ -12,14 +12,11 @@ import { setSeparateComplete } from "../subject/model/SetSeparateComplete";
 import { BUTTON_HEIGHT } from "./Common";
 import SortButton from "./SortButton";
 import { RouteComponentProps } from "react-router";
-import {
-  getDisplay,
-  SubjectsRouteProps,
-  updateDisplay,
-  subjectBase,
-} from "../subject/Routing";
+import { SubjectsRouteProps, subjectBase } from "../subject/Routing";
+import { getDisplay, updateDisplay } from "../Display";
 import { SearchRouteProps, searchBase } from "../Search/Routing";
 import { Paths } from "../Routing";
+import { ViewRouteProps } from "../views/Routing";
 
 const theme = getTheme();
 const styles = mergeStyleSets({
@@ -44,15 +41,23 @@ const styles = mergeStyleSets({
     justifyContent: "space-between",
     paddingLeft: 24,
     paddingRight: 24,
+    position: "relative",
+    zIndex: 10,
   },
 });
+
+const commandBarStyles = { root: { height: BUTTON_HEIGHT } };
+
+type AppCommandbarProps = RouteComponentProps<
+  SubjectsRouteProps & SearchRouteProps & ViewRouteProps
+>;
 
 export default function AppCommandBar({
   match,
   location,
   history,
-}: RouteComponentProps<SubjectsRouteProps & SearchRouteProps>): JSX.Element {
-  const { id } = match.params;
+}: AppCommandbarProps): JSX.Element {
+  const { parentId, viewId } = match.params;
   const dispatch = useDispatch();
   const display = getDisplay(location);
 
@@ -61,8 +66,8 @@ export default function AppCommandBar({
   );
 
   const dispatchCreateChildSubject = useCallback((): void => {
-    dispatch(createSubject({ parent: id }));
-  }, [dispatch, id]);
+    dispatch(createSubject({ parentId, viewId }));
+  }, [dispatch, parentId, viewId]);
 
   const dispatchCreateSubject = useCallback((): void => {
     dispatch(createSubject());
@@ -70,9 +75,9 @@ export default function AppCommandBar({
 
   const dispatchSetSeparateComplete = useCallback(
     (e: any, checked?: boolean): void => {
-      dispatch(setSeparateComplete(checked!, { subjectId: id }));
+      dispatch(setSeparateComplete(checked!, { subjectId: parentId }));
     },
-    [dispatch, id],
+    [dispatch, parentId],
   );
 
   const dispatchSetSeparateCompleteSearch = useCallback(
@@ -91,15 +96,17 @@ export default function AppCommandBar({
 
   if (match.path === Paths.subject || match.path === subjectBase) {
     const order =
-      id && id in dict ? dict[id].children.options : rootOrder.options;
+      parentId && parentId in dict
+        ? dict[parentId].children.options
+        : rootOrder.options;
 
-    const createSubjectButton = id ? (
+    const createSubjectButton = parentId ? (
       <CommandBarButton
         text="Create child subject"
         iconProps={{ iconName: "Childof" }}
         ariaLabel="Create child subject"
         onClick={dispatchCreateChildSubject}
-        styles={{ root: { height: BUTTON_HEIGHT } }}
+        styles={commandBarStyles}
       />
     ) : (
       <CommandBarButton
@@ -107,7 +114,7 @@ export default function AppCommandBar({
         iconProps={{ iconName: "Add" }}
         ariaLabel="Create subject"
         onClick={dispatchCreateSubject}
-        styles={{ root: { height: BUTTON_HEIGHT } }}
+        styles={commandBarStyles}
       />
     );
 
@@ -115,7 +122,7 @@ export default function AppCommandBar({
 
     if (display === "grid") {
       leftComponents.push(
-        <SortButton key="sort" subjectId={id} fields={order.fields} />,
+        <SortButton key="sort" subjectId={parentId} fields={order.fields} />,
       );
     }
 
@@ -148,6 +155,25 @@ export default function AppCommandBar({
         onText={"Separate completed items"}
         onChange={dispatchSetSeparateCompleteSearch}
         styles={{ root: { marginBottom: 0, marginLeft: 4, marginRight: 4 } }}
+      />,
+    );
+  } else if (match.path === Paths.view) {
+    leftComponents.push(
+      <CommandBarButton
+        key="addSubjectToView"
+        ariaLabel="Add subject to view"
+        iconProps={{ iconName: "Add" }}
+        text="Add subject to view"
+        // TODO: onClick
+        styles={commandBarStyles}
+      />,
+      <CommandBarButton
+        key="createSubjectForView"
+        text="Create child subject"
+        iconProps={{ iconName: "Childof" }}
+        ariaLabel="Create child subject"
+        onClick={dispatchCreateChildSubject}
+        styles={commandBarStyles}
       />,
     );
   }

@@ -1,9 +1,9 @@
 export interface ViewRouteProps {
-  name?: string;
+  viewId?: string;
 }
 
 export const viewBase = "/views";
 
-export const gotoView = (name: string): string => {
-  return `${viewBase}/${name}`;
+export const gotoView = (viewId: string): string => {
+  return `${viewBase}/${viewId}`;
 };

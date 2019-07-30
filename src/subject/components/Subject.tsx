@@ -14,7 +14,7 @@ import {
 import { getTheme, mergeStyleSets } from "@uifabric/styling";
 
 import { Subject } from "../model/Subject";
-import Name from "./Name";
+import TitleInput from "../../TitleInput";
 import SimpleListView from "./SimpleListView";
 import { setSubjectName } from "../model/Name";
 import { setSubjectDescription } from "../model/Description";
@@ -287,7 +287,8 @@ export default function SubjectComponent({
         </div>
 
         <div className={styles.body}>
-          <Name
+          <TitleInput
+            textAlign="center"
             className={styles.title}
             value={name}
             onChange={setNameLocal}

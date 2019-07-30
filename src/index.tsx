@@ -13,11 +13,12 @@ import storage from "redux-persist/lib/storage";
 import rootReducer from "./Reducer";
 import { PersistGate } from "redux-persist/integration/react";
 import transformSubjects from "./subject/model/Transform";
+import transformViews from "./views/model/Transform";
 
 const persistConfig = {
   key: "root",
   storage,
-  transforms: [transformSubjects],
+  transforms: [transformSubjects, transformViews],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer as Reducer);

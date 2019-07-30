@@ -104,7 +104,7 @@ const subjectReducer = (state: State, action: Action): State => ({
           setSubjectDueDateReducer(subjects, action as SetSubjectDueDateAction);
           break;
         case CREATE_SUBJECT:
-          createSubjectReducer(subjects, action as CreateSubjectAction<
+          createSubjectReducer(draftState, action as CreateSubjectAction<
             SubjectTypes
           >);
           break;

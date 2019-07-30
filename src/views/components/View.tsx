@@ -1,12 +1,92 @@
-import React from "react";
-import { RouteComponentProps } from "react-router";
+import React, { useCallback, useState, useEffect } from "react";
+import { RouteComponentProps, Redirect } from "react-router";
 import { ViewRouteProps } from "../Routing";
+import { useSelector, useDispatch } from "react-redux";
+import { State } from "../../Reducer";
+import { isUndefined } from "lodash";
+import GridView from "../../subject/components/GridView";
+import ListView from "../../subject/components/ListView/ListView";
+import { getDisplay } from "../../Display";
+import { mergeStyleSets } from "@uifabric/styling";
+import TitleInput from "../../TitleInput";
+import { Paths } from "../../Routing";
+import { updateViewName } from "../model/Name";
+import { Location } from "history";
+
+const styles = mergeStyleSets({
+  title: {
+    padding: 10,
+  },
+  wrapper: {
+    display: "flex",
+    flexDirection: "column",
+    height: "100%",
+    padding: 5,
+    width: "100%",
+  },
+});
+
+interface ViewProps {
+  location: Location;
+  viewId: string;
+}
+
+function ViewComponent({ location, viewId }: ViewProps): JSX.Element {
+  const { views } = useSelector((state: State) => state);
+  const dispatch = useDispatch();
+
+  const view =
+    viewId && viewId in views.dict ? views.dict[viewId] : { name: "" };
+
+  const [localName, setLocalName] = useState(view.name);
+  const updateName = useCallback((): void => {
+    if (viewId) {
+      dispatch(updateViewName(viewId, localName));
+    }
+  }, [viewId, dispatch, localName]);
+  useEffect((): void => {
+    setLocalName(view.name);
+  }, [view.name]);
+
+  const onChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>): void => {
+      setLocalName(e.target.value);
+    },
+    [],
+  );
+
+  const display = getDisplay(location);
+
+  const options = { viewId };
+  const viewComponent =
+    display === "grid" ? (
+      <GridView options={options} />
+    ) : (
+      <ListView options={options} />
+    );
+
+  return (
+    <div className={styles.wrapper}>
+      <TitleInput
+        className={styles.title}
+        value={localName}
+        onChange={onChange}
+        onBlur={updateName}
+      />
+      {viewComponent}
+    </div>
+  );
+}
 
 export default function View({
   match,
   location,
-  history,
 }: RouteComponentProps<ViewRouteProps>): JSX.Element {
-  console.log(match);
-  return <p>Hello View!</p>;
+  const { views } = useSelector((state: State) => state);
+  const { viewId } = match.params;
+
+  if (isUndefined(viewId) || !(viewId in views.dict)) {
+    return <Redirect to={Paths.base} />;
+  }
+  return <ViewComponent viewId={viewId} location={location} />;
 }

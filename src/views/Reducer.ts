@@ -2,11 +2,21 @@ import { ViewState } from "./model/View";
 import { Action } from "redux";
 import produce from "immer";
 import { State } from "../Reducer";
-import { createViewReducer, CREATE_VIEW } from "./model/Create";
+import {
+  createViewReducer,
+  CREATE_VIEW,
+  CreateViewAction,
+} from "./model/Create";
+import {
+  UPDATE_VIEW_NAME,
+  updateViewNameReducer,
+  UpdateViewNameAction,
+} from "./model/Name";
 
 export const initialViewState = (): ViewState => ({
   dict: {},
   order: [],
+  orderSet: new Set(),
 });
 
 // TODO: check if https://github.com/rt2zz/redux-persist/pull/915 is
@@ -23,9 +33,11 @@ const viewReducer = (state: State, action: Action): State => ({
 
       switch (action.type) {
         case CREATE_VIEW:
-          createViewReducer(draftState);
+          createViewReducer(draftState, action as CreateViewAction);
           break;
-
+        case UPDATE_VIEW_NAME:
+          updateViewNameReducer(draftState, action as UpdateViewNameAction);
+          break;
         default:
           break;
       }

@@ -41,11 +41,11 @@ export default function ViewsNav({
     if (match.url === subjectBase) {
       setSelectedKey(allSubjects);
     } else if (match.path === Paths.view) {
-      const { name } = match.params;
-      if (!name || !(name in views.dict)) {
+      const { viewId } = match.params;
+      if (!viewId || !(viewId in views.dict)) {
         history.push(Paths.base);
       } else {
-        setSelectedKey(name);
+        setSelectedKey(viewId);
       }
     } else {
       setSelectedKey("");
@@ -72,11 +72,12 @@ export default function ViewsNav({
     url: "",
   };
 
-  for (const name of views.order) {
+  for (const viewId of views.order) {
+    const v = views.dict[viewId];
     viewGroup.links!.push({
-      key: name,
-      name,
-      url: "#" + gotoView(name),
+      key: viewId,
+      name: v.name,
+      url: "#" + gotoView(viewId),
     });
   }
 
