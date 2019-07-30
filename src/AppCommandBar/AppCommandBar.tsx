@@ -16,6 +16,7 @@ import { SubjectsRouteProps, subjectBase } from "../subject/Routing";
 import { getDisplay, updateDisplay } from "../Display";
 import { SearchRouteProps, searchBase } from "../Search/Routing";
 import { Paths } from "../Routing";
+import { ViewRouteProps } from "../views/Routing";
 
 const theme = getTheme();
 const styles = mergeStyleSets({
@@ -47,12 +48,16 @@ const styles = mergeStyleSets({
 
 const commandBarStyles = { root: { height: BUTTON_HEIGHT } };
 
+type AppCommandbarProps = RouteComponentProps<
+  SubjectsRouteProps & SearchRouteProps & ViewRouteProps
+>;
+
 export default function AppCommandBar({
   match,
   location,
   history,
-}: RouteComponentProps<SubjectsRouteProps & SearchRouteProps>): JSX.Element {
-  const { parentId } = match.params;
+}: AppCommandbarProps): JSX.Element {
+  const { parentId, viewId } = match.params;
   const dispatch = useDispatch();
   const display = getDisplay(location);
 
@@ -61,8 +66,8 @@ export default function AppCommandBar({
   );
 
   const dispatchCreateChildSubject = useCallback((): void => {
-    dispatch(createSubject({ parentId }));
-  }, [dispatch, parentId]);
+    dispatch(createSubject({ parentId, viewId }));
+  }, [dispatch, parentId, viewId]);
 
   const dispatchCreateSubject = useCallback((): void => {
     dispatch(createSubject());
@@ -150,6 +155,25 @@ export default function AppCommandBar({
         onText={"Separate completed items"}
         onChange={dispatchSetSeparateCompleteSearch}
         styles={{ root: { marginBottom: 0, marginLeft: 4, marginRight: 4 } }}
+      />,
+    );
+  } else if (match.path === Paths.view) {
+    leftComponents.push(
+      <CommandBarButton
+        key="addSubjectToView"
+        ariaLabel="Add subject to view"
+        iconProps={{ iconName: "Add" }}
+        text="Add subject to view"
+        // TODO: onClick
+        styles={commandBarStyles}
+      />,
+      <CommandBarButton
+        key="createSubjectForView"
+        text="Create child subject"
+        iconProps={{ iconName: "Childof" }}
+        ariaLabel="Create child subject"
+        onClick={dispatchCreateChildSubject}
+        styles={commandBarStyles}
       />,
     );
   }
