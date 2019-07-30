@@ -94,7 +94,6 @@ export function useSubjectView({
   }
   const [currentOrder, setOrder] = useState(componentOrder);
   const items = getItems(subjects.dict, componentOrder, options);
-  console.log({ componentOrder });
 
   return {
     componentOrder,

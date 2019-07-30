@@ -15,7 +15,6 @@ export const createView = (): CreateViewAction => ({
 const getUntitledName = (orderSet: Set<string>): string => {
   let i = 1;
   let name = `Untitled${i}`;
-  console.log(name);
   while (orderSet.has(name)) {
     i++;
     name = `Untitled${i}`;
@@ -31,5 +30,4 @@ export const createViewReducer = (
   state.views.dict[viewId] = { children: getInitialOrder(), name };
   state.views.order.push(viewId);
   state.views.orderSet.add(name);
-  console.log(state.views.orderSet);
 };
