@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import {
   getTheme,
   mergeStyleSets,
@@ -17,6 +17,7 @@ import { getDisplay, updateDisplay } from "../Display";
 import { SearchRouteProps, searchBase } from "../Search/Routing";
 import { Paths } from "../Routing";
 import { ViewRouteProps } from "../views/Routing";
+import AppendChildren from "../views/components/AppendChildren";
 
 const theme = getTheme();
 const styles = mergeStyleSets({
@@ -64,6 +65,16 @@ export default function AppCommandBar({
   const { dict, order: rootOrder, searchSortOptions } = useSelector(
     (state: State) => state.subjects,
   );
+
+  const [appendChildrenPanelVisible, setAppendChildrenPanelVisible] = useState(
+    false,
+  );
+  const showAppendChildrenPanel = useCallback((): void => {
+    setAppendChildrenPanelVisible(true);
+  }, []);
+  const hideAppendChildrenPanel = useCallback((): void => {
+    setAppendChildrenPanelVisible(false);
+  }, []);
 
   const dispatchCreateChildSubject = useCallback((): void => {
     dispatch(createSubject({ parentId, viewId }));
@@ -175,6 +186,14 @@ export default function AppCommandBar({
         onClick={dispatchCreateChildSubject}
         styles={commandBarStyles}
       />,
+      <CommandBarButton
+        key="appendChildren"
+        text="Append child subjects"
+        iconProps={{ iconName: "RowsChild" }}
+        ariaLabel="Create child subject"
+        onClick={showAppendChildrenPanel}
+        styles={commandBarStyles}
+      />,
     );
   }
 
@@ -211,9 +230,16 @@ export default function AppCommandBar({
   );
 
   return (
-    <div className={styles.wrapper}>
-      <div className={styles.leftWrapper}>{leftComponents}</div>
-      <div className={styles.rightWrapper}>{rightComponents}</div>
-    </div>
+    <React.Fragment>
+      <div className={styles.wrapper}>
+        <div className={styles.leftWrapper}>{leftComponents}</div>
+        <div className={styles.rightWrapper}>{rightComponents}</div>
+      </div>
+      <AppendChildren
+        hidePanel={hideAppendChildrenPanel}
+        isOpen={appendChildrenPanelVisible}
+        viewId={viewId}
+      />
+    </React.Fragment>
   );
 }

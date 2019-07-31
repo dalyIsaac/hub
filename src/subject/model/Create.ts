@@ -6,8 +6,8 @@ import {
   appendChild as subjectsAppendChild,
 } from "./AppendChild";
 import {
-  appendChildReducer as viewsAppendChildReducer,
-  appendChild as viewsAppendChild,
+  appendChildView,
+  appendChildViewReducer,
 } from "../../views/model/AppendChild";
 import { State } from "../../Reducer";
 
@@ -58,7 +58,7 @@ export const createSubjectReducer = (
     );
   }
   if (viewId !== undefined) {
-    viewsAppendChildReducer(state, viewsAppendChild(viewId, subjectId));
+    appendChildViewReducer(state, appendChildView(viewId, subjectId));
   }
   state.subjects.order.order.push(subjectId);
 };

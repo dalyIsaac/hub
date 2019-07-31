@@ -12,6 +12,11 @@ import {
   updateViewNameReducer,
   UpdateViewNameAction,
 } from "./model/Name";
+import {
+  AppendChildViewAction,
+  APPEND_CHILD_VIEW,
+  appendChildViewReducer,
+} from "./model/AppendChild";
 
 export const initialViewState = (): ViewState => ({
   dict: {},
@@ -37,6 +42,9 @@ const viewReducer = (state: State, action: Action): State => ({
           break;
         case UPDATE_VIEW_NAME:
           updateViewNameReducer(draftState, action as UpdateViewNameAction);
+          break;
+        case APPEND_CHILD_VIEW:
+          appendChildViewReducer(draftState, action as AppendChildViewAction);
           break;
         default:
           break;

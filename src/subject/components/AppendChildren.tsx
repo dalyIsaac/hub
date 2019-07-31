@@ -15,9 +15,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { createSubject } from "../model/Create";
 import { border, gridTemplateColumns } from "./ListItem/ListItemBase";
 import { State } from "../../Reducer";
+import { PANEL_HEADER_HEIGHT } from "../../Common";
 
 export const AppendChildrenHeight = 32;
-const panelHeaderHeight = 115;
 
 const theme = getTheme();
 const styles = mergeStyleSets({
@@ -98,11 +98,11 @@ export default function({ parent }: AppendChildrenProps): JSX.Element {
   const contextMenuItems: IContextualMenuItem[] = [
     {
       iconProps: {
-        iconName: "ChildOf",
+        iconName: "RowsChild",
       },
       key: "appendChildren",
       onClick: showPanel,
-      text: "Append child subject",
+      text: "Append child subjects",
     },
   ];
 
@@ -141,7 +141,7 @@ export default function({ parent }: AppendChildrenProps): JSX.Element {
           }
           order={subjects.order.order}
           notifyNoChildren={true}
-          maxHeight={`calc(100vh-${panelHeaderHeight})`}
+          maxHeight={`calc(100vh-${PANEL_HEADER_HEIGHT})`}
           onRenderCell={AppendChildrenListItem}
         />
       </Panel>

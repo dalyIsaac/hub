@@ -7,6 +7,7 @@ import { getItems, Item } from "../model/Subject";
 
 interface ListViewProps {
   parentId?: string;
+  viewId?: string;
   illegalIds?: Set<string>;
   order: string[];
   maxHeight: number | string;
@@ -35,6 +36,7 @@ export default function SimpleListView({
   onRenderCell,
   illegalIds,
   notifyNoChildren,
+  viewId,
 }: ListViewProps): JSX.Element {
   const { subjects } = useSelector((state: State) => state);
 
@@ -43,7 +45,11 @@ export default function SimpleListView({
     [illegalIds],
   );
 
-  const options = illegalIds ? { condition, parentId } : { parentId };
+  const options = {
+    condition: illegalIds ? condition : undefined,
+    parentId,
+    viewId,
+  };
   const children = getItems(subjects.dict, order, options);
 
   return (
