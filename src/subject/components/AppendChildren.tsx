@@ -11,9 +11,10 @@ import {
 } from "office-ui-fabric-react";
 import SimpleListView from "./SimpleListView";
 import AppendChildrenListItem from "./ListItem/AppendChildrenListItem";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { createSubject } from "../model/Create";
 import { border, gridTemplateColumns } from "./ListItem/ListItemBase";
+import { State } from "../../Reducer";
 
 export const AppendChildrenHeight = 32;
 const panelHeaderHeight = 115;
@@ -92,6 +93,8 @@ export default function({ parent }: AppendChildrenProps): JSX.Element {
     dispatch(createSubject({ parentId: parent }));
   }, [dispatch, parent]);
 
+  const { subjects } = useSelector((state: State) => state);
+
   const contextMenuItems: IContextualMenuItem[] = [
     {
       iconProps: {
@@ -132,22 +135,25 @@ export default function({ parent }: AppendChildrenProps): JSX.Element {
         onDismiss={hidePanel}
       >
         <SimpleListView
-          subjectId={parent}
+          parentId={parent}
+          illegalIds={
+            new Set(subjects.dict[parent].children.order.concat(parent))
+          }
+          order={subjects.order.order}
           notifyNoChildren={true}
           maxHeight={`calc(100vh-${panelHeaderHeight})`}
           onRenderCell={AppendChildrenListItem}
         />
       </Panel>
 
-      {menuVisible ? (
-        <ContextualMenu
-          isBeakVisible={false}
-          onDismiss={hideMenu}
-          target={target}
-          directionalHint={DirectionalHint.bottomRightEdge}
-          items={contextMenuItems}
-        />
-      ) : null}
+      <ContextualMenu
+        hidden={!menuVisible}
+        isBeakVisible={false}
+        onDismiss={hideMenu}
+        target={target}
+        directionalHint={DirectionalHint.bottomRightEdge}
+        items={contextMenuItems}
+      />
     </React.Fragment>
   );
 }
