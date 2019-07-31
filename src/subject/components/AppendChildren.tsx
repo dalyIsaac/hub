@@ -11,12 +11,13 @@ import {
 } from "office-ui-fabric-react";
 import SimpleListView from "./SimpleListView";
 import AppendChildrenListItem from "./ListItem/AppendChildrenListItem";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { createSubject } from "../model/Create";
 import { border, gridTemplateColumns } from "./ListItem/ListItemBase";
+import { State } from "../../Reducer";
+import { PANEL_HEADER_HEIGHT } from "../../Common";
 
 export const AppendChildrenHeight = 32;
-const panelHeaderHeight = 115;
 
 const theme = getTheme();
 const styles = mergeStyleSets({
@@ -92,14 +93,16 @@ export default function({ parent }: AppendChildrenProps): JSX.Element {
     dispatch(createSubject({ parentId: parent }));
   }, [dispatch, parent]);
 
+  const { subjects } = useSelector((state: State) => state);
+
   const contextMenuItems: IContextualMenuItem[] = [
     {
       iconProps: {
-        iconName: "ChildOf",
+        iconName: "RowsChild",
       },
       key: "appendChildren",
       onClick: showPanel,
-      text: "Append child subject",
+      text: "Append child subjects",
     },
   ];
 
@@ -132,22 +135,25 @@ export default function({ parent }: AppendChildrenProps): JSX.Element {
         onDismiss={hidePanel}
       >
         <SimpleListView
-          subjectId={parent}
+          parentId={parent}
+          illegalIds={
+            new Set(subjects.dict[parent].children.order.concat(parent))
+          }
+          order={subjects.order.order}
           notifyNoChildren={true}
-          maxHeight={`calc(100vh-${panelHeaderHeight})`}
+          maxHeight={`calc(100vh-${PANEL_HEADER_HEIGHT})`}
           onRenderCell={AppendChildrenListItem}
         />
       </Panel>
 
-      {menuVisible ? (
-        <ContextualMenu
-          isBeakVisible={false}
-          onDismiss={hideMenu}
-          target={target}
-          directionalHint={DirectionalHint.bottomRightEdge}
-          items={contextMenuItems}
-        />
-      ) : null}
+      <ContextualMenu
+        hidden={!menuVisible}
+        isBeakVisible={false}
+        onDismiss={hideMenu}
+        target={target}
+        directionalHint={DirectionalHint.bottomRightEdge}
+        items={contextMenuItems}
+      />
     </React.Fragment>
   );
 }

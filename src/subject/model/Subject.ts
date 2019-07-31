@@ -35,6 +35,7 @@ export interface Item {
   id: string;
   subject: Subject<"BaseSubject">;
   parent?: string;
+  viewId?: string;
 }
 
 export interface GetItemsOptions {
@@ -61,8 +62,9 @@ export function getItems(
 ): Item[] {
   const items = [];
   const parent = options ? options.parentId : undefined;
+  const viewId = options ? options.viewId : undefined;
   for (const id of order) {
-    const current = { id, parent, subject: subjects[id] };
+    const current = { id, parent, subject: subjects[id], viewId };
     if (
       isUndefined(options) ||
       isUndefined(options.condition) ||

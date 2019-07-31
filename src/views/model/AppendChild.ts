@@ -8,7 +8,7 @@ export interface AppendChildViewAction extends ViewBaseAction {
   subjectId: string;
 }
 
-export const appendChild = (
+export const appendChildView = (
   viewId: string,
   subjectId: string,
 ): AppendChildViewAction => ({
@@ -17,7 +17,7 @@ export const appendChild = (
   viewId,
 });
 
-export const appendChildReducer = (
+export const appendChildViewReducer = (
   { subjects, views }: State,
   { subjectId, viewId }: AppendChildViewAction,
 ): void => {

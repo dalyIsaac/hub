@@ -21,7 +21,6 @@ const styles = mergeStyleSets({
     display: "flex",
     flexDirection: "column",
     height: "100%",
-    padding: 5,
     width: "100%",
   },
 });

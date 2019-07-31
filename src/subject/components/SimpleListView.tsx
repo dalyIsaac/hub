@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { useSelector } from "react-redux";
 import { FocusZone, List, Text } from "office-ui-fabric-react";
 import { mergeStyleSets } from "@uifabric/styling";
@@ -6,14 +6,11 @@ import { State } from "../../Reducer";
 import { getItems, Item } from "../model/Subject";
 
 interface ListViewProps {
-  subjectId: string;
+  parentId?: string;
+  viewId?: string;
+  illegalIds?: Set<string>;
+  order: string[];
   maxHeight: number | string;
-
-  /**
-   * If `true`, it gets all the children of the `subjectId`. If `false`, it gets
-   * all the subjects **except** the children of the `subjectId`.
-   */
-  getChildren?: boolean;
   onRenderCell: (
     item?: Item,
     index?: number | undefined,
@@ -33,36 +30,33 @@ const styles = mergeStyleSets({
 });
 
 export default function SimpleListView({
-  subjectId,
+  order,
+  parentId,
   maxHeight,
   onRenderCell,
-  getChildren,
+  illegalIds,
   notifyNoChildren,
+  viewId,
 }: ListViewProps): JSX.Element {
-  const { dict: subjects, order } = useSelector(
-    (state: State) => state.subjects,
+  const { subjects } = useSelector((state: State) => state);
+
+  const condition = useCallback(
+    (i: Item): boolean => !!illegalIds && !illegalIds.has(i.id),
+    [illegalIds],
   );
 
-  let children;
-  if (getChildren) {
-    children = getItems(subjects, subjects[subjectId].children.order, {
-      parentId: subjectId,
-    });
-  } else {
-    const childrenSet = new Set(subjects[subjectId].children.order);
-    const condition = (i: Item): boolean =>
-      !childrenSet.has(i.id) && i.id !== subjectId;
-    children = getItems(subjects, order.order, {
-      condition,
-      parentId: subjectId,
-    });
-  }
+  const options = {
+    condition: illegalIds ? condition : undefined,
+    parentId,
+    viewId,
+  };
+  const children = getItems(subjects.dict, order, options);
 
   return (
     <FocusZone className={styles.list} style={{ maxHeight }}>
       {children.length === 0 && notifyNoChildren ? (
         <Text>
-          There's nothing here{" "}
+          {"There's nothing here"}
           <span role="img" aria-label="Gust of Wind emoji">
             💨
           </span>

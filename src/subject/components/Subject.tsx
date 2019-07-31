@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   FocusZone,
   Stack,
@@ -25,6 +25,7 @@ import AppendChildren, { AppendChildrenHeight } from "./AppendChildren";
 import SubjectListItem from "./ListItem/SubjectListItem";
 import { Link } from "react-router-dom";
 import { gotoSubject } from "../Routing";
+import { State } from "../../Reducer";
 
 interface SubjectProps {
   subject: Subject;
@@ -140,6 +141,8 @@ export default function SubjectComponent({
   const dispatch = useDispatch();
   const [name, setName] = useState(subject.name);
   const [description, setDescription] = useState(subject.description);
+
+  const { subjects } = useSelector((state: State) => state);
 
   // Side effects update state with new props
   useEffect((): void => {
@@ -329,10 +332,10 @@ export default function SubjectComponent({
             }}
           >
             <SimpleListView
-              subjectId={id}
+              parentId={id}
+              order={subjects.dict[id].children.order}
               maxHeight={`calc(${listHeight})`}
               onRenderCell={SubjectListItem}
-              getChildren={true}
             />
             <AppendChildren parent={id} />
           </div>
