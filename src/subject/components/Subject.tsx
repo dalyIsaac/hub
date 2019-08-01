@@ -26,6 +26,7 @@ import SubjectListItem from "./ListItem/SubjectListItem";
 import { Link } from "react-router-dom";
 import { gotoSubject } from "../Routing";
 import { State } from "../../Reducer";
+import { removeChildView } from "../../views/model/RemoveChild";
 
 interface SubjectProps {
   item: Item;
@@ -147,7 +148,7 @@ function getDaysDifference(first: Date, second: Date): number {
 }
 
 export default function SubjectComponent({
-  item: { subject, id },
+  item: { subject, id, viewId },
   listHeight,
   showOpenButton,
   showCloseButton,
@@ -217,6 +218,12 @@ export default function SubjectComponent({
   const deleteSubjectOnClick = useCallback((): void => {
     dispatch(deleteSubject(id));
   }, [dispatch, id]);
+
+  const removeChildViewOnClick = useCallback((): void => {
+    if (viewId && id) {
+      dispatch(removeChildView(viewId, id));
+    }
+  }, [dispatch, id, viewId]);
 
   const completeItem = {
     key: "complete-2-level",
@@ -294,6 +301,7 @@ export default function SubjectComponent({
               iconProps={{ iconName: "Cancel" }}
               title={headerCloseLabel}
               ariaLabel={headerCloseLabel}
+              onClick={removeChildViewOnClick}
             />
           ) : null}
           {header}

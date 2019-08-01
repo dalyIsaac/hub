@@ -17,6 +17,11 @@ import {
   APPEND_CHILD_VIEW,
   appendChildViewReducer,
 } from "./model/AppendChild";
+import {
+  REMOVE_CHILD_VIEW,
+  RemoveChildViewAction,
+  removeChildViewReducer,
+} from "./model/RemoveChild";
 
 export const initialViewState = (): ViewState => ({
   dict: {},
@@ -45,6 +50,9 @@ const viewReducer = (state: State, action: Action): State => ({
           break;
         case APPEND_CHILD_VIEW:
           appendChildViewReducer(draftState, action as AppendChildViewAction);
+          break;
+        case REMOVE_CHILD_VIEW:
+          removeChildViewReducer(draftState, action as RemoveChildViewAction);
           break;
         default:
           break;
