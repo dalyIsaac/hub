@@ -13,7 +13,7 @@ import {
 } from "office-ui-fabric-react";
 import { getTheme, mergeStyleSets } from "@uifabric/styling";
 
-import { Subject } from "../model/Subject";
+import { Item } from "../model/Subject";
 import TitleInput from "../../TitleInput";
 import SimpleListView from "./SimpleListView";
 import { setSubjectName } from "../model/Name";
@@ -26,10 +26,10 @@ import SubjectListItem from "./ListItem/SubjectListItem";
 import { Link } from "react-router-dom";
 import { gotoSubject } from "../Routing";
 import { State } from "../../Reducer";
+import { removeChildView } from "../../views/model/RemoveChild";
 
 interface SubjectProps {
-  subject: Subject;
-  id: string;
+  item: Item;
 
   /**
    * This should be an expression which can be evaluated by CSS calc()
@@ -37,14 +37,17 @@ interface SubjectProps {
   listHeight?: string;
 
   showOpenButton?: boolean;
+  showCloseButton?: boolean;
 }
 
 const theme = getTheme();
 const border = "1px solid " + theme.palette.neutralTertiary;
 const styles = mergeStyleSets({
   headerWrapper: {
+    borderTopLeftRadius: 4,
+    borderTopRightRadius: 4,
     display: "grid",
-    gridTemplateColumns: "auto 32px",
+    gridTemplateColumns: "32px auto 32px",
   },
   header: {
     alignItems: "center",
@@ -53,35 +56,47 @@ const styles = mergeStyleSets({
     color: theme.palette.neutralLight,
     display: "flex",
     flexDirection: "column",
-    gridColumn: "1 / 3",
+    gridColumn: "2",
     gridRow: "1",
     margin: -1,
     padding: 5,
     zIndex: 1,
-    selectors: {
-      "&:focus": {
-        border: "none",
-        outline: "none",
-      },
-    },
   },
-  headerButton: {
+  headerOpenButton: {
     background: theme.palette.white,
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
-    borderRight: border,
-    borderTop: border,
     borderTopLeftRadius: 0,
     borderTopRightRadius: 4,
-    marginBottom: -1,
-    marginLeft: 0,
-    marginRight: -1,
-    marginTop: -1,
+    margin: 0,
+    marginTop: 0,
     outline: "none",
     zIndex: 2,
   },
+  headerCloseButton: {
+    background: theme.palette.white,
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
+    borderTopLeftRadius: 4,
+    borderTopRightRadius: 0,
+    margin: 0,
+    outline: "none",
+    zIndex: 2,
+    selectors: {
+      "&:active": {
+        backgroundColor: theme.palette.red,
+        color: theme.palette.white,
+        filter: "brightness(80%)",
+        outline: "none",
+      },
+      "&:hover": {
+        backgroundColor: theme.palette.red,
+        color: theme.palette.white,
+      },
+    },
+  },
   headerLink: {
-    gridColumn: "2",
+    gridColumn: "3",
     gridRow: "1",
     outline: "none",
   },
@@ -133,10 +148,10 @@ function getDaysDifference(first: Date, second: Date): number {
 }
 
 export default function SubjectComponent({
-  subject,
-  id,
+  item: { subject, id, viewId },
   listHeight,
   showOpenButton,
+  showCloseButton,
 }: SubjectProps): JSX.Element {
   const dispatch = useDispatch();
   const [name, setName] = useState(subject.name);
@@ -204,6 +219,12 @@ export default function SubjectComponent({
     dispatch(deleteSubject(id));
   }, [dispatch, id]);
 
+  const removeChildViewOnClick = useCallback((): void => {
+    if (viewId && id) {
+      dispatch(removeChildView(viewId, id));
+    }
+  }, [dispatch, id, viewId]);
+
   const completeItem = {
     key: "complete-2-level",
     text: "Mark this and its children as complete",
@@ -221,13 +242,12 @@ export default function SubjectComponent({
 
   let header;
   let heroButton;
+  let backgroundColor;
   if (!subject.completed) {
+    backgroundColor = theme.palette.green;
     header = (
-      <Text
-        className={styles.header}
-        style={{ backgroundColor: theme.palette.green }}
-      >
-        Created {subject.created.toLocaleString()}
+      <Text className={styles.header}>
+        Created {subject.created.toLocaleDateString()}
       </Text>
     );
 
@@ -245,12 +265,10 @@ export default function SubjectComponent({
       />
     );
   } else {
+    backgroundColor = theme.palette.red;
     header = (
-      <Text
-        className={styles.header}
-        style={{ backgroundColor: theme.palette.red }}
-      >
-        Completed {subject.completed.toLocaleString()}
+      <Text className={styles.header}>
+        Completed {subject.completed.toLocaleDateString()}
       </Text>
     );
 
@@ -270,17 +288,28 @@ export default function SubjectComponent({
   }
 
   const headerOpenLabel = "Open " + subject.name;
+  const headerCloseLabel = "Close " + subject.name;
 
   return (
     <FocusZone>
       <Stack verticalAlign={"center"}>
-        <div className={styles.headerWrapper}>
+        <div className={styles.headerWrapper} style={{ backgroundColor }}>
+          {showCloseButton ? (
+            <IconButton
+              styles={{ root: { width: "" } }}
+              className={styles.headerCloseButton}
+              iconProps={{ iconName: "Cancel" }}
+              title={headerCloseLabel}
+              ariaLabel={headerCloseLabel}
+              onClick={removeChildViewOnClick}
+            />
+          ) : null}
           {header}
           {showOpenButton ? (
             <Link to={gotoSubject("grid", id)} className={styles.headerLink}>
               <IconButton
                 styles={{ root: { width: "" } }}
-                className={styles.headerButton}
+                className={styles.headerOpenButton}
                 iconProps={{ iconName: "OpenFile" }}
                 title={headerOpenLabel}
                 ariaLabel={headerOpenLabel}

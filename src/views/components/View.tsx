@@ -15,6 +15,7 @@ import { Location } from "history";
 
 const styles = mergeStyleSets({
   title: {
+    marginTop: 10,
     padding: 10,
   },
   wrapper: {
@@ -59,9 +60,9 @@ function ViewComponent({ location, viewId }: ViewProps): JSX.Element {
   const options = { viewId };
   const viewComponent =
     display === "grid" ? (
-      <GridView options={options} />
+      <GridView options={options} showCloseButton={true} />
     ) : (
-      <ListView options={options} />
+      <ListView options={options} showCloseButton={true} />
     );
 
   return (
