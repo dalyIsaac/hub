@@ -256,6 +256,7 @@ function ListView({
           item,
           onDismiss: dismissContextMenu,
           onEditClick: setModalItem,
+          showCloseButton,
         });
 
         // stops ev.preventDefault()
@@ -265,7 +266,7 @@ function ListView({
         return true;
       }
     },
-    [dismissContextMenu],
+    [dismissContextMenu, showCloseButton],
   );
 
   const height = `calc(100vh - ${APPBAR_HEIGHT +

@@ -9,22 +9,25 @@ import {
 import { useDispatch } from "react-redux";
 import { completeSubject, uncompleteSubject } from "../../model/Completed";
 import { deleteSubject } from "../../model/Delete";
+import { removeChildView } from "../../../views/model/RemoveChild";
 
 export interface ListViewContextMenuProps {
   item: Item;
   ev: Event;
+  showCloseButton?: boolean;
   onEditClick: (item: Item) => void;
   onDismiss: IContextualMenuProps["onDismiss"];
 }
 
 export default function ListViewContextMenu({
   item,
+  showCloseButton,
   ev,
   onDismiss,
   onEditClick,
 }: ListViewContextMenuProps): JSX.Element {
   const dispatch = useDispatch();
-  const { id } = item;
+  const { id, viewId } = item;
 
   const onChange = useCallback(
     (e: any, checked?: boolean, level?: number): void => {
@@ -72,6 +75,12 @@ export default function ListViewContextMenu({
     onEditClick(item);
   }, [item, onEditClick]);
 
+  const removeChildViewOnClick = useCallback((): void => {
+    if (viewId && id) {
+      dispatch(removeChildView(viewId, id));
+    }
+  }, [dispatch, id, viewId]);
+
   const completeContextItems = [
     {
       iconProps: { iconName: "Completed" },
@@ -111,6 +120,15 @@ export default function ListViewContextMenu({
       text: "Delete this",
     },
   ];
+
+  if (showCloseButton) {
+    contextItems.push({
+      iconProps: { iconName: "Cancel" },
+      key: "removeChildView",
+      onClick: removeChildViewOnClick,
+      text: "Remove this subject from this view",
+    });
+  }
 
   return (
     <ContextualMenu
