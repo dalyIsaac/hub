@@ -15,6 +15,7 @@ import { Location } from "history";
 
 const styles = mergeStyleSets({
   title: {
+    marginTop: 10,
     padding: 10,
   },
   wrapper: {

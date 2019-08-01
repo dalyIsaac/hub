@@ -13,7 +13,7 @@ import { Subject, GetItemsOptions, Item } from "../../model/Subject";
 import { useSelector, useDispatch } from "react-redux";
 import { State } from "../../../Reducer";
 import { APP_COMMAND_BAR_HEIGHT } from "../../../AppCommandBar/Common";
-import { APPBAR_HEIGHT } from "../../../Common";
+import { APPBAR_HEIGHT, VIEW_TITLE_HEIGHT } from "../../../Common";
 import { SortItemsOptions, SortFieldKey } from "../../../Order";
 import { gotoSubject } from "../../Routing";
 import { RouteComponentProps, withRouter, Link } from "react-router-dom";
@@ -25,12 +25,10 @@ import ListViewContextMenu, {
   ListViewContextMenuProps,
 } from "./ListViewContextMenu";
 import { useSubjectView } from "../SubjectView";
+import { Paths } from "../../../Routing";
 
 const theme = getTheme();
 const styles = mergeStyleSets({
-  detailsList: {
-    height: `calc(100vh - ${APPBAR_HEIGHT}px - ${APP_COMMAND_BAR_HEIGHT}px)`,
-  },
   rowButton: {
     selectors: {
       "&:active": {
@@ -60,6 +58,7 @@ interface ListViewProps {
 }
 
 function ListView({
+  match,
   history,
   options,
   sortOptions,
@@ -301,13 +300,16 @@ function ListView({
     [dismissContextMenu],
   );
 
+  const height = `calc(100vh - ${APPBAR_HEIGHT +
+    APP_COMMAND_BAR_HEIGHT +
+    (match.path === Paths.view ? VIEW_TITLE_HEIGHT : 0)}px)`;
   return (
     <React.Fragment>
       <DetailsList
+        styles={{ root: { height } }}
         getKey={getKey}
         componentRef={listRef}
         onColumnHeaderClick={dispatchSetFieldsDesc}
-        className={styles.detailsList}
         columns={columns}
         items={items}
         isHeaderVisible={true}
@@ -334,10 +336,7 @@ function ListView({
       >
         <div className={styles.subjectWrapper}>
           {modalItem ? (
-            <SubjectComponent
-              item={modalItem}
-              showOpenButton={true}
-            />
+            <SubjectComponent item={modalItem} showOpenButton={true} />
           ) : null}
         </div>
       </Modal>

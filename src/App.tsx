@@ -12,6 +12,7 @@ import View from "./views/components/View";
 
 const styles = mergeStyleSets({
   main: {
+    overflowY: "auto",
     width: "100%",
   },
   wrapper: {
