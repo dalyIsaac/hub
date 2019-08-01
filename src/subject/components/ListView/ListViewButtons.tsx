@@ -1,14 +1,10 @@
-import React, { useState, useCallback } from "react";
+import React, { useCallback } from "react";
 import { Item } from "../../model/Subject";
 import { gotoSubject } from "../../Routing";
-import SubjectComponent from "../Subject";
 import { Link } from "react-router-dom";
-import {
-  IconButton,
-  Modal,
-  getTheme,
-  mergeStyleSets,
-} from "office-ui-fabric-react";
+import { IconButton, getTheme, mergeStyleSets } from "office-ui-fabric-react";
+import { useDispatch } from "react-redux";
+import { removeChildView } from "../../../views/model/RemoveChild";
 
 const theme = getTheme();
 const styles = mergeStyleSets({
@@ -37,25 +33,45 @@ const styles = mergeStyleSets({
 
 interface ListViewButtonsProps {
   item: Item;
+  openModal: (item: Item) => void;
+  showCloseButton?: boolean;
 }
 
 export default function ListViewButtons({
   item,
+  openModal,
+  showCloseButton,
 }: ListViewButtonsProps): JSX.Element {
-  const [showModal, setModalVisible] = useState(false);
-  const dismissModal = useCallback((): void => {
-    setModalVisible(false);
-  }, []);
-  const openModal = useCallback((): void => {
-    setModalVisible(true);
-  }, []);
+  const dispatch = useDispatch();
+
+  const openModalOnClick = useCallback((): void => {
+    openModal(item);
+  }, [item, openModal]);
+
+  const removeChildViewOnClick = useCallback((): void => {
+    if (item.viewId && item.id) {
+      dispatch(removeChildView(item.viewId, item.id));
+    }
+  }, [dispatch, item]);
 
   const openLabel = "Open " + item.subject.name;
   const editLabel = "Edit " + item.subject.name;
+  const closeLabel = "Close " + item.subject.name;
+
   return (
     <div className={styles.rowButtonWrapper}>
+      {showCloseButton ? (
+        <IconButton
+          onClick={removeChildViewOnClick}
+          styles={{ root: { width: "" } }}
+          className={styles.rowButton}
+          iconProps={{ iconName: "Cancel" }}
+          title={closeLabel}
+          ariaLabel={closeLabel}
+        />
+      ) : null}
       <IconButton
-        onClick={openModal}
+        onClick={openModalOnClick}
         styles={{ root: { width: "" } }}
         className={styles.rowButton}
         iconProps={{ iconName: "Edit" }}
@@ -71,21 +87,6 @@ export default function ListViewButtons({
           ariaLabel={openLabel}
         />
       </Link>
-      <Modal
-        isOpen={showModal}
-        onDismiss={dismissModal}
-        styles={{
-          main: {
-            backgroundColor: "none",
-            border: "1px solid transparent",
-            borderRadius: 4,
-          },
-        }}
-      >
-        <div className={styles.subjectWrapper}>
-          <SubjectComponent item={item} showOpenButton={true} />
-        </div>
-      </Modal>
     </div>
   );
 }

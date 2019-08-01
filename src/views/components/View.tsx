@@ -62,7 +62,7 @@ function ViewComponent({ location, viewId }: ViewProps): JSX.Element {
     display === "grid" ? (
       <GridView options={options} showCloseButton={true} />
     ) : (
-      <ListView options={options} />
+      <ListView options={options} showCloseButton={true} />
     );
 
   return (

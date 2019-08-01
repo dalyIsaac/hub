@@ -5,7 +5,6 @@ import {
   SelectionMode,
   mergeStyleSets,
   IDetailsList,
-  IconButton,
   getTheme,
   Modal,
 } from "office-ui-fabric-react";
@@ -16,7 +15,7 @@ import { APP_COMMAND_BAR_HEIGHT } from "../../../AppCommandBar/Common";
 import { APPBAR_HEIGHT, VIEW_TITLE_HEIGHT } from "../../../Common";
 import { SortItemsOptions, SortFieldKey } from "../../../Order";
 import { gotoSubject } from "../../Routing";
-import { RouteComponentProps, withRouter, Link } from "react-router-dom";
+import { RouteComponentProps, withRouter } from "react-router-dom";
 import { setFieldsArray } from "../../model/SetFieldsArray";
 import { setFieldsDesc } from "../../model/SetFieldsDesc";
 import { getDiffIndex } from "../View";
@@ -26,25 +25,10 @@ import ListViewContextMenu, {
 } from "./ListViewContextMenu";
 import { useSubjectView } from "../SubjectView";
 import { Paths } from "../../../Routing";
+import ListViewButtons from "./ListViewButtons";
 
 const theme = getTheme();
 const styles = mergeStyleSets({
-  rowButton: {
-    selectors: {
-      "&:active": {
-        filter: "brightness(80%)",
-        outline: "none",
-      },
-      "&:hover": {
-        filter: "brightness(90%)",
-        outline: "none",
-      },
-    },
-  },
-  rowButtonWrapper: {
-    display: "flex",
-    flexDirection: "row",
-  },
   subjectWrapper: {
     backgroundColor: theme.palette.white,
     border: "1px solid " + theme.palette.neutralTertiary,
@@ -55,6 +39,7 @@ const styles = mergeStyleSets({
 interface ListViewProps {
   options?: GetItemsOptions;
   sortOptions?: SortItemsOptions;
+  showCloseButton?: boolean;
 }
 
 function ListView({
@@ -62,6 +47,7 @@ function ListView({
   history,
   options,
   sortOptions,
+  showCloseButton,
 }: ListViewProps & RouteComponentProps): JSX.Element {
   const parentId = options ? options.parentId : undefined;
   const { subjects } = useSelector((state: State) => state);
@@ -139,31 +125,13 @@ function ListView({
   );
 
   const renderButtons = useCallback(
-    (item: Item): JSX.Element => {
-      const openLabel = "Open " + item.subject.name;
-      const editLabel = "Edit " + item.subject.name;
-      return (
-        <div className={styles.rowButtonWrapper}>
-          <IconButton
-            onClick={(): void => openModal(item)}
-            styles={{ root: { width: "" } }}
-            className={styles.rowButton}
-            iconProps={{ iconName: "Edit" }}
-            title={editLabel}
-            ariaLabel={editLabel}
-          />
-          <Link to={gotoSubject("list", item.id)}>
-            <IconButton
-              styles={{ root: { width: "" } }}
-              className={styles.rowButton}
-              iconProps={{ iconName: "OpenFile" }}
-              title={openLabel}
-              ariaLabel={openLabel}
-            />
-          </Link>
-        </div>
-      );
-    },
+    (item: Item): JSX.Element => (
+      <ListViewButtons
+        item={item}
+        openModal={openModal}
+        showCloseButton={showCloseButton}
+      />
+    ),
     [openModal],
   );
   //#endregion
@@ -241,7 +209,7 @@ function ListView({
   }
 
   columns.push({
-    key: "openButton",
+    key: "itemButtons",
     minWidth: 80,
     name: "",
     onRender: renderButtons,
@@ -336,7 +304,11 @@ function ListView({
       >
         <div className={styles.subjectWrapper}>
           {modalItem ? (
-            <SubjectComponent item={modalItem} showOpenButton={true} />
+            <SubjectComponent
+              showCloseButton={showCloseButton}
+              item={modalItem}
+              showOpenButton={true}
+            />
           ) : null}
         </div>
       </Modal>
