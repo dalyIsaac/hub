@@ -127,7 +127,7 @@ export default function SubjectView({
     }
   }
 
-  const parentSubject = <SubjectComponent subject={dict[id]} id={id} />;
+  const parentSubject = <SubjectComponent item={{ id, subject: dict[id] }} />;
   if (windowSize.innerWidth > MIN_COL_WIDTH * 2) {
     const options = { parentId: id };
     return (

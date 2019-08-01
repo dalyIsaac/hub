@@ -43,7 +43,14 @@ const styles = mergeStyleSets({
 
 const getPageHeight = (): number => ROW_HEIGHT * ROWS_PER_PAGE;
 
-export default function GridView(props: SubjectViewHookProps): JSX.Element {
+interface GridViewProps extends SubjectViewHookProps {
+  showCloseButton?: boolean;
+}
+
+export default function GridView({
+  showCloseButton,
+  ...props
+}: GridViewProps): JSX.Element {
   const subjectId = props.options ? props.options.parentId : undefined;
   const { subjects } = useSelector((state: State) => state);
 
@@ -84,35 +91,37 @@ export default function GridView(props: SubjectViewHookProps): JSX.Element {
     }
   }, [componentOrder, currentOrder, setCurrentOrder, subjectId, subjects]);
 
-  const renderCell = useCallback((props?: Item): JSX.Element | undefined => {
-    if (!props) {
-      return;
-    }
+  const renderCell = useCallback(
+    (props?: Item): JSX.Element | undefined => {
+      if (!props) {
+        return;
+      }
 
-    const { id, subject } = props;
-    return (
-      <div
-        className={styles.tile}
-        data-is-focusable={true}
-        key={id}
-        style={{
-          height: ROW_HEIGHT,
-          width: 100 / columnCount.current + "%",
-        }}
-      >
-        <div className={styles.padding}>
-          <div className={styles.contents}>
-            <SubjectComponent
-              subject={subject}
-              id={id}
-              listHeight={"260px"}
-              showOpenButton={true}
-            />
+      return (
+        <div
+          className={styles.tile}
+          data-is-focusable={true}
+          key={props.id}
+          style={{
+            height: ROW_HEIGHT,
+            width: 100 / columnCount.current + "%",
+          }}
+        >
+          <div className={styles.padding}>
+            <div className={styles.contents}>
+              <SubjectComponent
+                showCloseButton={showCloseButton}
+                item={props}
+                listHeight={"260px"}
+                showOpenButton={true}
+              />
+            </div>
           </div>
         </div>
-      </div>
-    );
-  }, []);
+      );
+    },
+    [showCloseButton],
+  );
 
   const getItemCountForPage = useCallback(
     (itemIndex?: number, surfaceRect?: IRectangle): number => {

@@ -335,8 +335,7 @@ function ListView({
         <div className={styles.subjectWrapper}>
           {modalItem ? (
             <SubjectComponent
-              id={modalItem.id}
-              subject={modalItem.subject}
+              item={modalItem}
               showOpenButton={true}
             />
           ) : null}

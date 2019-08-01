@@ -83,11 +83,7 @@ export default function ListViewButtons({
         }}
       >
         <div className={styles.subjectWrapper}>
-          <SubjectComponent
-            id={item.id}
-            subject={item.subject}
-            showOpenButton={true}
-          />
+          <SubjectComponent item={item} showOpenButton={true} />
         </div>
       </Modal>
     </div>
