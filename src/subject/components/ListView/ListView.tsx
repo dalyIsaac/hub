@@ -132,7 +132,7 @@ function ListView({
         showCloseButton={showCloseButton}
       />
     ),
-    [openModal],
+    [openModal, showCloseButton],
   );
   //#endregion
 
