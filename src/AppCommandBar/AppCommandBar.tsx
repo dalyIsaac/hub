@@ -104,6 +104,7 @@ export default function AppCommandBar({
 
   const leftComponents: JSX.Element[] = [];
   const rightComponents: JSX.Element[] = [];
+  let panel: JSX.Element | null = null;
 
   if (match.path === Paths.subject || match.path === subjectBase) {
     const order =
@@ -171,11 +172,11 @@ export default function AppCommandBar({
   } else if (match.path === Paths.view) {
     leftComponents.push(
       <CommandBarButton
-        key="addSubjectToView"
-        ariaLabel="Add subject to view"
-        iconProps={{ iconName: "Add" }}
-        text="Add subject to view"
-        // TODO: onClick
+        key="appendChildren"
+        text="Append child subjects"
+        iconProps={{ iconName: "RowsChild" }}
+        ariaLabel="Create child subject"
+        onClick={showAppendChildrenPanel}
         styles={commandBarStyles}
       />,
       <CommandBarButton
@@ -186,14 +187,14 @@ export default function AppCommandBar({
         onClick={dispatchCreateChildSubject}
         styles={commandBarStyles}
       />,
-      <CommandBarButton
-        key="appendChildren"
-        text="Append child subjects"
-        iconProps={{ iconName: "RowsChild" }}
-        ariaLabel="Create child subject"
-        onClick={showAppendChildrenPanel}
-        styles={commandBarStyles}
-      />,
+    );
+
+    panel = (
+      <AppendChildren
+        hidePanel={hideAppendChildrenPanel}
+        isOpen={appendChildrenPanelVisible}
+        viewId={viewId}
+      />
     );
   }
 
@@ -235,11 +236,7 @@ export default function AppCommandBar({
         <div className={styles.leftWrapper}>{leftComponents}</div>
         <div className={styles.rightWrapper}>{rightComponents}</div>
       </div>
-      <AppendChildren
-        hidePanel={hideAppendChildrenPanel}
-        isOpen={appendChildrenPanelVisible}
-        viewId={viewId}
-      />
+      {panel}
     </React.Fragment>
   );
 }
