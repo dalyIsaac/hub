@@ -10,7 +10,11 @@ const transformViews = createTransform<ViewState, PersistSubjectState>(
     return everythingElse;
   },
   (state, _key) => {
-    return { ...state, orderSet: new Set(state.order) };
+    const orderSet = new Set<string>();
+    for (const viewId of state.order) {
+      orderSet.add(state.dict[viewId].name);
+    }
+    return { ...state, orderSet };
   },
   {
     whitelist: ["views"],
