@@ -89,17 +89,21 @@ export default function ViewsNav({
           name: "All subjects",
           url: "#" + subjectBase,
         },
-        viewGroup,
-        {
-          icon: "Add",
-          key: "createView",
-          name: "Create view",
-          onClick: dispatchCreateView,
-          url: "",
-        },
       ],
     },
   ];
+
+  if (viewGroup.links!.length > 0) {
+    groups[0].links.push(viewGroup);
+  }
+
+  groups[0].links.push({
+    icon: "Add",
+    key: "createView",
+    name: "Create view",
+    onClick: dispatchCreateView,
+    url: "",
+  });
 
   return (
     <Nav
