@@ -327,12 +327,14 @@ export default function SubjectComponent({
             onBlur={setNameRedux}
           />
           <TextField
+            resizable={false}
             multiline
             rows={3}
             value={description}
             onChange={setDescriptionLocal}
             onBlur={setDescriptionRedux}
             className={styles.description}
+            styles={{ field: { height: 63 } }}
           />
           <div className={styles.date}>
             <Label>Due date:</Label>

@@ -18,6 +18,7 @@ const styles = mergeStyleSets({
     border: "1px solid transparent",
     borderRadius: 0,
     fontSize: FontSizes.size28,
+    height: 32,
     outline: "none",
     paddingBottom: 4,
     textAlign: "center",

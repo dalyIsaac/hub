@@ -9,7 +9,7 @@
       "request": "launch",
       "version": "canary",
       "name": "Launch Microsoft Edge (Chromium) against localhost",
-      "url": "localhost:3000/#/subjects",
+      "url": "localhost:3000",
       "port": 9222,
       "webRoot": "${workspaceFolder}",
       "windows": {
@@ -20,7 +20,7 @@
       "type": "edge",
       "request": "attach",
       "name": "Attach Microsoft Edge (Chromium) against localhost",
-      "url": "localhost:3000/#/subjects",
+      "url": "localhost:3000",
       "port": 9222,
       "webRoot": "${workspaceFolder}",
       "windows": {
@@ -31,7 +31,7 @@
       "type": "chrome",
       "request": "launch",
       "name": "Launch Chrome against localhost",
-      "url": "http://localhost:3000/#/subjects",
+      "url": "http://localhost:3000",
       "webRoot": "${workspaceFolder}"
     },
     {
@@ -39,7 +39,14 @@
       "request": "attach",
       "name": "Attach to Chrome against localhost",
       "port": 9222,
-      "url": "localhost:3000/#/subjects",
+      "url": "localhost:3000",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
+      "type": "firefox",
+      "request": "launch",
+      "name": "Launch Firefox against localhost",
+      "url": "localhost:3000",
       "webRoot": "${workspaceFolder}"
     }
   ]
