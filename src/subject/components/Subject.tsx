@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  FocusZone,
   Stack,
   Text,
   TextField,
@@ -42,6 +41,7 @@ interface SubjectProps {
 
 const theme = getTheme();
 const border = "1px solid " + theme.palette.neutralTertiary;
+const focusBorder = "1px solid " + theme.palette.themePrimary;
 const styles = mergeStyleSets({
   headerWrapper: {
     borderTopLeftRadius: 4,
@@ -72,6 +72,16 @@ const styles = mergeStyleSets({
     marginTop: 0,
     outline: "none",
     zIndex: 2,
+    selectors: {
+      "&:focus": {
+        border: focusBorder,
+        borderBottomLeftRadius: 0,
+        borderBottomRightRadius: 0,
+        borderTopLeftRadius: 0,
+        borderTopRightRadius: 4,
+        outline: "none",
+      },
+    },
   },
   headerCloseButton: {
     background: theme.palette.white,
@@ -87,6 +97,14 @@ const styles = mergeStyleSets({
         backgroundColor: theme.palette.red,
         color: theme.palette.white,
         filter: "brightness(80%)",
+        outline: "none",
+      },
+      "&:focus": {
+        border: focusBorder,
+        borderBottomLeftRadius: 0,
+        borderBottomRightRadius: 0,
+        borderTopLeftRadius: 4,
+        borderTopRightRadius: 0,
         outline: "none",
       },
       "&:hover": {
@@ -240,16 +258,12 @@ export default function SubjectComponent({
     ? getDaysDifference(new Date(), subject.dueDate)
     : "∞";
 
-  let header;
+  let text: string;
   let heroButton;
   let backgroundColor;
   if (!subject.completed) {
     backgroundColor = theme.palette.green;
-    header = (
-      <Text className={styles.header}>
-        Created {subject.created.toLocaleDateString()}
-      </Text>
-    );
+    text = "Created " + subject.created.toLocaleDateString();
 
     heroButton = (
       <DefaultButton
@@ -266,11 +280,7 @@ export default function SubjectComponent({
     );
   } else {
     backgroundColor = theme.palette.red;
-    header = (
-      <Text className={styles.header}>
-        Completed {subject.completed.toLocaleDateString()}
-      </Text>
-    );
+    text = "Completed " + subject.completed.toLocaleDateString();
 
     heroButton = (
       <DefaultButton
@@ -287,92 +297,99 @@ export default function SubjectComponent({
     );
   }
 
+  const header = (
+    <Text className={styles.header} tabIndex={-1}>
+      {text}
+    </Text>
+  );
+
   const headerOpenLabel = "Open " + subject.name;
   const headerCloseLabel = "Close " + subject.name;
 
   return (
-    <FocusZone>
-      <Stack verticalAlign={"center"}>
-        <div className={styles.headerWrapper} style={{ backgroundColor }}>
-          {showCloseButton ? (
+    <Stack verticalAlign={"center"}>
+      <div className={styles.headerWrapper} style={{ backgroundColor }}>
+        {showCloseButton ? (
+          <IconButton
+            styles={{ root: { width: "" } }}
+            className={styles.headerCloseButton}
+            iconProps={{ iconName: "Cancel" }}
+            title={headerCloseLabel}
+            ariaLabel={headerCloseLabel}
+            onClick={removeChildViewOnClick}
+          />
+        ) : null}
+        {header}
+        {showOpenButton ? (
+          <Link
+            to={gotoSubject("grid", id)}
+            className={styles.headerLink}
+            tabIndex={-1}
+          >
             <IconButton
               styles={{ root: { width: "" } }}
-              className={styles.headerCloseButton}
-              iconProps={{ iconName: "Cancel" }}
-              title={headerCloseLabel}
-              ariaLabel={headerCloseLabel}
-              onClick={removeChildViewOnClick}
+              className={styles.headerOpenButton}
+              iconProps={{ iconName: "OpenFile" }}
+              title={headerOpenLabel}
+              ariaLabel={headerOpenLabel}
             />
-          ) : null}
-          {header}
-          {showOpenButton ? (
-            <Link to={gotoSubject("grid", id)} className={styles.headerLink}>
-              <IconButton
-                styles={{ root: { width: "" } }}
-                className={styles.headerOpenButton}
-                iconProps={{ iconName: "OpenFile" }}
-                title={headerOpenLabel}
-                ariaLabel={headerOpenLabel}
-              />
-            </Link>
-          ) : null}
-        </div>
+          </Link>
+        ) : null}
+      </div>
 
-        <div className={styles.body}>
-          <TitleInput
-            textAlign="center"
-            className={styles.title}
-            value={name}
-            onChange={setNameLocal}
-            onBlur={setNameRedux}
-          />
-          <TextField
-            resizable={false}
-            multiline
-            rows={3}
-            value={description}
-            onChange={setDescriptionLocal}
-            onBlur={setDescriptionRedux}
-            className={styles.description}
-            styles={{ field: { height: 63 } }}
-          />
-          <div className={styles.date}>
-            <Label>Due date:</Label>
-            <div className={styles.datePicker}>
-              <DatePicker
-                value={subject.dueDate}
-                onSelectDate={setDueDateRedux}
-              />
-              {subject.dueDate ? (
-                <IconButton
-                  iconProps={{ iconName: "cancel" }}
-                  title="Clear date"
-                  onClick={clearDueDateOnClick}
-                />
-              ) : null}
-            </div>
-          </div>
-          <div className={styles.daysLeft}>
-            <Label>
-              {`${daysLeft} ${daysLeft === 1 ? "day" : "days"} left`}
-            </Label>
-          </div>
-          <div
-            style={{
-              minHeight: `calc((${listHeight}) + ${AppendChildrenHeight}px)`,
-            }}
-          >
-            <SimpleListView
-              parentId={id}
-              order={subjects.dict[id].children.order}
-              maxHeight={`calc(${listHeight})`}
-              onRenderCell={SubjectListItem}
+      <div className={styles.body}>
+        <TitleInput
+          textAlign="center"
+          className={styles.title}
+          value={name}
+          onChange={setNameLocal}
+          onBlur={setNameRedux}
+        />
+        <TextField
+          resizable={false}
+          multiline
+          rows={3}
+          value={description}
+          onChange={setDescriptionLocal}
+          onBlur={setDescriptionRedux}
+          className={styles.description}
+          styles={{ field: { height: 63 } }}
+        />
+        <div className={styles.date}>
+          <Label>Due date:</Label>
+          <div className={styles.datePicker}>
+            <DatePicker
+              disableAutoFocus={true}
+              value={subject.dueDate}
+              onSelectDate={setDueDateRedux}
             />
-            <AppendChildren parent={id} />
+            {subject.dueDate ? (
+              <IconButton
+                iconProps={{ iconName: "cancel" }}
+                title="Clear date"
+                onClick={clearDueDateOnClick}
+              />
+            ) : null}
           </div>
-          <div className={styles.heroButton}>{heroButton}</div>
         </div>
-      </Stack>
-    </FocusZone>
+        <div className={styles.daysLeft}>
+          <Label>{`${daysLeft} ${daysLeft === 1 ? "day" : "days"} left`}</Label>
+        </div>
+        <div
+          style={{
+            minHeight: `calc((${listHeight}) + ${AppendChildrenHeight}px)`,
+          }}
+        >
+          <SimpleListView
+            parentId={id}
+            order={subjects.dict[id].children.order}
+            maxHeight={`calc(${listHeight})`}
+            onRenderCell={SubjectListItem}
+          />
+          <AppendChildren parent={id} />
+        </div>
+        <div className={styles.heroButton}>{heroButton}</div>
+      </div>
+    </Stack>
   );
 }

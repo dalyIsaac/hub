@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 import { useSelector } from "react-redux";
-import { FocusZone, List, Text } from "office-ui-fabric-react";
+import { List, Text } from "office-ui-fabric-react";
 import { mergeStyleSets } from "@uifabric/styling";
 import { State } from "../../Reducer";
 import { getItems, Item } from "../model/Subject";
@@ -53,7 +53,7 @@ export default function SimpleListView({
   const children = getItems(subjects.dict, order, options);
 
   return (
-    <FocusZone className={styles.list} style={{ maxHeight }}>
+    <div className={styles.list} style={{ maxHeight }}>
       {children.length === 0 && notifyNoChildren ? (
         <Text>
           {"There's nothing here"}
@@ -64,6 +64,6 @@ export default function SimpleListView({
       ) : (
         <List items={children} onRenderCell={onRenderCell} />
       )}
-    </FocusZone>
+    </div>
   );
 }

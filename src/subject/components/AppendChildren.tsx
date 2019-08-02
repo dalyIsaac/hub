@@ -44,6 +44,9 @@ const styles = mergeStyleSets({
         filter: "brightness(80%)",
         outline: "none",
       },
+      "&:focus": {
+        outline: "1px solid " + theme.palette.themePrimary,
+      },
       "&:hover": {
         filter: "brightness(90%)",
         outline: "none",
