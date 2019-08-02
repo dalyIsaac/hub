@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import {
   getTheme,
   mergeStyleSets,
@@ -14,7 +14,11 @@ import SortButton from "./SortButton";
 import { RouteComponentProps } from "react-router";
 import { SubjectsRouteProps, subjectBase } from "../subject/Routing";
 import { getDisplay, updateDisplay } from "../Display";
-import { SearchRouteProps, searchBase } from "../Search/Routing";
+import {
+  SearchRouteProps,
+  searchBase,
+  getSearchMatch,
+} from "../Search/Routing";
 import { Paths } from "../Routing";
 import { ViewRouteProps } from "../views/Routing";
 import AppendChildren from "../views/components/AppendChildren";
@@ -62,10 +66,9 @@ export default function AppCommandBar({
   const dispatch = useDispatch();
   const display = getDisplay(location);
 
-  const { dict, order: rootOrder, searchSortOptions } = useSelector(
-    (state: State) => state.subjects,
-  );
+  const { subjects, views } = useSelector((state: State) => state);
 
+  //#region Append children panel
   const [appendChildrenPanelVisible, setAppendChildrenPanelVisible] = useState(
     false,
   );
@@ -75,7 +78,9 @@ export default function AppCommandBar({
   const hideAppendChildrenPanel = useCallback((): void => {
     setAppendChildrenPanelVisible(false);
   }, []);
+  //#endregion
 
+  //#region Create child subject
   const dispatchCreateChildSubject = useCallback((): void => {
     dispatch(createSubject({ parentId, viewId }));
   }, [dispatch, parentId, viewId]);
@@ -90,6 +95,7 @@ export default function AppCommandBar({
     },
     [dispatch, parentId],
   );
+  //#endregion
 
   const dispatchSetSeparateCompleteSearch = useCallback(
     (e: any, checked?: boolean): void => {
@@ -102,15 +108,20 @@ export default function AppCommandBar({
     history.push(updateDisplay(location, display === "grid" ? "list" : "grid"));
   }, [display, history, location]);
 
+  const subjectPath =
+    match.path === Paths.subject || match.path === subjectBase;
+  const searchPath = match.path === Paths.search || match.path === searchBase;
+  const viewsPath = match.path === Paths.view && viewId;
+
   const leftComponents: JSX.Element[] = [];
   const rightComponents: JSX.Element[] = [];
   let panel: JSX.Element | null = null;
 
-  if (match.path === Paths.subject || match.path === subjectBase) {
-    const order =
-      parentId && parentId in dict
-        ? dict[parentId].children.options
-        : rootOrder.options;
+  if (subjectPath) {
+    const currentOrder =
+      parentId && parentId in subjects.dict
+        ? subjects.dict[parentId].children.options
+        : subjects.order.options;
 
     const createSubjectButton = parentId ? (
       <CommandBarButton
@@ -134,27 +145,10 @@ export default function AppCommandBar({
 
     if (display === "grid") {
       leftComponents.push(
-        <SortButton key="sort" subjectId={parentId} fields={order.fields} />,
-      );
-    }
-
-    leftComponents.push(
-      <Toggle
-        key="separateComplete"
-        checked={order.separateCompletedItems}
-        offText={"Don't separate completed items"}
-        onText={"Separate completed items"}
-        onChange={dispatchSetSeparateComplete}
-        styles={{ root: { marginBottom: 0, marginLeft: 4, marginRight: 4 } }}
-      />,
-    );
-  } else if (match.path === Paths.search || match.path === searchBase) {
-    if (display === "grid") {
-      leftComponents.push(
         <SortButton
           key="sort"
-          setSearchOptions={true}
-          fields={searchSortOptions.fields}
+          subjectId={parentId}
+          fields={currentOrder.fields}
         />,
       );
     }
@@ -162,14 +156,35 @@ export default function AppCommandBar({
     leftComponents.push(
       <Toggle
         key="separateComplete"
-        checked={searchSortOptions.separateCompletedItems}
+        checked={currentOrder.separateCompletedItems}
+        offText={"Don't separate completed items"}
+        onText={"Separate completed items"}
+        onChange={dispatchSetSeparateComplete}
+        styles={{ root: { marginBottom: 0, marginLeft: 4, marginRight: 4 } }}
+      />,
+    );
+  } else if (searchPath) {
+    if (display === "grid") {
+      leftComponents.push(
+        <SortButton
+          key="sort"
+          setSearchOptions={true}
+          fields={subjects.searchSortOptions.fields}
+        />,
+      );
+    }
+
+    leftComponents.push(
+      <Toggle
+        key="separateComplete"
+        checked={subjects.searchSortOptions.separateCompletedItems}
         offText={"Don't separate completed items"}
         onText={"Separate completed items"}
         onChange={dispatchSetSeparateCompleteSearch}
         styles={{ root: { marginBottom: 0, marginLeft: 4, marginRight: 4 } }}
       />,
     );
-  } else if (match.path === Paths.view) {
+  } else if (viewsPath) {
     leftComponents.push(
       <CommandBarButton
         key="appendChildren"
@@ -197,6 +212,46 @@ export default function AppCommandBar({
       />
     );
   }
+
+  // Responsive page title
+  useEffect((): void => {
+    let path: string | null = null;
+    let titleChild: string | null = null;
+    if (subjectPath) {
+      path = "subjects";
+      if (parentId) {
+        titleChild = subjects.dict[parentId].name;
+      }
+    } else if (searchPath) {
+      const [param, query] = getSearchMatch(match);
+      path = "search/" + param;
+      titleChild = query;
+    } else if (viewsPath) {
+      if (viewId) {
+        path = "views";
+        titleChild = views.dict[viewId].name;
+      }
+    }
+
+    if (path) {
+      if (titleChild) {
+        document.title = `hub/${path}: ${titleChild}`;
+      } else {
+        document.title = `hub/${path}`;
+      }
+    } else {
+      document.title = `hub`;
+    }
+  }, [
+    subjectPath,
+    parentId,
+    subjects.dict,
+    searchPath,
+    match,
+    viewsPath,
+    viewId,
+    views.dict,
+  ]);
 
   rightComponents.push(
     <CommandBarButton
