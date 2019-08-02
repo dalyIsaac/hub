@@ -22,7 +22,7 @@ export default function AppendChildren({
 }: AppendChildrenProps): JSX.Element {
   const { subjects, views } = useSelector((state: State) => state);
 
-  if (isUndefined(viewId)) {
+  if (isUndefined(viewId) || !(viewId in views.dict)) {
     return <Redirect to={Paths.base} />;
   }
 
