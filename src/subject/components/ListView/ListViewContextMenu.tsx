@@ -10,6 +10,11 @@ import { useDispatch } from "react-redux";
 import { completeSubject, uncompleteSubject } from "../../model/Completed";
 import { deleteSubject } from "../../model/Delete";
 import { removeChildView } from "../../../views/model/RemoveChild";
+import {
+  completeItem,
+  completeWithChildrenItem,
+  uncompleteItem,
+} from "../SubjectButtonsProps";
 
 export interface ListViewContextMenuProps {
   item: Item;
@@ -83,25 +88,19 @@ export default function ListViewContextMenu({
 
   const completeContextItems = [
     {
-      iconProps: { iconName: "Completed" },
-      key: "complete-1-level",
+      ...completeItem,
       onClick: completeOnClick,
-      text: "Mark as complete",
     },
     {
-      iconProps: { iconName: "CompletedSolid" },
-      key: "complete-2-level",
+      ...completeWithChildrenItem,
       onClick: completeWithChildrenOnClick,
-      text: "Mark this and its children as complete",
     },
   ];
 
   const uncompleteContextItems = [
     {
-      iconProps: { iconName: "Blocked2" },
-      key: "uncomplete",
+      ...uncompleteItem,
       onClick: uncompleteOnClick,
-      text: "Mark as incomplete",
     },
   ];
 

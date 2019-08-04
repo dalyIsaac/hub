@@ -26,6 +26,12 @@ import { Link } from "react-router-dom";
 import { gotoSubject } from "../Routing";
 import { State } from "../../Reducer";
 import { removeChildView } from "../../views/model/RemoveChild";
+import {
+  completeWithChildrenItem,
+  deleteItem,
+  completeItem,
+  uncompleteItem,
+} from "./SubjectButtonsProps";
 
 interface SubjectProps {
   item: Item;
@@ -243,14 +249,12 @@ export default function SubjectComponent({
     }
   }, [dispatch, id, viewId]);
 
-  const completeItem = {
-    key: "complete-2-level",
-    text: "Mark this and its children as complete",
+  const completeButtonItem = {
+    ...completeWithChildrenItem,
     onClick: completeSubjectOnClick,
   };
-  const deleteItem = {
-    key: "delete",
-    text: "Delete this",
+  const deleteButtonItem = {
+    ...deleteItem,
     onClick: deleteSubjectOnClick,
   };
 
@@ -268,13 +272,13 @@ export default function SubjectComponent({
     heroButton = (
       <DefaultButton
         primary
-        text="Mark as complete"
+        {...completeItem}
         split={true}
         onClick={completeOnClick}
         menuProps={{
           directionalHint: DirectionalHint.bottomCenter,
           isBeakVisible: false,
-          items: [completeItem, deleteItem],
+          items: [completeButtonItem, deleteButtonItem],
         }}
       />
     );
@@ -284,13 +288,13 @@ export default function SubjectComponent({
 
     heroButton = (
       <DefaultButton
-        text="Mark as uncomplete"
+        {...uncompleteItem}
         split={true}
         onClick={uncompleteOnClick}
         menuProps={{
           directionalHint: DirectionalHint.bottomCenter,
           isBeakVisible: false,
-          items: [deleteItem],
+          items: [deleteButtonItem],
         }}
         style={{ background: theme.palette.white }}
       />

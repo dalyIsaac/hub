@@ -11,6 +11,13 @@ import ListItemBase from "./ListItemBase";
 import { isUndefined } from "lodash";
 import { setSubjectName } from "../../model/Name";
 import { gotoSubject } from "../../Routing";
+import {
+  completeItem,
+  completeWithChildrenItem,
+  uncompleteItem,
+  removeItem,
+  deleteItem,
+} from "../SubjectButtonsProps";
 
 const styles = mergeStyleSets({
   open: {
@@ -77,41 +84,31 @@ function ListItem({ id, parent, subject }: Item): JSX.Element {
 
   const completeContextItems = [
     {
-      iconProps: { iconName: "Completed" },
-      key: "complete-1-level",
+      ...completeItem,
       onClick: completeOnClick,
-      text: "Mark as complete",
     },
     {
-      iconProps: { iconName: "CompletedSolid" },
-      key: "complete-2-level",
+      ...completeWithChildrenItem,
       onClick: completeWithChildrenOnClick,
-      text: "Mark this and its children as complete",
     },
   ];
 
   const uncompleteContextItems = [
     {
-      iconProps: { iconName: "Blocked2" },
-      key: "uncomplete",
+      ...uncompleteItem,
       onClick: uncompleteOnClick,
-      text: "Mark as incomplete",
     },
   ];
 
   const contextItems: IContextualMenuItem[] = [
     ...(subject.completed ? uncompleteContextItems : completeContextItems),
     {
-      iconProps: { iconName: "Remove" },
-      key: "remove",
+      ...removeItem,
       onClick: removeChildOnClick,
-      text: "Remove this as a child",
     },
     {
-      iconProps: { iconName: "Delete" },
-      key: "delete",
+      ...deleteItem,
       onClick: deleteSubjectOnClick,
-      text: "Delete this",
     },
   ];
 
