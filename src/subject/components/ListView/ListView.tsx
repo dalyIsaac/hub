@@ -1,40 +1,28 @@
-import React, { useCallback, useRef, useEffect, useState } from "react";
+import React, { useCallback, useRef, useEffect } from "react";
 import {
   IColumn,
   DetailsList,
   SelectionMode,
-  mergeStyleSets,
   IDetailsList,
-  getTheme,
-  Modal,
 } from "office-ui-fabric-react";
-import { Subject, GetItemsOptions, Item } from "../../model/Subject";
+import { Subject, Item, GetItemsOptions } from "../../model/Subject";
 import { useSelector, useDispatch } from "react-redux";
 import { State } from "../../../Reducer";
 import { APP_COMMAND_BAR_HEIGHT } from "../../../AppCommandBar/Common";
 import { APPBAR_HEIGHT, VIEW_TITLE_HEIGHT } from "../../../Common";
-import { SortItemsOptions, SortFieldKey } from "../../../Order";
+import { SortFieldKey, SortItemsOptions } from "../../../Order";
 import { gotoSubject } from "../../Routing";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { setFieldsArray } from "../../model/SetFieldsArray";
 import { setFieldsDesc } from "../../model/SetFieldsDesc";
 import { getDiffIndex } from "../View";
-import SubjectComponent from "../Subject";
-import ListViewContextMenu, {
-  ListViewContextMenuProps,
-} from "./ListViewContextMenu";
+import ListViewContextMenu from "./ListViewContextMenu";
 import { useSubjectView } from "../SubjectView";
 import { Paths } from "../../../Routing";
 import ListViewButtons from "./ListViewButtons";
-
-const theme = getTheme();
-const styles = mergeStyleSets({
-  subjectWrapper: {
-    backgroundColor: theme.palette.white,
-    border: "1px solid " + theme.palette.neutralTertiary,
-    borderRadius: 4,
-  },
-});
+import ListViewModal from "./ListViewModal";
+import { useListViewModal } from "./UseListViewModal";
+import { useListViewContextMenu } from "./UseListViewContextMenu";
 
 interface ListViewProps {
   options?: GetItemsOptions;
@@ -77,18 +65,13 @@ function ListView({
     [dispatch, reorderParams],
   );
 
-  // The Subject shown in the modal
-  const [modalItem, setModalItem] = useState<Item | null>(null);
-  const dismissModal = useCallback((): void => {
-    setModalItem(null);
-  }, []);
-  const openModal = useCallback((item: Item): void => {
-    setModalItem(item);
-  }, []);
-
-  if (modalItem && !(modalItem.id in subjects.dict)) {
-    setModalItem(null);
-  }
+  const { dismissModal, modalItem, openModal, setModalItem } = useListViewModal(
+    subjects,
+  );
+  const { contextMenuProps, onItemContextMenu } = useListViewContextMenu(
+    setModalItem,
+    showCloseButton,
+  );
 
   // Update modalItem
   useEffect((): void => {
@@ -102,7 +85,7 @@ function ListView({
         setModalItem(null);
       }
     }
-  }, [subjects.dict, modalItem]);
+  }, [subjects.dict, modalItem, setModalItem]);
 
   //#region Render
   const renderSubjectString = useCallback(
@@ -241,37 +224,10 @@ function ListView({
 
   const getKey = useCallback((item: Item): string => item.id, []);
 
-  const [
-    contextMenuProps,
-    updateContextMenuProps,
-  ] = useState<ListViewContextMenuProps | null>(null);
-  const dismissContextMenu = useCallback((): void => {
-    updateContextMenuProps(null);
-  }, []);
-  const onItemContextMenu = useCallback(
-    (item?: Item, index?: number, ev?: Event): boolean => {
-      if (item && ev) {
-        updateContextMenuProps({
-          ev,
-          item,
-          onDismiss: dismissContextMenu,
-          onEditClick: setModalItem,
-          showCloseButton,
-        });
-
-        // stops ev.preventDefault()
-        return false;
-      } else {
-        // runs ev.preventDefault()
-        return true;
-      }
-    },
-    [dismissContextMenu, showCloseButton],
-  );
-
   const height = `calc(100vh - ${APPBAR_HEIGHT +
     APP_COMMAND_BAR_HEIGHT +
     (match.path === Paths.view ? VIEW_TITLE_HEIGHT : 0)}px)`;
+
   return (
     <React.Fragment>
       <DetailsList
@@ -292,27 +248,11 @@ function ListView({
         }}
       />
       {contextMenuProps && <ListViewContextMenu {...contextMenuProps} />}
-      <Modal
-        isOpen={!!modalItem}
-        onDismiss={dismissModal}
-        styles={{
-          main: {
-            backgroundColor: "none",
-            border: "1px solid transparent",
-            borderRadius: 4,
-          },
-        }}
-      >
-        <div className={styles.subjectWrapper}>
-          {modalItem ? (
-            <SubjectComponent
-              showCloseButton={showCloseButton}
-              item={modalItem}
-              showOpenButton={true}
-            />
-          ) : null}
-        </div>
-      </Modal>
+      <ListViewModal
+        modalItem={modalItem}
+        dismissModal={dismissModal}
+        showCloseButton={showCloseButton}
+      />
     </React.Fragment>
   );
 }
