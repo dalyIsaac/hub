@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { Item, SubjectState } from "../../model/Subject";
 
 export interface UseListViewModal {
@@ -23,6 +23,20 @@ export function useListViewModal(subjects: SubjectState): UseListViewModal {
   if (modalItem && !(modalItem.id in subjects.dict)) {
     setModalItem(null);
   }
+
+  // Update modalItem
+  useEffect((): void => {
+    if (modalItem) {
+      if (modalItem.id in subjects.dict) {
+        const subject = subjects.dict[modalItem.id];
+        if (subject !== modalItem.subject) {
+          setModalItem({ ...modalItem, subject });
+        }
+      } else {
+        setModalItem(null);
+      }
+    }
+  }, [subjects.dict, modalItem, setModalItem]);
 
   return { dismissModal, modalItem, openModal, setModalItem };
 }
