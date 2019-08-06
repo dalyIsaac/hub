@@ -24,7 +24,7 @@ export interface SubjectViewHookProps {
   order?: string[];
 }
 
-interface UseSubjectView {
+export interface UseSubjectView {
   /**
    * Array of the items to render.
    */
