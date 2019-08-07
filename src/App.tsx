@@ -12,6 +12,8 @@ import { subjectBase } from "./subject/Routing";
 
 const styles = mergeStyleSets({
   main: {
+    display: "flex",
+    flexDirection: "column",
     overflowY: "auto",
     width: "100%",
   },

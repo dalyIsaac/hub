@@ -1,15 +1,18 @@
-import React, { useEffect, useCallback } from "react";
-import { List, IRectangle, ScrollToMode } from "office-ui-fabric-react";
-import { mergeStyleSets, getTheme } from "@uifabric/styling";
+import { IRectangle, List, ScrollToMode } from "office-ui-fabric-react";
+import React, { useCallback, useEffect } from "react";
+import { SubjectViewHookProps, useSubjectView } from "../SubjectView";
+import { getTheme, mergeStyleSets } from "@uifabric/styling";
+
+import { APPBAR_HEIGHT } from "../../../Common";
+import { APP_COMMAND_BAR_HEIGHT } from "../../../AppCommandBar/Common";
+import AppCommandBar from "../../../AppCommandBar/AppCommandBar";
+import { Item } from "../../model/Subject";
+import { State } from "../../../Reducer";
+import SubjectComponent from "../Subject";
+import { getDiffIndex } from "../View";
+import { useCommandBar } from "./UseCommandBar";
 import { useRef } from "react";
 import { useSelector } from "react-redux";
-import { State } from "../../Reducer";
-import { Item } from "../model/Subject";
-import SubjectComponent from "./Subject";
-import { APP_COMMAND_BAR_HEIGHT } from "../../AppCommandBar/Common";
-import { APPBAR_HEIGHT } from "../../Common";
-import { getDiffIndex } from "./View";
-import { useSubjectView, SubjectViewHookProps } from "./SubjectView";
 
 const ROWS_PER_PAGE = 3;
 const ROW_HEIGHT = 603;
@@ -141,15 +144,20 @@ export default function GridView({
     [],
   );
 
+  const commandBarItems = useCommandBar(subjectId);
+
   return (
-    <List
-      ref={gridRef}
-      className={styles.grid}
-      items={items}
-      getItemCountForPage={getItemCountForPage}
-      getPageHeight={getPageHeight}
-      renderedWindowsAhead={4}
-      onRenderCell={renderCell}
-    />
+    <React.Fragment>
+      <AppCommandBar items={commandBarItems} />
+      <List
+        ref={gridRef}
+        className={styles.grid}
+        items={items}
+        getItemCountForPage={getItemCountForPage}
+        getPageHeight={getPageHeight}
+        renderedWindowsAhead={4}
+        onRenderCell={renderCell}
+      />
+    </React.Fragment>
   );
 }

@@ -21,12 +21,12 @@ import { useGetCreateButtonItems } from "./UseGetCreateButtonItems";
 const theme = getTheme();
 const styles = mergeStyleSets({
   navWrapper: {
-    borderRight: "1px solid " + theme.palette.neutralQuaternary,
     display: "flex",
     flexDirection: "column",
   },
   nav: {
     background: theme.palette.white,
+    borderRight: "1px solid " + theme.palette.neutralQuaternary,
     boxSizing: "border-box",
     height: "100%",
     overflowY: "auto",
@@ -123,7 +123,7 @@ export default function ViewsNav({
         expandButtonAriaLabel="Expand or collapse"
         className={styles.nav}
         groups={groups}
-        styles={{navItems: {margin: 0}}}
+        styles={{ navItems: { margin: 0 } }}
       />
     </div>
   );

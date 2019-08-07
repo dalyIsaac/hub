@@ -5,6 +5,7 @@ import {
   mergeStyleSets,
 } from "office-ui-fabric-react";
 import React, { useCallback, useEffect, useState } from "react";
+import { RouteComponentProps, withRouter } from "react-router";
 import {
   SearchRouteProps,
   getSearchMatch,
@@ -17,11 +18,10 @@ import { useDispatch, useSelector } from "react-redux";
 import AppendChildren from "../views/components/AppendChildren";
 import { BUTTON_HEIGHT } from "./Common";
 import { Paths } from "../Routing";
-import { RouteComponentProps } from "react-router";
 import SortButton from "./SortButton";
 import { State } from "../Reducer";
 import { ViewRouteProps } from "../views/Routing";
-import { createSubject } from "../subject/model/Create";
+// import { createSubject } from "../subject/model/Create";
 import { setSeparateComplete } from "../subject/model/SetSeparateComplete";
 
 const theme = getTheme();
@@ -32,7 +32,7 @@ export const commandBarStyle = {
   height: BUTTON_HEIGHT,
   margin: 0,
   padding: 0,
-  zIndex: 10
+  zIndex: 10,
 };
 
 const styles = mergeStyleSets({
@@ -61,15 +61,15 @@ const styles = mergeStyleSets({
 
 const commandBarStyles = { root: { height: BUTTON_HEIGHT } };
 
-type AppCommandbarProps = RouteComponentProps<
+type _AppCommandbarProps = RouteComponentProps<
   SubjectsRouteProps & SearchRouteProps & ViewRouteProps
 >;
 
-export default function AppCommandBar({
+function _AppCommandBar({
   match,
   location,
-  history,
-}: AppCommandbarProps): JSX.Element {
+}: // history,
+_AppCommandbarProps): JSX.Element {
   const { parentId, viewId } = match.params;
   const dispatch = useDispatch();
   const display = getDisplay(location);
@@ -89,20 +89,20 @@ export default function AppCommandBar({
   //#endregion
 
   //#region Create child subject
-  const dispatchCreateChildSubject = useCallback((): void => {
-    dispatch(createSubject({ parentId, viewId }));
-  }, [dispatch, parentId, viewId]);
+  // const dispatchCreateChildSubject = useCallback((): void => {
+  //   dispatch(createSubject({ parentId, viewId }));
+  // }, [dispatch, parentId, viewId]);
 
-  const dispatchCreateSubject = useCallback((): void => {
-    dispatch(createSubject());
-  }, [dispatch]);
+  // const dispatchCreateSubject = useCallback((): void => {
+  //   dispatch(createSubject());
+  // }, [dispatch]);
 
-  const dispatchSetSeparateComplete = useCallback(
-    (e: any, checked?: boolean): void => {
-      dispatch(setSeparateComplete(checked!, { subjectId: parentId }));
-    },
-    [dispatch, parentId],
-  );
+  // const dispatchSetSeparateComplete = useCallback(
+  //   (e: any, checked?: boolean): void => {
+  //     dispatch(setSeparateComplete(checked!, { subjectId: parentId }));
+  //   },
+  //   [dispatch, parentId],
+  // );
   //#endregion
 
   const dispatchSetSeparateCompleteSearch = useCallback(
@@ -112,9 +112,9 @@ export default function AppCommandBar({
     [dispatch],
   );
 
-  const toggleView = useCallback((): void => {
-    history.push(updateDisplay(location, display === "grid" ? "list" : "grid"));
-  }, [display, history, location]);
+  // const toggleView = useCallback((): void => {
+  //   history.push(updateDisplay(location, display === "grid" ? "list" : "grid"));
+  // }, [display, history, location]);
 
   const subjectPath =
     match.path === Paths.subject || match.path === subjectBase;
@@ -125,53 +125,54 @@ export default function AppCommandBar({
   const rightComponents: JSX.Element[] = [];
   let panel: JSX.Element | null = null;
 
-  if (subjectPath) {
-    const currentOrder =
-      parentId && parentId in subjects.dict
-        ? subjects.dict[parentId].children.options
-        : subjects.order.options;
+  // if (subjectPath) {
+  // const currentOrder =
+  //   parentId && parentId in subjects.dict
+  //     ? subjects.dict[parentId].children.options
+  //     : subjects.order.options;
 
-    const createSubjectButton = parentId ? (
-      <CommandBarButton
-        text="Create child subject"
-        iconProps={{ iconName: "Childof" }}
-        ariaLabel="Create child subject"
-        onClick={dispatchCreateChildSubject}
-        styles={commandBarStyles}
-      />
-    ) : (
-      <CommandBarButton
-        text="Create subject"
-        iconProps={{ iconName: "Add" }}
-        ariaLabel="Create subject"
-        onClick={dispatchCreateSubject}
-        styles={commandBarStyles}
-      />
-    );
+  // const createSubjectButton = parentId ? (
+  //   <CommandBarButton
+  //     text="Create child subject"
+  //     iconProps={{ iconName: "Childof" }}
+  //     ariaLabel="Create child subject"
+  //     onClick={dispatchCreateChildSubject}
+  //     styles={commandBarStyles}
+  //   />
+  // ) : (
+  //   <CommandBarButton
+  //     text="Create subject"
+  //     iconProps={{ iconName: "Add" }}
+  //     ariaLabel="Create subject"
+  //     onClick={dispatchCreateSubject}
+  //     styles={commandBarStyles}
+  //   />
+  // );
 
-    leftComponents.push(<div key="createSubject">{createSubjectButton}</div>);
+  // leftComponents.push(<div key="createSubject">{createSubjectButton}</div>);
 
-    if (display === "grid") {
-      leftComponents.push(
-        <SortButton
-          key="sort"
-          subjectId={parentId}
-          fields={currentOrder.fields}
-        />,
-      );
-    }
+  // if (display === "grid") {
+  //   leftComponents.push(
+  //     <SortButton
+  //       key="sort"
+  //       subjectId={parentId}
+  //       fields={currentOrder.fields}
+  //     />,
+  //   );
+  // }
 
-    leftComponents.push(
-      <Toggle
-        key="separateComplete"
-        checked={currentOrder.separateCompletedItems}
-        offText={"Don't separate completed items"}
-        onText={"Separate completed items"}
-        onChange={dispatchSetSeparateComplete}
-        styles={{ root: { marginBottom: 0, marginLeft: 4, marginRight: 4 } }}
-      />,
-    );
-  } else if (searchPath) {
+  // leftComponents.push(
+  //   <Toggle
+  //     key="separateComplete"
+  //     checked={currentOrder.separateCompletedItems}
+  //     offText={"Don't separate completed items"}
+  //     onText={"Separate completed items"}
+  //     onChange={dispatchSetSeparateComplete}
+  //     styles={{ root: { marginBottom: 0, marginLeft: 4, marginRight: 4 } }}
+  //   />,
+  // );
+  // } else
+  if (searchPath) {
     if (display === "grid") {
       leftComponents.push(
         <SortButton
@@ -202,14 +203,14 @@ export default function AppCommandBar({
         onClick={showAppendChildrenPanel}
         styles={commandBarStyles}
       />,
-      <CommandBarButton
-        key="createSubjectForView"
-        text="Create child subject"
-        iconProps={{ iconName: "Childof" }}
-        ariaLabel="Create child subject"
-        onClick={dispatchCreateChildSubject}
-        styles={commandBarStyles}
-      />,
+      // <CommandBarButton
+      //   key="createSubjectForView"
+      //   text="Create child subject"
+      //   iconProps={{ iconName: "Childof" }}
+      //   ariaLabel="Create child subject"
+      //   onClick={dispatchCreateChildSubject}
+      //   styles={commandBarStyles}
+      // />,
     );
 
     panel = (
@@ -261,37 +262,37 @@ export default function AppCommandBar({
     views.dict,
   ]);
 
-  rightComponents.push(
-    <CommandBarButton
-      key="toggleView"
-      ariaLabel="Toggle view"
-      iconProps={{
-        iconName: display === "list" ? "BulletedListText" : "GridViewMedium",
-      }}
-      text={display === "list" ? "List" : "Grid"}
-      styles={{
-        root: { background: theme.palette.white, height: BUTTON_HEIGHT },
-      }}
-      menuProps={{
-        directionalHintFixed: true,
-        items: [
-          display === "list"
-            ? {
-                iconProps: { iconName: "GridViewMedium" },
-                key: "gridButton",
-                onClick: toggleView,
-                text: "Grid",
-              }
-            : {
-                iconProps: { iconName: "BulletedListText" },
-                key: "listButton",
-                onClick: toggleView,
-                text: "List",
-              },
-        ],
-      }}
-    />,
-  );
+  // rightComponents.push(
+  //   <CommandBarButton
+  //     key="toggleView"
+  //     ariaLabel="Toggle view"
+  //     iconProps={{
+  //       iconName: display === "list" ? "BulletedListText" : "GridViewMedium",
+  //     }}
+  //     text={display === "list" ? "List" : "Grid"}
+  //     styles={{
+  //       root: { background: theme.palette.white, height: BUTTON_HEIGHT },
+  //     }}
+  //     menuProps={{
+  //       directionalHintFixed: true,
+  //       items: [
+  //         display === "list"
+  //           ? {
+  //               iconProps: { iconName: "GridViewMedium" },
+  //               key: "gridButton",
+  //               onClick: toggleView,
+  //               text: "Grid",
+  //             }
+  //           : {
+  //               iconProps: { iconName: "BulletedListText" },
+  //               key: "listButton",
+  //               onClick: toggleView,
+  //               text: "List",
+  //             },
+  //       ],
+  //     }}
+  //   />,
+  // );
 
   return (
     <React.Fragment>
@@ -303,3 +304,60 @@ export default function AppCommandBar({
     </React.Fragment>
   );
 }
+
+interface AppCommandBarProps {
+  items: JSX.Element[];
+  farItems?: JSX.Element[];
+}
+
+export default withRouter(function AppCommandBar({
+  items,
+  farItems,
+  location,
+  history,
+}: AppCommandBarProps & RouteComponentProps) {
+  const display = getDisplay(location);
+
+  const toggleView = useCallback((): void => {
+    history.push(updateDisplay(location, display === "grid" ? "list" : "grid"));
+  }, [display, history, location]);
+
+  return (
+    <div className={styles.wrapper}>
+      <div className={styles.leftWrapper}>{items}</div>
+      <div className={styles.rightWrapper}>
+        {farItems}
+        <CommandBarButton
+          key="toggleView"
+          ariaLabel="Toggle view"
+          iconProps={{
+            iconName:
+              display === "list" ? "BulletedListText" : "GridViewMedium",
+          }}
+          text={display === "list" ? "List" : "Grid"}
+          styles={{
+            root: { background: theme.palette.white, height: BUTTON_HEIGHT },
+          }}
+          menuProps={{
+            directionalHintFixed: true,
+            items: [
+              display === "list"
+                ? {
+                    iconProps: { iconName: "GridViewMedium" },
+                    key: "gridButton",
+                    onClick: toggleView,
+                    text: "Grid",
+                  }
+                : {
+                    iconProps: { iconName: "BulletedListText" },
+                    key: "listButton",
+                    onClick: toggleView,
+                    text: "List",
+                  },
+            ],
+          }}
+        />
+      </div>
+    </div>
+  );
+});
