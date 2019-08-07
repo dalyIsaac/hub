@@ -1,29 +1,40 @@
-import React, { useCallback, useState, useEffect } from "react";
 import {
-  getTheme,
-  mergeStyleSets,
   CommandBarButton,
   Toggle,
+  getTheme,
+  mergeStyleSets,
 } from "office-ui-fabric-react";
-import { useDispatch, useSelector } from "react-redux";
-import { createSubject } from "../subject/model/Create";
-import { State } from "../Reducer";
-import { setSeparateComplete } from "../subject/model/SetSeparateComplete";
-import { BUTTON_HEIGHT } from "./Common";
-import SortButton from "./SortButton";
-import { RouteComponentProps } from "react-router";
-import { SubjectsRouteProps, subjectBase } from "../subject/Routing";
-import { getDisplay, updateDisplay } from "../Display";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   SearchRouteProps,
-  searchBase,
   getSearchMatch,
+  searchBase,
 } from "../Search/Routing";
-import { Paths } from "../Routing";
-import { ViewRouteProps } from "../views/Routing";
+import { SubjectsRouteProps, subjectBase } from "../subject/Routing";
+import { getDisplay, updateDisplay } from "../Display";
+import { useDispatch, useSelector } from "react-redux";
+
 import AppendChildren from "../views/components/AppendChildren";
+import { BUTTON_HEIGHT } from "./Common";
+import { Paths } from "../Routing";
+import { RouteComponentProps } from "react-router";
+import SortButton from "./SortButton";
+import { State } from "../Reducer";
+import { ViewRouteProps } from "../views/Routing";
+import { createSubject } from "../subject/model/Create";
+import { setSeparateComplete } from "../subject/model/SetSeparateComplete";
 
 const theme = getTheme();
+
+export const commandBarStyle = {
+  borderBottom: "1px solid " + theme.palette.neutralQuaternary,
+  boxShadow: "0 6px 20px 0 rgba(0, 0, 0, 0.19)",
+  height: BUTTON_HEIGHT,
+  margin: 0,
+  padding: 0,
+  zIndex: 10
+};
+
 const styles = mergeStyleSets({
   leftWrapper: {
     alignItems: "center",
@@ -36,18 +47,15 @@ const styles = mergeStyleSets({
     flexDirection: "row-reverse",
   },
   wrapper: {
+    ...commandBarStyle,
     alignItems: "center",
     backgroundColor: theme.palette.white,
-    borderBottom: "1px solid " + theme.palette.neutralQuaternary,
-    boxShadow: "0 6px 20px 0 rgba(0, 0, 0, 0.19)",
     display: "flex",
     flexDirection: "row",
-    height: BUTTON_HEIGHT,
     justifyContent: "space-between",
     paddingLeft: 24,
     paddingRight: 24,
     position: "relative",
-    zIndex: 10,
   },
 });
 

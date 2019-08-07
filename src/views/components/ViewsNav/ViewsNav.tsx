@@ -1,24 +1,32 @@
-import React, { useCallback, useState, useEffect } from "react";
+import { AllParams, Paths } from "../../../Routing";
 import {
+  CommandBar,
+  INavLink,
+  INavLinkGroup,
   Nav,
   getTheme,
   mergeStyleSets,
-  INavLinkGroup,
-  INavLink,
 } from "office-ui-fabric-react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { createView } from "../model/Create";
-import { State } from "../../Reducer";
+
 import { RouteComponentProps } from "react-router";
-import { ViewRouteProps, gotoView } from "../Routing";
-import { SubjectsRouteProps, subjectBase } from "../../subject/Routing";
-import { Paths } from "../../Routing";
+import { State } from "../../../Reducer";
+import { commandBarStyle } from "../../../AppCommandBar/AppCommandBar";
+import { createView } from "../../model/Create";
+import { gotoView } from "../../Routing";
+import { subjectBase } from "../../../subject/Routing";
+import { useGetCreateButtonItems } from "./UseGetCreateButtonItems";
 
 const theme = getTheme();
 const styles = mergeStyleSets({
+  navWrapper: {
+    borderRight: "1px solid " + theme.palette.neutralQuaternary,
+    display: "flex",
+    flexDirection: "column",
+  },
   nav: {
     background: theme.palette.white,
-    borderRight: "1px solid " + theme.palette.neutralQuaternary,
     boxSizing: "border-box",
     height: "100%",
     overflowY: "auto",
@@ -29,7 +37,7 @@ const styles = mergeStyleSets({
 export default function ViewsNav({
   match,
   history,
-}: RouteComponentProps<SubjectsRouteProps & ViewRouteProps>): JSX.Element {
+}: RouteComponentProps<AllParams>): JSX.Element {
   const dispatch = useDispatch();
   const [gotoNewView, setGotoNewView] = useState(false);
   const [selectedKey, setSelectedKey] = useState("");
@@ -105,12 +113,18 @@ export default function ViewsNav({
     url: "",
   });
 
+  const items = useGetCreateButtonItems(match.params);
+
   return (
-    <Nav
-      selectedKey={selectedKey}
-      expandButtonAriaLabel="Expand or collapse"
-      className={styles.nav}
-      groups={groups}
-    />
+    <div className={styles.navWrapper}>
+      <CommandBar items={items} styles={{ root: commandBarStyle }} />
+      <Nav
+        selectedKey={selectedKey}
+        expandButtonAriaLabel="Expand or collapse"
+        className={styles.nav}
+        groups={groups}
+        styles={{navItems: {margin: 0}}}
+      />
+    </div>
   );
 }
