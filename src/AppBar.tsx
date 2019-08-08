@@ -1,11 +1,11 @@
 import { AllRouteComponentProps, Paths } from "./Routing";
-import { Link, match } from "react-router-dom";
 import React, { useEffect } from "react";
 import { getSearchMatch, searchBase } from "./Search/Routing";
 import { getTheme, mergeStyleSets } from "@uifabric/styling";
 import { gotoSubject, subjectBase } from "./subject/Routing";
 
 import { APPBAR_HEIGHT } from "./Common";
+import { Link } from "react-router-dom";
 import SearchBar from "./Search/SearchBar";
 import { State } from "./Reducer";
 import { Text } from "office-ui-fabric-react";
