@@ -18,7 +18,7 @@ import { useDispatch, useSelector } from "react-redux";
 import AppendChildren from "../views/components/AppendChildren";
 import { BUTTON_HEIGHT } from "./Common";
 import { Paths } from "../Routing";
-import SortButton from "./SortButton";
+// import SortButton from "./SortButton";
 import { State } from "../Reducer";
 import { ViewRouteProps } from "../views/Routing";
 // import { createSubject } from "../subject/model/Create";
@@ -67,12 +67,12 @@ type _AppCommandbarProps = RouteComponentProps<
 
 function _AppCommandBar({
   match,
-  location,
-}: // history,
+}: // location,
+// history,
 _AppCommandbarProps): JSX.Element {
   const { parentId, viewId } = match.params;
   const dispatch = useDispatch();
-  const display = getDisplay(location);
+  // const display = getDisplay(location);
 
   const { subjects, views } = useSelector((state: State) => state);
 
@@ -173,15 +173,15 @@ _AppCommandbarProps): JSX.Element {
   // );
   // } else
   if (searchPath) {
-    if (display === "grid") {
-      leftComponents.push(
-        <SortButton
-          key="sort"
-          setSearchOptions={true}
-          fields={subjects.searchSortOptions.fields}
-        />,
-      );
-    }
+    // if (display === "grid") {
+    //   leftComponents.push(
+    //     <SortButton
+    //       key="sort"
+    //       setSearchOptions={true}
+    //       fields={subjects.searchSortOptions.fields}
+    //     />,
+    //   );
+    // }
 
     leftComponents.push(
       <Toggle

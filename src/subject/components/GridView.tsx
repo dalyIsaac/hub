@@ -1,15 +1,15 @@
 import { IRectangle, List, ScrollToMode } from "office-ui-fabric-react";
 import React, { useCallback, useEffect } from "react";
-import { SubjectViewHookProps, useSubjectView } from "../SubjectView";
+import { SubjectViewHookProps, useSubjectView } from "./SubjectView";
 import { getTheme, mergeStyleSets } from "@uifabric/styling";
 
-import { APPBAR_HEIGHT } from "../../../Common";
-import { APP_COMMAND_BAR_HEIGHT } from "../../../AppCommandBar/Common";
-import AppCommandBar from "../../../AppCommandBar/AppCommandBar";
-import { Item } from "../../model/Subject";
-import { State } from "../../../Reducer";
-import SubjectComponent from "../Subject";
-import { getDiffIndex } from "../View";
+import { APPBAR_HEIGHT } from "../../Common";
+import { APP_COMMAND_BAR_HEIGHT } from "../../AppCommandBar/Common";
+import AppCommandBar from "../../AppCommandBar/AppCommandBar";
+import { Item } from "../model/Subject";
+import { State } from "../../Reducer";
+import SubjectComponent from "./Subject";
+import { getDiffIndex } from "./View";
 import { useCommandBar } from "./UseCommandBar";
 import { useRef } from "react";
 import { useSelector } from "react-redux";
@@ -144,7 +144,7 @@ export default function GridView({
     [],
   );
 
-  const commandBarItems = useCommandBar(subjectId);
+  const commandBarItems = useCommandBar({ showSort: true, subjectId });
 
   return (
     <React.Fragment>

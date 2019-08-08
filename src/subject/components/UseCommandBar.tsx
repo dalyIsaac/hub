@@ -1,12 +1,18 @@
 import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import SortButton from "../../../AppCommandBar/SortButton";
-import { State } from "../../../Reducer";
+import SortButton from "../../AppCommandBar/SortButton";
+import { State } from "../../Reducer";
 import { Toggle } from "office-ui-fabric-react";
-import { setSeparateComplete } from "../../model/SetSeparateComplete";
+import { setSeparateComplete } from "../model/SetSeparateComplete";
 
-export function useCommandBar(subjectId?: string) {
+interface UseCommandBarOptions {
+  subjectId?: string;
+  isSearch?: boolean;
+  showSort?: boolean;
+}
+
+export function useCommandBar({ showSort, subjectId }: UseCommandBarOptions) {
   const dispatch = useDispatch();
   const subjects = useSelector((state: State) => state.subjects);
 
@@ -22,12 +28,19 @@ export function useCommandBar(subjectId?: string) {
     [dispatch, subjectId],
   );
 
-  return [
-    <SortButton
-      key="sort"
-      subjectId={subjectId}
-      fields={currentOrder.fields}
-    />,
+  const items = [];
+
+  if (showSort) {
+    items.push(
+      <SortButton
+        key="sort"
+        subjectId={subjectId}
+        fields={currentOrder.fields}
+      />,
+    );
+  }
+
+  items.push(
     <Toggle
       key="separateComplete"
       checked={currentOrder.separateCompletedItems}
@@ -36,5 +49,7 @@ export function useCommandBar(subjectId?: string) {
       onChange={setSeparateCompleteOnChange}
       styles={{ root: { marginBottom: 0, marginLeft: 4, marginRight: 4 } }}
     />,
-  ];
+  );
+
+  return items;
 }

@@ -1,21 +1,24 @@
-import React from "react";
-import { DetailsList, SelectionMode } from "office-ui-fabric-react";
-import { GetItemsOptions } from "../../model/Subject";
-import { useSelector } from "react-redux";
-import { State } from "../../../Reducer";
-import { APP_COMMAND_BAR_HEIGHT } from "../../../AppCommandBar/Common";
 import { APPBAR_HEIGHT, VIEW_TITLE_HEIGHT } from "../../../Common";
-import { SortItemsOptions } from "../../../Order";
+import { DetailsList, SelectionMode } from "office-ui-fabric-react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
+
+import { APP_COMMAND_BAR_HEIGHT } from "../../../AppCommandBar/Common";
+import AppCommandBar from "../../../AppCommandBar/AppCommandBar";
+import { GetItemsOptions } from "../../model/Subject";
 import ListViewContextMenu from "./ListViewContextMenu";
-import { useSubjectView } from "../SubjectView";
-import { Paths } from "../../../Routing";
 import ListViewModal from "./ListViewModal";
-import { useListViewModal } from "./UseListViewModal";
+import { Paths } from "../../../Routing";
+import React from "react";
+import { SortItemsOptions } from "../../../Order";
+import { State } from "../../../Reducer";
+import { useCommandBar } from "../UseCommandBar";
 import { useListViewContextMenu } from "./UseListViewContextMenu";
+import { useListViewDetailsList } from "./UseListViewDetailsList";
+import { useListViewModal } from "./UseListViewModal";
 import { useListViewRender } from "./UseListViewRender";
 import { useListViewScroll } from "./UseListViewScroll";
-import { useListViewDetailsList } from "./UseListViewDetailsList";
+import { useSelector } from "react-redux";
+import { useSubjectView } from "../SubjectView";
 
 interface ListViewProps {
   options?: GetItemsOptions;
@@ -79,8 +82,11 @@ function ListView({
     APP_COMMAND_BAR_HEIGHT +
     (match.path === Paths.view ? VIEW_TITLE_HEIGHT : 0)}px)`;
 
+  const commandBarItems = useCommandBar({ subjectId: parentId });
+
   return (
     <React.Fragment>
+      <AppCommandBar items={commandBarItems} />
       <DetailsList
         styles={{ root: { height } }}
         getKey={getKey}
