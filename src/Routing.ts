@@ -2,6 +2,8 @@ import { SearchRouteProps, searchBase } from "./Search/Routing";
 import { SubjectsRouteProps, subjectBase } from "./subject/Routing";
 import { ViewRouteProps, viewBase } from "./views/Routing";
 
+import { RouteComponentProps } from "react-router";
+
 export const Paths = {
   base: "/",
   search: searchBase + "/:param/:query",
@@ -13,3 +15,4 @@ export const Paths = {
 export const AllPaths = [Paths.search, Paths.subject, Paths.view, Paths.base];
 
 export type AllParams = SubjectsRouteProps & SearchRouteProps & ViewRouteProps;
+export type AllRouteComponentProps = RouteComponentProps<AllParams>;

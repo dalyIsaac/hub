@@ -1,13 +1,12 @@
 import { APPBAR_HEIGHT, VIEW_TITLE_HEIGHT } from "../../../Common";
+import { AllRouteComponentProps, Paths } from "../../../Routing";
 import { DetailsList, SelectionMode } from "office-ui-fabric-react";
-import { RouteComponentProps, withRouter } from "react-router-dom";
 
 import { APP_COMMAND_BAR_HEIGHT } from "../../../AppCommandBar/Common";
 import AppCommandBar from "../../../AppCommandBar/AppCommandBar";
 import { GetItemsOptions } from "../../model/Subject";
 import ListViewContextMenu from "./ListViewContextMenu";
 import ListViewModal from "./ListViewModal";
-import { Paths } from "../../../Routing";
 import React from "react";
 import { SortItemsOptions } from "../../../Order";
 import { State } from "../../../Reducer";
@@ -19,20 +18,23 @@ import { useListViewRender } from "./UseListViewRender";
 import { useListViewScroll } from "./UseListViewScroll";
 import { useSelector } from "react-redux";
 import { useSubjectView } from "../SubjectView";
+import { withRouter } from "react-router-dom";
 
 interface ListViewProps {
+  children?: JSX.Element | JSX.Element[];
   options?: GetItemsOptions;
-  sortOptions?: SortItemsOptions;
   showCloseButton?: boolean;
+  sortOptions?: SortItemsOptions;
 }
 
 function ListView({
-  match,
+  children,
   history,
+  match,
   options,
-  sortOptions,
   showCloseButton,
-}: ListViewProps & RouteComponentProps): JSX.Element {
+  sortOptions,
+}: ListViewProps & AllRouteComponentProps): JSX.Element {
   const parentId = options ? options.parentId : undefined;
   const { subjects } = useSelector((state: State) => state);
 
@@ -82,11 +84,12 @@ function ListView({
     APP_COMMAND_BAR_HEIGHT +
     (match.path === Paths.view ? VIEW_TITLE_HEIGHT : 0)}px)`;
 
-  const commandBarItems = useCommandBar({ subjectId: parentId });
+  const commandBarItems = useCommandBar({ match, subjectId: parentId });
 
   return (
     <React.Fragment>
       <AppCommandBar items={commandBarItems} />
+      {children}
       <DetailsList
         styles={{ root: { height } }}
         getKey={getKey}

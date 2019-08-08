@@ -5,6 +5,7 @@ import { getTheme, mergeStyleSets } from "@uifabric/styling";
 
 import { APPBAR_HEIGHT } from "../../Common";
 import { APP_COMMAND_BAR_HEIGHT } from "../../AppCommandBar/Common";
+import { AllRouteComponentProps } from "../../Routing";
 import AppCommandBar from "../../AppCommandBar/AppCommandBar";
 import { Item } from "../model/Subject";
 import { State } from "../../Reducer";
@@ -13,6 +14,7 @@ import { getDiffIndex } from "./View";
 import { useCommandBar } from "./UseCommandBar";
 import { useRef } from "react";
 import { useSelector } from "react-redux";
+import { withRouter } from "react-router";
 
 const ROWS_PER_PAGE = 3;
 const ROW_HEIGHT = 603;
@@ -47,13 +49,18 @@ const styles = mergeStyleSets({
 const getPageHeight = (): number => ROW_HEIGHT * ROWS_PER_PAGE;
 
 interface GridViewProps extends SubjectViewHookProps {
+  children?: JSX.Element | JSX.Element[];
   showCloseButton?: boolean;
 }
 
-export default function GridView({
+function GridView({
+  children,
+  history: _history,
+  location: _location,
+  match,
   showCloseButton,
   ...props
-}: GridViewProps): JSX.Element {
+}: GridViewProps & AllRouteComponentProps): JSX.Element {
   const subjectId = props.options ? props.options.parentId : undefined;
   const { subjects } = useSelector((state: State) => state);
 
@@ -144,11 +151,12 @@ export default function GridView({
     [],
   );
 
-  const commandBarItems = useCommandBar({ showSort: true, subjectId });
+  const commandBarItems = useCommandBar({ match, showSort: true, subjectId });
 
   return (
     <React.Fragment>
       <AppCommandBar items={commandBarItems} />
+      {children}
       <List
         ref={gridRef}
         className={styles.grid}
@@ -161,3 +169,5 @@ export default function GridView({
     </React.Fragment>
   );
 }
+
+export default withRouter(GridView);

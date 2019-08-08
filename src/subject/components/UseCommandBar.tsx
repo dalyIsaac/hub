@@ -1,18 +1,30 @@
-import React, { useCallback } from "react";
+import { AllRouteComponentProps, Paths } from "../../Routing";
+import { CommandBarButton, Toggle } from "office-ui-fabric-react";
+import React, { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
+import AppendChildren from "../../views/components/AppendChildren";
+import { BUTTON_HEIGHT } from "../../AppCommandBar/Common";
 import SortButton from "../../AppCommandBar/SortButton";
 import { State } from "../../Reducer";
-import { Toggle } from "office-ui-fabric-react";
 import { setSeparateComplete } from "../model/SetSeparateComplete";
+
+const commandBarStyles = { root: { height: BUTTON_HEIGHT } };
 
 interface UseCommandBarOptions {
   subjectId?: string;
-  isSearch?: boolean;
   showSort?: boolean;
+  match: AllRouteComponentProps["match"];
 }
 
-export function useCommandBar({ showSort, subjectId }: UseCommandBarOptions) {
+export function useCommandBar({
+  match,
+  showSort,
+  subjectId,
+}: UseCommandBarOptions) {
+  const { viewId } = match.params;
+  const isViews = match.path === Paths.view && viewId;
+
   const dispatch = useDispatch();
   const subjects = useSelector((state: State) => state.subjects);
 
@@ -29,6 +41,33 @@ export function useCommandBar({ showSort, subjectId }: UseCommandBarOptions) {
   );
 
   const items = [];
+
+  const [panelOpen, setShowPanel] = useState(false);
+  const showPanel = useCallback((): void => {
+    setShowPanel(true);
+  }, []);
+  const hidePanel = useCallback((): void => {
+    setShowPanel(false);
+  }, []);
+
+  if (isViews) {
+    items.push(
+      <CommandBarButton
+        key="appendChildren"
+        text="Append child subjects"
+        iconProps={{ iconName: "RowsChild" }}
+        ariaLabel="Create child subject"
+        onClick={showPanel}
+        styles={commandBarStyles}
+      />,
+      <AppendChildren
+        key="panel"
+        hidePanel={hidePanel}
+        isOpen={panelOpen}
+        viewId={viewId}
+      />,
+    );
+  }
 
   if (showSort) {
     items.push(

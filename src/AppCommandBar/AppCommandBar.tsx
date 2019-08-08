@@ -77,15 +77,15 @@ _AppCommandbarProps): JSX.Element {
   const { subjects, views } = useSelector((state: State) => state);
 
   //#region Append children panel
-  const [appendChildrenPanelVisible, setAppendChildrenPanelVisible] = useState(
-    false,
-  );
-  const showAppendChildrenPanel = useCallback((): void => {
-    setAppendChildrenPanelVisible(true);
-  }, []);
-  const hideAppendChildrenPanel = useCallback((): void => {
-    setAppendChildrenPanelVisible(false);
-  }, []);
+  // const [appendChildrenPanelVisible, setAppendChildrenPanelVisible] = useState(
+  //   false,
+  // );
+  // const showAppendChildrenPanel = useCallback((): void => {
+  //   setAppendChildrenPanelVisible(true);
+  // }, []);
+  // const hideAppendChildrenPanel = useCallback((): void => {
+  //   setAppendChildrenPanelVisible(false);
+  // }, []);
   //#endregion
 
   //#region Create child subject
@@ -123,7 +123,7 @@ _AppCommandbarProps): JSX.Element {
 
   const leftComponents: JSX.Element[] = [];
   const rightComponents: JSX.Element[] = [];
-  let panel: JSX.Element | null = null;
+  // let panel: JSX.Element | null = null;
 
   // if (subjectPath) {
   // const currentOrder =
@@ -194,32 +194,31 @@ _AppCommandbarProps): JSX.Element {
       />,
     );
   } else if (viewsPath) {
-    leftComponents.push(
-      <CommandBarButton
-        key="appendChildren"
-        text="Append child subjects"
-        iconProps={{ iconName: "RowsChild" }}
-        ariaLabel="Create child subject"
-        onClick={showAppendChildrenPanel}
-        styles={commandBarStyles}
-      />,
-      // <CommandBarButton
-      //   key="createSubjectForView"
-      //   text="Create child subject"
-      //   iconProps={{ iconName: "Childof" }}
-      //   ariaLabel="Create child subject"
-      //   onClick={dispatchCreateChildSubject}
-      //   styles={commandBarStyles}
-      // />,
-    );
-
-    panel = (
-      <AppendChildren
-        hidePanel={hideAppendChildrenPanel}
-        isOpen={appendChildrenPanelVisible}
-        viewId={viewId}
-      />
-    );
+    // leftComponents.push(
+    // <CommandBarButton
+    //   key="appendChildren"
+    //   text="Append child subjects"
+    //   iconProps={{ iconName: "RowsChild" }}
+    //   ariaLabel="Create child subject"
+    //   onClick={showAppendChildrenPanel}
+    //   styles={commandBarStyles}
+    // />,
+    // <CommandBarButton
+    //   key="createSubjectForView"
+    //   text="Create child subject"
+    //   iconProps={{ iconName: "Childof" }}
+    //   ariaLabel="Create child subject"
+    //   onClick={dispatchCreateChildSubject}
+    //   styles={commandBarStyles}
+    // />,
+    // );
+    // panel = (
+    //   <AppendChildren
+    //     hidePanel={hideAppendChildrenPanel}
+    //     isOpen={appendChildrenPanelVisible}
+    //     viewId={viewId}
+    //   />
+    // );
   }
 
   // Responsive page title
@@ -300,7 +299,7 @@ _AppCommandbarProps): JSX.Element {
         <div className={styles.leftWrapper}>{leftComponents}</div>
         <div className={styles.rightWrapper}>{rightComponents}</div>
       </div>
-      {panel}
+      {/* {panel} */}
     </React.Fragment>
   );
 }
