@@ -1,22 +1,20 @@
+import { GetItemsOptions, Item, getItems } from "../model/Subject";
 import React, { useState } from "react";
-import { SubjectsRouteProps } from "../Routing";
-import { getDisplay } from "../../Display";
-import GridView, { MIN_COL_WIDTH } from "./GridView";
-import { isUndefined } from "lodash";
-import useWindowSize from "@rehooks/window-size";
-import SubjectComponent from "./Subject";
-import { useSelector } from "react-redux";
-import { State } from "../../Reducer";
 import { Redirect, RouteComponentProps } from "react-router";
-import ListView from "./ListView/ListView";
-import ViewWithSidebar from "./ViewWithSidebar";
-import { GetItemsOptions, getItems, Item } from "../model/Subject";
 import {
+  SetSortParameters,
+  SortField,
   SortItemsOptions,
   sortItems,
-  SortField,
-  SetSortParameters,
 } from "../../Order";
+
+import GridView from "./GridView";
+import ListView from "./ListView/ListView";
+import { State } from "../../Reducer";
+import { SubjectsRouteProps } from "../Routing";
+import { getDisplay } from "../../Display";
+import { isUndefined } from "lodash";
+import { useSelector } from "react-redux";
 
 export interface SubjectViewHookProps {
   options?: GetItemsOptions;
@@ -109,40 +107,20 @@ export default function SubjectView({
   match,
   location,
 }: RouteComponentProps<SubjectsRouteProps>): JSX.Element {
-  const { parentId: id } = match.params;
+  const { parentId } = match.params;
   const display = getDisplay(location);
 
-  const windowSize = useWindowSize();
   const { dict } = useSelector((state: State) => state.subjects);
 
-  if (!isUndefined(id) && !(id in dict)) {
+  if (!isUndefined(parentId) && !(parentId in dict)) {
     return <Redirect to="/" />;
   }
 
-  if (isUndefined(id)) {
-    if (display === "list") {
-      return <ListView />;
-    } else {
-      return <GridView />;
-    }
+  const options = { parentId };
+  // if (isUndefined(parentId)) {
+  if (display === "list") {
+    return <ListView options={options} />;
+  } else {
+    return <GridView options={options} />;
   }
-
-  const parentSubject = <SubjectComponent item={{ id, subject: dict[id] }} />;
-  if (windowSize.innerWidth > MIN_COL_WIDTH * 2) {
-    const options = { parentId: id };
-    return (
-      <ViewWithSidebar
-        viewComponent={
-          display === "grid" ? (
-            <GridView options={options} />
-          ) : (
-            <ListView options={options} />
-          )
-        }
-        sidebarComponent={parentSubject}
-      />
-    );
-  }
-
-  return parentSubject;
 }

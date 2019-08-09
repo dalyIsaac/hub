@@ -1,19 +1,22 @@
-import React, { useEffect, useCallback } from "react";
-import { List, IRectangle, ScrollToMode } from "office-ui-fabric-react";
-import { mergeStyleSets, getTheme } from "@uifabric/styling";
+import { IRectangle, List, ScrollToMode } from "office-ui-fabric-react";
+import React, { useCallback, useEffect } from "react";
+import { SubjectViewHookProps, useSubjectView } from "./SubjectView";
+import Wrapper, { MIN_COL_WIDTH } from "../../Wrapper";
+import { getTheme, mergeStyleSets } from "@uifabric/styling";
+
+import { AllRouteComponentProps } from "../../Routing";
+import AppCommandBar from "../../AppCommandBar/AppCommandBar";
+import { Item } from "../model/Subject";
+import { State } from "../../Reducer";
+import SubjectComponent from "./Subject";
+import { getDiffIndex } from "./View";
+import { useCommandBar } from "./UseCommandBar";
 import { useRef } from "react";
 import { useSelector } from "react-redux";
-import { State } from "../../Reducer";
-import { Item } from "../model/Subject";
-import SubjectComponent from "./Subject";
-import { APP_COMMAND_BAR_HEIGHT } from "../../AppCommandBar/Common";
-import { APPBAR_HEIGHT } from "../../Common";
-import { getDiffIndex } from "./View";
-import { useSubjectView, SubjectViewHookProps } from "./SubjectView";
+import { withRouter } from "react-router";
 
 const ROWS_PER_PAGE = 3;
 const ROW_HEIGHT = 603;
-export const MIN_COL_WIDTH = 400;
 
 const theme = getTheme();
 const styles = mergeStyleSets({
@@ -22,8 +25,9 @@ const styles = mergeStyleSets({
     gridTemplateColumns: `auto ${MIN_COL_WIDTH}px`,
   },
   grid: {
-    height: `calc(100vh - ${APPBAR_HEIGHT}px - ${APP_COMMAND_BAR_HEIGHT}px)`,
+    height: "100%",
     overflow: "auto",
+    overflowY: "auto",
     position: "relative",
   },
   tile: {
@@ -44,13 +48,18 @@ const styles = mergeStyleSets({
 const getPageHeight = (): number => ROW_HEIGHT * ROWS_PER_PAGE;
 
 interface GridViewProps extends SubjectViewHookProps {
+  title?: JSX.Element;
   showCloseButton?: boolean;
 }
 
-export default function GridView({
+function GridView({
+  title,
+  history: _history,
+  location: _location,
+  match,
   showCloseButton,
   ...props
-}: GridViewProps): JSX.Element {
+}: GridViewProps & AllRouteComponentProps): JSX.Element {
   const subjectId = props.options ? props.options.parentId : undefined;
   const { subjects } = useSelector((state: State) => state);
 
@@ -141,15 +150,26 @@ export default function GridView({
     [],
   );
 
+  const commandBarItems = useCommandBar({ match, showSort: true, subjectId });
+
   return (
-    <List
-      ref={gridRef}
-      className={styles.grid}
-      items={items}
-      getItemCountForPage={getItemCountForPage}
-      getPageHeight={getPageHeight}
-      renderedWindowsAhead={4}
-      onRenderCell={renderCell}
+    <Wrapper
+      commandBar={<AppCommandBar items={commandBarItems} />}
+      main={
+        <List
+          ref={gridRef}
+          className={styles.grid}
+          items={items}
+          getItemCountForPage={getItemCountForPage}
+          getPageHeight={getPageHeight}
+          renderedWindowsAhead={4}
+          onRenderCell={renderCell}
+        />
+      }
+      parentId={subjectId}
+      title={title}
     />
   );
 }
+
+export default withRouter(GridView);

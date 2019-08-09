@@ -1,17 +1,18 @@
-import React, { useCallback, useState, useEffect } from "react";
-import { RouteComponentProps, Redirect } from "react-router";
-import { ViewRouteProps } from "../Routing";
-import { useSelector, useDispatch } from "react-redux";
-import { State } from "../../Reducer";
-import { isUndefined } from "lodash";
+import React, { useCallback, useEffect, useState } from "react";
+import { Redirect, RouteComponentProps } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+
 import GridView from "../../subject/components/GridView";
 import ListView from "../../subject/components/ListView/ListView";
-import { getDisplay } from "../../Display";
-import { mergeStyleSets } from "@uifabric/styling";
-import TitleInput from "../../TitleInput";
-import { Paths } from "../../Routing";
-import { updateViewName } from "../model/Name";
 import { Location } from "history";
+import { Paths } from "../../Routing";
+import { State } from "../../Reducer";
+import TitleInput from "../../TitleInput";
+import { ViewRouteProps } from "../Routing";
+import { getDisplay } from "../../Display";
+import { isUndefined } from "lodash";
+import { mergeStyleSets } from "@uifabric/styling";
+import { updateViewName } from "../model/Name";
 
 const styles = mergeStyleSets({
   title: {
@@ -58,24 +59,22 @@ function ViewComponent({ location, viewId }: ViewProps): JSX.Element {
   const display = getDisplay(location);
 
   const options = { viewId };
+  const title = (
+    <TitleInput
+      className={styles.title}
+      value={localName}
+      onChange={onChange}
+      onBlur={updateName}
+    />
+  );
   const viewComponent =
     display === "grid" ? (
-      <GridView options={options} showCloseButton={true} />
+      <GridView options={options} showCloseButton={true} title={title} />
     ) : (
-      <ListView options={options} showCloseButton={true} />
+      <ListView options={options} showCloseButton={true} title={title} />
     );
 
-  return (
-    <div className={styles.wrapper}>
-      <TitleInput
-        className={styles.title}
-        value={localName}
-        onChange={onChange}
-        onBlur={updateName}
-      />
-      {viewComponent}
-    </div>
-  );
+  return <div className={styles.wrapper}>{viewComponent}</div>;
 }
 
 export default function View({

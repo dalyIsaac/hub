@@ -1,35 +1,41 @@
-import React from "react";
-import { DetailsList, SelectionMode } from "office-ui-fabric-react";
-import { GetItemsOptions } from "../../model/Subject";
-import { useSelector } from "react-redux";
-import { State } from "../../../Reducer";
-import { APP_COMMAND_BAR_HEIGHT } from "../../../AppCommandBar/Common";
 import { APPBAR_HEIGHT, VIEW_TITLE_HEIGHT } from "../../../Common";
-import { SortItemsOptions } from "../../../Order";
-import { RouteComponentProps, withRouter } from "react-router-dom";
+import { AllRouteComponentProps, Paths } from "../../../Routing";
+import { DetailsList, SelectionMode } from "office-ui-fabric-react";
+
+import { APP_COMMAND_BAR_HEIGHT } from "../../../AppCommandBar/Common";
+import AppCommandBar from "../../../AppCommandBar/AppCommandBar";
+import { GetItemsOptions } from "../../model/Subject";
 import ListViewContextMenu from "./ListViewContextMenu";
-import { useSubjectView } from "../SubjectView";
-import { Paths } from "../../../Routing";
 import ListViewModal from "./ListViewModal";
-import { useListViewModal } from "./UseListViewModal";
+import React from "react";
+import { SortItemsOptions } from "../../../Order";
+import { State } from "../../../Reducer";
+import Wrapper from "../../../Wrapper";
+import { useCommandBar } from "../UseCommandBar";
 import { useListViewContextMenu } from "./UseListViewContextMenu";
+import { useListViewDetailsList } from "./UseListViewDetailsList";
+import { useListViewModal } from "./UseListViewModal";
 import { useListViewRender } from "./UseListViewRender";
 import { useListViewScroll } from "./UseListViewScroll";
-import { useListViewDetailsList } from "./UseListViewDetailsList";
+import { useSelector } from "react-redux";
+import { useSubjectView } from "../SubjectView";
+import { withRouter } from "react-router-dom";
 
 interface ListViewProps {
+  title?: JSX.Element;
   options?: GetItemsOptions;
-  sortOptions?: SortItemsOptions;
   showCloseButton?: boolean;
+  sortOptions?: SortItemsOptions;
 }
 
 function ListView({
-  match,
+  title,
   history,
+  match,
   options,
-  sortOptions,
   showCloseButton,
-}: ListViewProps & RouteComponentProps): JSX.Element {
+  sortOptions,
+}: ListViewProps & AllRouteComponentProps): JSX.Element {
   const parentId = options ? options.parentId : undefined;
   const { subjects } = useSelector((state: State) => state);
 
@@ -79,32 +85,41 @@ function ListView({
     APP_COMMAND_BAR_HEIGHT +
     (match.path === Paths.view ? VIEW_TITLE_HEIGHT : 0)}px)`;
 
+  const commandBarItems = useCommandBar({ match, subjectId: parentId });
+
   return (
-    <React.Fragment>
-      <DetailsList
-        styles={{ root: { height } }}
-        getKey={getKey}
-        componentRef={listRef}
-        onColumnHeaderClick={dispatchSetFieldsDesc}
-        columns={columns}
-        items={items}
-        isHeaderVisible={true}
-        selectionMode={SelectionMode.none}
-        onItemInvoked={onItemInvoked}
-        onItemContextMenu={onItemContextMenu}
-        columnReorderOptions={{
-          frozenColumnCountFromEnd: 1,
-          frozenColumnCountFromStart: 0,
-          handleColumnReorder: reorder,
-        }}
-      />
-      {contextMenuProps && <ListViewContextMenu {...contextMenuProps} />}
-      <ListViewModal
-        modalItem={modalItem}
-        dismissModal={dismissModal}
-        showCloseButton={showCloseButton}
-      />
-    </React.Fragment>
+    <Wrapper
+      commandBar={<AppCommandBar items={commandBarItems} />}
+      main={
+        <React.Fragment>
+          <DetailsList
+            styles={{ root: { height } }}
+            getKey={getKey}
+            componentRef={listRef}
+            onColumnHeaderClick={dispatchSetFieldsDesc}
+            columns={columns}
+            items={items}
+            isHeaderVisible={true}
+            selectionMode={SelectionMode.none}
+            onItemInvoked={onItemInvoked}
+            onItemContextMenu={onItemContextMenu}
+            columnReorderOptions={{
+              frozenColumnCountFromEnd: 1,
+              frozenColumnCountFromStart: 0,
+              handleColumnReorder: reorder,
+            }}
+          />
+          {contextMenuProps && <ListViewContextMenu {...contextMenuProps} />}
+          <ListViewModal
+            modalItem={modalItem}
+            dismissModal={dismissModal}
+            showCloseButton={showCloseButton}
+          />
+        </React.Fragment>
+      }
+      parentId={parentId}
+      title={title}
+    />
   );
 }
 
