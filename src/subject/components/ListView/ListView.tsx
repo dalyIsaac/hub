@@ -10,6 +10,7 @@ import ListViewModal from "./ListViewModal";
 import React from "react";
 import { SortItemsOptions } from "../../../Order";
 import { State } from "../../../Reducer";
+import Wrapper from "../../../Wrapper";
 import { useCommandBar } from "../UseCommandBar";
 import { useListViewContextMenu } from "./UseListViewContextMenu";
 import { useListViewDetailsList } from "./UseListViewDetailsList";
@@ -21,14 +22,14 @@ import { useSubjectView } from "../SubjectView";
 import { withRouter } from "react-router-dom";
 
 interface ListViewProps {
-  children?: JSX.Element | JSX.Element[];
+  title?: JSX.Element;
   options?: GetItemsOptions;
   showCloseButton?: boolean;
   sortOptions?: SortItemsOptions;
 }
 
 function ListView({
-  children,
+  title,
   history,
   match,
   options,
@@ -87,33 +88,38 @@ function ListView({
   const commandBarItems = useCommandBar({ match, subjectId: parentId });
 
   return (
-    <React.Fragment>
-      <AppCommandBar items={commandBarItems} />
-      {children}
-      <DetailsList
-        styles={{ root: { height } }}
-        getKey={getKey}
-        componentRef={listRef}
-        onColumnHeaderClick={dispatchSetFieldsDesc}
-        columns={columns}
-        items={items}
-        isHeaderVisible={true}
-        selectionMode={SelectionMode.none}
-        onItemInvoked={onItemInvoked}
-        onItemContextMenu={onItemContextMenu}
-        columnReorderOptions={{
-          frozenColumnCountFromEnd: 1,
-          frozenColumnCountFromStart: 0,
-          handleColumnReorder: reorder,
-        }}
-      />
-      {contextMenuProps && <ListViewContextMenu {...contextMenuProps} />}
-      <ListViewModal
-        modalItem={modalItem}
-        dismissModal={dismissModal}
-        showCloseButton={showCloseButton}
-      />
-    </React.Fragment>
+    <Wrapper
+      commandBar={<AppCommandBar items={commandBarItems} />}
+      main={
+        <React.Fragment>
+          <DetailsList
+            styles={{ root: { height } }}
+            getKey={getKey}
+            componentRef={listRef}
+            onColumnHeaderClick={dispatchSetFieldsDesc}
+            columns={columns}
+            items={items}
+            isHeaderVisible={true}
+            selectionMode={SelectionMode.none}
+            onItemInvoked={onItemInvoked}
+            onItemContextMenu={onItemContextMenu}
+            columnReorderOptions={{
+              frozenColumnCountFromEnd: 1,
+              frozenColumnCountFromStart: 0,
+              handleColumnReorder: reorder,
+            }}
+          />
+          {contextMenuProps && <ListViewContextMenu {...contextMenuProps} />}
+          <ListViewModal
+            modalItem={modalItem}
+            dismissModal={dismissModal}
+            showCloseButton={showCloseButton}
+          />
+        </React.Fragment>
+      }
+      parentId={parentId}
+      title={title}
+    />
   );
 }
 

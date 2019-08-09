@@ -18,6 +18,8 @@ import { gotoView } from "../../Routing";
 import { subjectBase } from "../../../subject/Routing";
 import { useGetCreateButtonItems } from "./UseGetCreateButtonItems";
 
+export const viewsNavWidth = 208;
+
 const theme = getTheme();
 const styles = mergeStyleSets({
   navWrapper: {
@@ -30,7 +32,7 @@ const styles = mergeStyleSets({
     boxSizing: "border-box",
     height: "100%",
     overflowY: "auto",
-    width: 208,
+    width: viewsNavWidth,
   },
 });
 

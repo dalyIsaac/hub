@@ -1,6 +1,7 @@
 import { IRectangle, List, ScrollToMode } from "office-ui-fabric-react";
 import React, { useCallback, useEffect } from "react";
 import { SubjectViewHookProps, useSubjectView } from "./SubjectView";
+import Wrapper, { MIN_COL_WIDTH } from "../../Wrapper";
 import { getTheme, mergeStyleSets } from "@uifabric/styling";
 
 import { APPBAR_HEIGHT } from "../../Common";
@@ -18,7 +19,6 @@ import { withRouter } from "react-router";
 
 const ROWS_PER_PAGE = 3;
 const ROW_HEIGHT = 603;
-export const MIN_COL_WIDTH = 400;
 
 const theme = getTheme();
 const styles = mergeStyleSets({
@@ -49,12 +49,12 @@ const styles = mergeStyleSets({
 const getPageHeight = (): number => ROW_HEIGHT * ROWS_PER_PAGE;
 
 interface GridViewProps extends SubjectViewHookProps {
-  children?: JSX.Element | JSX.Element[];
+  title?: JSX.Element;
   showCloseButton?: boolean;
 }
 
 function GridView({
-  children,
+  title,
   history: _history,
   location: _location,
   match,
@@ -154,19 +154,22 @@ function GridView({
   const commandBarItems = useCommandBar({ match, showSort: true, subjectId });
 
   return (
-    <React.Fragment>
-      <AppCommandBar items={commandBarItems} />
-      {children}
-      <List
-        ref={gridRef}
-        className={styles.grid}
-        items={items}
-        getItemCountForPage={getItemCountForPage}
-        getPageHeight={getPageHeight}
-        renderedWindowsAhead={4}
-        onRenderCell={renderCell}
-      />
-    </React.Fragment>
+    <Wrapper
+      commandBar={<AppCommandBar items={commandBarItems} />}
+      main={
+        <List
+          ref={gridRef}
+          className={styles.grid}
+          items={items}
+          getItemCountForPage={getItemCountForPage}
+          getPageHeight={getPageHeight}
+          renderedWindowsAhead={4}
+          onRenderCell={renderCell}
+        />
+      }
+      parentId={subjectId}
+      title={title}
+    />
   );
 }
 

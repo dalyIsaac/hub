@@ -59,7 +59,7 @@ function ViewComponent({ location, viewId }: ViewProps): JSX.Element {
   const display = getDisplay(location);
 
   const options = { viewId };
-  const children = (
+  const title = (
     <TitleInput
       className={styles.title}
       value={localName}
@@ -69,13 +69,9 @@ function ViewComponent({ location, viewId }: ViewProps): JSX.Element {
   );
   const viewComponent =
     display === "grid" ? (
-      <GridView options={options} showCloseButton={true}>
-        {children}
-      </GridView>
+      <GridView options={options} showCloseButton={true} title={title} />
     ) : (
-      <ListView options={options} showCloseButton={true}>
-        {children}
-      </ListView>
+      <ListView options={options} showCloseButton={true} title={title} />
     );
 
   return <div className={styles.wrapper}>{viewComponent}</div>;
