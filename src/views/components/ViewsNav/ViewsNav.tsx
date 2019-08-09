@@ -23,12 +23,12 @@ export const viewsNavWidth = 208;
 const theme = getTheme();
 const styles = mergeStyleSets({
   navWrapper: {
+    borderRight: "1px solid " + theme.palette.neutralQuaternary,
     display: "flex",
     flexDirection: "column",
   },
   nav: {
     background: theme.palette.white,
-    borderRight: "1px solid " + theme.palette.neutralQuaternary,
     boxSizing: "border-box",
     height: "100%",
     overflowY: "auto",

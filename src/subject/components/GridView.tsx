@@ -4,8 +4,6 @@ import { SubjectViewHookProps, useSubjectView } from "./SubjectView";
 import Wrapper, { MIN_COL_WIDTH } from "../../Wrapper";
 import { getTheme, mergeStyleSets } from "@uifabric/styling";
 
-import { APPBAR_HEIGHT } from "../../Common";
-import { APP_COMMAND_BAR_HEIGHT } from "../../AppCommandBar/Common";
 import { AllRouteComponentProps } from "../../Routing";
 import AppCommandBar from "../../AppCommandBar/AppCommandBar";
 import { Item } from "../model/Subject";
@@ -27,8 +25,9 @@ const styles = mergeStyleSets({
     gridTemplateColumns: `auto ${MIN_COL_WIDTH}px`,
   },
   grid: {
-    height: `calc(100vh - ${APPBAR_HEIGHT}px - ${APP_COMMAND_BAR_HEIGHT}px)`,
+    height: "100%",
     overflow: "auto",
+    overflowY: "auto",
     position: "relative",
   },
   tile: {

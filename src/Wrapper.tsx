@@ -54,10 +54,8 @@ export default function Wrapper({
     </div>
   ) : null;
 
-  // TODO: fix the extra horizontal scrollbar (at the very bottom)
-  // TODO: calculate the height for the main view
-
-  const width = parentId ? `calc(100% - ${MIN_COL_WIDTH}px)` : "100%";
+  // 2 is for the border
+  const width = parentId ? `calc(100% - ${MIN_COL_WIDTH + 2}px)` : "100%";
 
   const windowSize = useWindowSize();
   if (sidebar && windowSize.innerWidth < MIN_COL_WIDTH * 2) {
