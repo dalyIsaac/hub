@@ -1,9 +1,10 @@
 import React, { useCallback } from "react";
+
 import { Item } from "../../subject/model/Subject";
-import { useDispatch } from "react-redux";
-import { isUndefined } from "lodash";
 import ListItemBase from "../../subject/components/ListItem/ListItemBase";
-import { appendChildView } from "../model/AppendChild";
+import { appendSubjectToView } from "../model/AppendSubjectToView";
+import { isUndefined } from "lodash";
+import { useDispatch } from "react-redux";
 
 function ListItem({ id, viewId, subject }: Item): JSX.Element {
   const dispatch = useDispatch();
@@ -14,7 +15,7 @@ function ListItem({ id, viewId, subject }: Item): JSX.Element {
       checked?: boolean,
     ): void => {
       if (checked === true) {
-        dispatch(appendChildView(viewId!, id));
+        dispatch(appendSubjectToView(viewId!, id));
       }
     },
     [dispatch, id, viewId],

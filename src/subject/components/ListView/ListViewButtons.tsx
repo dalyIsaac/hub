@@ -1,10 +1,11 @@
-import React, { useCallback } from "react";
-import { Item } from "../../model/Subject";
-import { gotoSubject } from "../../Routing";
-import { Link } from "react-router-dom";
 import { IconButton, getTheme, mergeStyleSets } from "office-ui-fabric-react";
+import React, { useCallback } from "react";
+
+import { Item } from "../../model/Subject";
+import { Link } from "react-router-dom";
+import { gotoSubject } from "../../Routing";
+import { removeSubjectFromView } from "../../../views/model/RemoveSubjectFromView";
 import { useDispatch } from "react-redux";
-import { removeChildView } from "../../../views/model/RemoveChild";
 
 const theme = getTheme();
 const styles = mergeStyleSets({
@@ -50,7 +51,7 @@ export default function ListViewButtons({
 
   const removeChildViewOnClick = useCallback((): void => {
     if (item.viewId && item.id) {
-      dispatch(removeChildView(item.viewId, item.id));
+      dispatch(removeSubjectFromView(item.viewId, item.id));
     }
   }, [dispatch, item]);
 

@@ -1,21 +1,22 @@
-import React, { useState, useRef, useCallback } from "react";
 import {
-  getTheme,
-  mergeStyleSets,
-  Icon,
-  Text,
-  Panel,
   ContextualMenu,
   DirectionalHint,
   IContextualMenuItem,
+  Icon,
+  Panel,
+  Text,
+  getTheme,
+  mergeStyleSets,
 } from "office-ui-fabric-react";
-import SimpleListView from "./SimpleListView";
-import AppendChildrenListItem from "./ListItem/AppendChildrenListItem";
-import { useDispatch, useSelector } from "react-redux";
-import { createSubject } from "../model/Create";
+import React, { useCallback, useRef, useState } from "react";
 import { border, gridTemplateColumns } from "./ListItem/ListItemBase";
-import { State } from "../../Reducer";
+import { useDispatch, useSelector } from "react-redux";
+
+import AppendChildrenListItem from "./ListItem/AppendChildrenListItem";
 import { PANEL_HEADER_HEIGHT } from "../../Common";
+import SimpleListView from "./SimpleListView";
+import { State } from "../../Reducer";
+import { createSubject } from "../model/CreateSubject";
 
 export const AppendChildrenHeight = 32;
 

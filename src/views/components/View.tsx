@@ -12,7 +12,7 @@ import { ViewRouteProps } from "../Routing";
 import { getDisplay } from "../../Display";
 import { isUndefined } from "lodash";
 import { mergeStyleSets } from "@uifabric/styling";
-import { updateViewName } from "../model/Name";
+import { setViewName } from "../model/SetViewName";
 
 const styles = mergeStyleSets({
   title: {
@@ -42,7 +42,7 @@ function ViewComponent({ location, viewId }: ViewProps): JSX.Element {
   const [localName, setLocalName] = useState(view.name);
   const updateName = useCallback((): void => {
     if (viewId) {
-      dispatch(updateViewName(viewId, localName));
+      dispatch(setViewName(viewId, localName));
     }
   }, [viewId, dispatch, localName]);
   useEffect((): void => {

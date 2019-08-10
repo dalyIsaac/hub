@@ -1,37 +1,37 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import AppendChildren, { AppendChildrenHeight } from "./AppendChildren";
 import {
+  DatePicker,
+  DefaultButton,
+  DirectionalHint,
+  IconButton,
+  Label,
   Stack,
   Text,
   TextField,
-  Label,
-  DatePicker,
-  DefaultButton,
-  IconButton,
-  DirectionalHint,
 } from "office-ui-fabric-react";
-import { getTheme, mergeStyleSets } from "@uifabric/styling";
-
-import { Item } from "../model/Subject";
-import TitleInput from "../../TitleInput";
-import SimpleListView from "./SimpleListView";
-import { setSubjectName } from "../model/Name";
-import { setSubjectDescription } from "../model/Description";
-import { completeSubject, uncompleteSubject } from "../model/Completed";
-import { deleteSubject } from "../model/Delete";
-import { setSubjectDueDate } from "../model/Date";
-import AppendChildren, { AppendChildrenHeight } from "./AppendChildren";
-import SubjectListItem from "./ListItem/SubjectListItem";
-import { Link } from "react-router-dom";
-import { gotoSubject } from "../Routing";
-import { State } from "../../Reducer";
-import { removeChildView } from "../../views/model/RemoveChild";
+import React, { useCallback, useEffect, useState } from "react";
 import {
+  completeItem,
   completeWithChildrenItem,
   deleteItem,
-  completeItem,
   uncompleteItem,
 } from "./SubjectButtonsProps";
+import { completeSubject, uncompleteSubject } from "../model/CompleteSubject";
+import { getTheme, mergeStyleSets } from "@uifabric/styling";
+import { useDispatch, useSelector } from "react-redux";
+
+import { Item } from "../model/Subject";
+import { Link } from "react-router-dom";
+import SimpleListView from "./SimpleListView";
+import { State } from "../../Reducer";
+import SubjectListItem from "./ListItem/SubjectListItem";
+import TitleInput from "../../TitleInput";
+import { deleteSubject } from "../model/DeleteSubject";
+import { gotoSubject } from "../Routing";
+import { removeSubjectFromView } from "../../views/model/RemoveSubjectFromView";
+import { setSubjectDescription } from "../model/SetSubjectDescription";
+import { setSubjectDueDate } from "../model/SetSubjectDueDate";
+import { setSubjectName } from "../model/SetSubjectName";
 
 interface SubjectProps {
   item: Item;
@@ -245,7 +245,7 @@ export default function SubjectComponent({
 
   const removeChildViewOnClick = useCallback((): void => {
     if (viewId && id) {
-      dispatch(removeChildView(viewId, id));
+      dispatch(removeSubjectFromView(viewId, id));
     }
   }, [dispatch, id, viewId]);
 

@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RouteComponentProps } from "react-router";
 import { State } from "../../../Reducer";
 import { commandBarStyle } from "../../../AppCommandBar/AppCommandBar";
-import { createView } from "../../model/Create";
+import { createView } from "../../model/CreateView";
 import { gotoView } from "../../Routing";
 import { subjectBase } from "../../../subject/Routing";
 import { useGetCreateButtonItems } from "./UseGetCreateButtonItems";

@@ -1,24 +1,26 @@
 import { SubjectBaseAction, SubjectState } from "./Subject";
+
 import { sortItems } from "../../Order";
 
-export const APPEND_CHILD_SUBJECT = "APPEND_CHILD_SUBJECT";
+export const APPEND_CHILD_SUBJECT_TO_SUBJECT =
+  "APPEND_CHILD_SUBJECT_TO_SUBJECT";
 
-export interface AppendChildAction extends SubjectBaseAction {
+export interface AppendChildSubjectToSubjectAction extends SubjectBaseAction {
   child: string;
 }
 
-export const appendChild = (
+export const appendChildSubjectToSubject = (
   subjectId: string,
   child: string,
-): AppendChildAction => ({
+): AppendChildSubjectToSubjectAction => ({
   child,
   subjectId,
-  type: APPEND_CHILD_SUBJECT,
+  type: APPEND_CHILD_SUBJECT_TO_SUBJECT,
 });
 
-export const appendChildReducer = (
+export const appendChildSubjectToSubjectReducer = (
   state: SubjectState,
-  { subjectId, child }: AppendChildAction,
+  { subjectId, child }: AppendChildSubjectToSubjectAction,
 ): void => {
   const parentOrder = state.dict[subjectId].children;
   parentOrder.order.push(child);

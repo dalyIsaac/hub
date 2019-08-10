@@ -1,15 +1,16 @@
-import { Subject, SubjectTypes, SubjectBaseAction } from "./Subject";
-import { v4 } from "uuid";
-import { getInitialOrder } from "../../Order";
+import { Subject, SubjectBaseAction, SubjectTypes } from "./Subject";
 import {
-  appendChildReducer as subjectsAppendChildReducer,
-  appendChild as subjectsAppendChild,
-} from "./AppendChild";
+  appendSubjectToView,
+  appendSubjectToViewReducer,
+} from "../../views/model/AppendSubjectToView";
 import {
-  appendChildView,
-  appendChildViewReducer,
-} from "../../views/model/AppendChild";
+  appendChildSubjectToSubject as subjectsAppendChild,
+  appendChildSubjectToSubjectReducer as subjectsAppendChildReducer,
+} from "./AppendChildSubjectToSubject";
+
 import { State } from "../../Reducer";
+import { getInitialOrder } from "../../Order";
+import { v4 } from "uuid";
 
 export const CREATE_SUBJECT = "CREATE_SUBJECT";
 
@@ -47,7 +48,7 @@ export const createSubjectReducer = (
     name: "Untitled",
     parents: new Set(),
     type: subjectType || "BaseSubject",
-    views: new Set()
+    views: new Set(),
   };
 
   state.subjects.dict[subjectId] = subject;
@@ -59,7 +60,7 @@ export const createSubjectReducer = (
     );
   }
   if (viewId !== undefined) {
-    appendChildViewReducer(state, appendChildView(viewId, subjectId));
+    appendSubjectToViewReducer(state, appendSubjectToView(viewId, subjectId));
   }
   state.subjects.order.order.push(subjectId);
 };

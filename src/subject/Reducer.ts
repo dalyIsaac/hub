@@ -1,54 +1,31 @@
-import produce from "immer";
-import { Action } from "redux";
-import { SubjectState, SubjectTypes } from "./model/Subject";
 import {
-  SET_SUBJECT_NAME,
-  setSubjectNameReducer,
-  SetSubjectNameAction,
-} from "./model/Name";
-import {
-  SET_SUBJECT_DESCRIPTION,
-  setSubjectDescriptionReducer,
-  SetSubjectDescriptionAction,
-} from "./model/Description";
+  APPEND_CHILD_SUBJECT_TO_SUBJECT,
+  AppendChildSubjectToSubjectAction,
+  appendChildSubjectToSubjectReducer,
+} from "./model/AppendChildSubjectToSubject";
 import {
   COMPLETE_SUBJECT,
   CompleteSubjectAction,
   UNCOMPLETE_SUBJECT,
-  uncompleteSubjectReducer,
-  completeSubjectReducer,
   UncompleteSubjectAction,
-} from "./model/Completed";
+  completeSubjectReducer,
+  uncompleteSubjectReducer,
+} from "./model/CompleteSubject";
+import {
+  CREATE_SUBJECT,
+  CreateSubjectAction,
+  createSubjectReducer,
+} from "./model/CreateSubject";
 import {
   DELETE_SUBJECT,
   DeleteSubjectAction,
   deleteSubjectReducer,
-} from "./model/Delete";
+} from "./model/DeleteSubject";
 import {
-  SET_SUBJECT_DUE_DATE,
-  SetSubjectDueDateAction,
-  setSubjectDueDateReducer,
-} from "./model/Date";
-import {
-  CREATE_SUBJECT,
-  createSubjectReducer,
-  CreateSubjectAction,
-} from "./model/Create";
-import {
-  REMOVE_CHILD_SUBJECT,
-  removeChildReducer,
-  RemoveChildAction,
-} from "./model/RemoveChild";
-import {
-  APPEND_CHILD_SUBJECT,
-  AppendChildAction,
-  appendChildReducer,
-} from "./model/AppendChild";
-import {
-  getInitialOrder,
-  sortItems,
-  getInitialSortItemsOptions,
-} from "../Order";
+  REMOVE_CHILD_SUBJECT_FROM_SUBJECT_REDUCER,
+  RemoveChildSubjectFromSubjectAction,
+  removeChildSubjectFromSubjectReducer,
+} from "./model/RemoveChildSubjectFromSubject";
 import {
   SET_FIELDS_ARRAY,
   SetFieldsArrayAction,
@@ -56,16 +33,40 @@ import {
 } from "./model/SetFieldsArray";
 import {
   SET_FIELDS_DESC,
-  setFieldsDescReducer,
   SetFieldsDescAction,
+  setFieldsDescReducer,
 } from "./model/SetFieldsDesc";
 import {
   SET_SEPARATE_COMPLETE,
-  setSeparateCompleteReducer,
   SetSeparateCompleteAction,
+  setSeparateCompleteReducer,
 } from "./model/SetSeparateComplete";
-import { isUndefined } from "lodash";
+import {
+  SET_SUBJECT_DESCRIPTION,
+  SetSubjectDescriptionAction,
+  setSubjectDescriptionReducer,
+} from "./model/SetSubjectDescription";
+import {
+  SET_SUBJECT_DUE_DATE,
+  SetSubjectDueDateAction,
+  setSubjectDueDateReducer,
+} from "./model/SetSubjectDueDate";
+import {
+  SET_SUBJECT_NAME,
+  SetSubjectNameAction,
+  setSubjectNameReducer,
+} from "./model/SetSubjectName";
+import { SubjectState, SubjectTypes } from "./model/Subject";
+import {
+  getInitialOrder,
+  getInitialSortItemsOptions,
+  sortItems,
+} from "../Order";
+
+import { Action } from "redux";
 import { State } from "../Reducer";
+import { isUndefined } from "lodash";
+import produce from "immer";
 
 export const initialSubjectState = (): SubjectState => ({
   dict: {},
@@ -108,11 +109,17 @@ const subjectReducer = (state: State, action: Action): State => ({
             SubjectTypes
           >);
           break;
-        case REMOVE_CHILD_SUBJECT:
-          removeChildReducer(subjects, action as RemoveChildAction);
+        case REMOVE_CHILD_SUBJECT_FROM_SUBJECT_REDUCER:
+          removeChildSubjectFromSubjectReducer(
+            subjects,
+            action as RemoveChildSubjectFromSubjectAction,
+          );
           break;
-        case APPEND_CHILD_SUBJECT:
-          appendChildReducer(subjects, action as AppendChildAction);
+        case APPEND_CHILD_SUBJECT_TO_SUBJECT:
+          appendChildSubjectToSubjectReducer(
+            subjects,
+            action as AppendChildSubjectToSubjectAction,
+          );
           break;
         case SET_FIELDS_ARRAY:
           setFieldsArrayReducer(subjects, action as SetFieldsArrayAction);

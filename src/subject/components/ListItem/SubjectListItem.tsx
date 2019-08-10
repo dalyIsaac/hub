@@ -1,23 +1,27 @@
-import React, { useCallback } from "react";
 import { IContextualMenuItem, IconButton } from "office-ui-fabric-react";
-import { mergeStyleSets } from "@uifabric/styling";
-import { Item } from "../../model/Subject";
-import { useDispatch } from "react-redux";
-import { completeSubject, uncompleteSubject } from "../../model/Completed";
-import { deleteSubject } from "../../model/Delete";
-import { Link } from "react-router-dom";
-import { removeChild } from "../../model/RemoveChild";
-import ListItemBase from "./ListItemBase";
-import { isUndefined } from "lodash";
-import { setSubjectName } from "../../model/Name";
-import { gotoSubject } from "../../Routing";
+import React, { useCallback } from "react";
 import {
   completeItem,
   completeWithChildrenItem,
-  uncompleteItem,
-  removeItem,
   deleteItem,
+  removeItem,
+  uncompleteItem,
 } from "../SubjectButtonsProps";
+import {
+  completeSubject,
+  uncompleteSubject,
+} from "../../model/CompleteSubject";
+
+import { Item } from "../../model/Subject";
+import { Link } from "react-router-dom";
+import ListItemBase from "./ListItemBase";
+import { deleteSubject } from "../../model/DeleteSubject";
+import { gotoSubject } from "../../Routing";
+import { isUndefined } from "lodash";
+import { mergeStyleSets } from "@uifabric/styling";
+import { removeChildSubjectFromSubject } from "../../model/RemoveChildSubjectFromSubject";
+import { setSubjectName } from "../../model/SetSubjectName";
+import { useDispatch } from "react-redux";
 
 const styles = mergeStyleSets({
   open: {
@@ -75,7 +79,7 @@ function ListItem({ id, parent, subject }: Item): JSX.Element {
   );
 
   const removeChildOnClick = useCallback((): void => {
-    dispatch(removeChild(id, parent!));
+    dispatch(removeChildSubjectFromSubject(id, parent!));
   }, [dispatch, id, parent]);
 
   const deleteSubjectOnClick = useCallback((): void => {

@@ -1,9 +1,10 @@
 import React, { useCallback } from "react";
+
 import { Item } from "../../model/Subject";
-import { useDispatch } from "react-redux";
-import { appendChild } from "../../model/AppendChild";
-import { isUndefined } from "lodash";
 import ListItemBase from "./ListItemBase";
+import { appendChildSubjectToSubject } from "../../model/AppendChildSubjectToSubject";
+import { isUndefined } from "lodash";
+import { useDispatch } from "react-redux";
 
 function ListItem({ id, parent, subject }: Item): JSX.Element {
   const dispatch = useDispatch();
@@ -14,7 +15,7 @@ function ListItem({ id, parent, subject }: Item): JSX.Element {
       checked?: boolean,
     ): void => {
       if (checked === true) {
-        dispatch(appendChild(parent!, id));
+        dispatch(appendChildSubjectToSubject(parent!, id));
       }
     },
     [dispatch, id, parent],

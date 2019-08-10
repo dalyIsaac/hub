@@ -1,6 +1,6 @@
 import { AllParams } from "../../../Routing";
 import { ICommandBarItemProps } from "office-ui-fabric-react";
-import { createSubject } from "../../../subject/model/Create";
+import { createSubject } from "../../../subject/model/CreateSubject";
 import { useCallback } from "react";
 import { useDispatch } from "react-redux";
 

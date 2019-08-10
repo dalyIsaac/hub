@@ -1,27 +1,28 @@
-import { ViewState } from "./model/View";
-import { Action } from "redux";
-import produce from "immer";
-import { State } from "../Reducer";
 import {
-  createViewReducer,
+  APPEND_SUBJECT_TO_VIEW,
+  AppendSubjectToViewAction,
+  appendSubjectToViewReducer,
+} from "./model/AppendSubjectToView";
+import {
   CREATE_VIEW,
   CreateViewAction,
-} from "./model/Create";
+  createViewReducer,
+} from "./model/CreateView";
 import {
-  UPDATE_VIEW_NAME,
-  updateViewNameReducer,
-  UpdateViewNameAction,
-} from "./model/Name";
+  REMOVE_SUBJECT_FROM_VIEW,
+  RemoveSubjectFromViewAction,
+  removeSubjectFromViewReducer,
+} from "./model/RemoveSubjectFromView";
 import {
-  AppendChildViewAction,
-  APPEND_CHILD_VIEW,
-  appendChildViewReducer,
-} from "./model/AppendChild";
-import {
-  REMOVE_CHILD_VIEW,
-  RemoveChildViewAction,
-  removeChildViewReducer,
-} from "./model/RemoveChild";
+  SET_VIEW_NAME,
+  SetViewNameAction,
+  setViewNameReducer,
+} from "./model/SetViewName";
+
+import { Action } from "redux";
+import { State } from "../Reducer";
+import { ViewState } from "./model/View";
+import produce from "immer";
 
 export const initialViewState = (): ViewState => ({
   dict: {},
@@ -45,14 +46,20 @@ const viewReducer = (state: State, action: Action): State => ({
         case CREATE_VIEW:
           createViewReducer(draftState, action as CreateViewAction);
           break;
-        case UPDATE_VIEW_NAME:
-          updateViewNameReducer(draftState, action as UpdateViewNameAction);
+        case SET_VIEW_NAME:
+          setViewNameReducer(draftState, action as SetViewNameAction);
           break;
-        case APPEND_CHILD_VIEW:
-          appendChildViewReducer(draftState, action as AppendChildViewAction);
+        case APPEND_SUBJECT_TO_VIEW:
+          appendSubjectToViewReducer(
+            draftState,
+            action as AppendSubjectToViewAction,
+          );
           break;
-        case REMOVE_CHILD_VIEW:
-          removeChildViewReducer(draftState, action as RemoveChildViewAction);
+        case REMOVE_SUBJECT_FROM_VIEW:
+          removeSubjectFromViewReducer(
+            draftState,
+            action as RemoveSubjectFromViewAction,
+          );
           break;
         default:
           break;

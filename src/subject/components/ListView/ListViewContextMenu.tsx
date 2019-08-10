@@ -1,20 +1,24 @@
-import React, { useCallback } from "react";
-import { Item } from "../../model/Subject";
 import {
   ContextualMenu,
-  IContextualMenuItem,
   DirectionalHint,
+  IContextualMenuItem,
   IContextualMenuProps,
 } from "office-ui-fabric-react";
-import { useDispatch } from "react-redux";
-import { completeSubject, uncompleteSubject } from "../../model/Completed";
-import { deleteSubject } from "../../model/Delete";
-import { removeChildView } from "../../../views/model/RemoveChild";
+import React, { useCallback } from "react";
 import {
   completeItem,
   completeWithChildrenItem,
   uncompleteItem,
 } from "../SubjectButtonsProps";
+import {
+  completeSubject,
+  uncompleteSubject,
+} from "../../model/CompleteSubject";
+
+import { Item } from "../../model/Subject";
+import { deleteSubject } from "../../model/DeleteSubject";
+import { removeSubjectFromView } from "../../../views/model/RemoveSubjectFromView";
+import { useDispatch } from "react-redux";
 
 export interface ListViewContextMenuProps {
   item: Item;
@@ -82,7 +86,7 @@ export default function ListViewContextMenu({
 
   const removeChildViewOnClick = useCallback((): void => {
     if (viewId && id) {
-      dispatch(removeChildView(viewId, id));
+      dispatch(removeSubjectFromView(viewId, id));
     }
   }, [dispatch, id, viewId]);
 
