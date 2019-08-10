@@ -47,6 +47,7 @@ export const createSubjectReducer = (
     name: "Untitled",
     parents: new Set(),
     type: subjectType || "BaseSubject",
+    views: new Set()
   };
 
   state.subjects.dict[subjectId] = subject;

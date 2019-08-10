@@ -1,14 +1,16 @@
-/* eslint @typescript-eslint/explicit-function-return-type: "off" */
-
 import { createTransform } from "redux-persist";
 import { Subject, SubjectState, SubjectDictState } from "./Subject";
 
 interface PersistSubject
-  extends Omit<Subject, "created" | "completed" | "dueDate" | "parents"> {
+  extends Omit<
+    Subject,
+    "created" | "completed" | "dueDate" | "parents" | "views"
+  > {
   created: Date | string;
   completed?: Date | string;
   dueDate?: Date | string;
   parents: string[];
+  views: string[];
 }
 
 interface PersistSubjectDictState {
@@ -23,7 +25,7 @@ const transformSubjects = createTransform<SubjectState, PersistSubjectState>(
   ({ dict: inboundSubjects, ...everythingElse }, _key) => {
     const dict: PersistSubjectDictState = {};
     for (const [key, s] of Object.entries(inboundSubjects)) {
-      dict[key] = { ...s, parents: [...s.parents] };
+      dict[key] = { ...s, parents: [...s.parents], views: [...s.views] };
     }
     return { dict, ...everythingElse };
   },
@@ -31,7 +33,7 @@ const transformSubjects = createTransform<SubjectState, PersistSubjectState>(
     const dict: SubjectDictState = {};
     for (const [
       key,
-      { created, completed, dueDate, parents, ...s },
+      { created, completed, dueDate, parents, views, ...s },
     ] of Object.entries(outboundSubjects)) {
       const completedDate = completed ? new Date(completed) : undefined;
       const dueDateDate = dueDate ? new Date(dueDate) : undefined;
@@ -41,6 +43,7 @@ const transformSubjects = createTransform<SubjectState, PersistSubjectState>(
         created: new Date(created),
         dueDate: dueDateDate,
         parents: new Set(parents),
+        views: new Set(views),
       };
     }
     return { dict, ...everythingElse };

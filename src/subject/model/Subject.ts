@@ -15,6 +15,7 @@ export interface Subject<T = SubjectTypes> {
   dueDate?: Date;
   children: OrderState;
   parents: Set<string>;
+  views: Set<string>;
 }
 
 export interface SubjectDictState {
