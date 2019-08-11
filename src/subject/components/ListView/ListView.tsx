@@ -10,7 +10,7 @@ import ListViewModal from "./ListViewModal";
 import React from "react";
 import { SortItemsOptions } from "../../../model/Order";
 import { State } from "../../../Reducer";
-import Wrapper from "../../../Wrapper";
+import Wrapper from "../../../components/Wrapper";
 import { useCommandBar } from "../UseCommandBar";
 import { useListViewContextMenu } from "./UseListViewContextMenu";
 import { useListViewDetailsList } from "./UseListViewDetailsList";

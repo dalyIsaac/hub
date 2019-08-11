@@ -1,15 +1,15 @@
-import { AllRouteComponentProps, Paths } from "./Routing";
+import { AllRouteComponentProps, Paths } from "../Routing";
 import React, { useEffect } from "react";
-import { getSearchMatch, searchBase } from "./model/Search/Routing";
+import { getSearchMatch, searchBase } from "../model/Search/Routing";
 import { getTheme, mergeStyleSets } from "@uifabric/styling";
-import { gotoSubject, subjectBase } from "./model/Subject/Routing";
+import { gotoSubject, subjectBase } from "../model/Subject/Routing";
 
-import { APPBAR_HEIGHT } from "./Common";
+import { APPBAR_HEIGHT } from "../Common";
 import { Link } from "react-router-dom";
-import SearchBar from "./components/SearchBar";
-import { State } from "./Reducer";
+import SearchBar from "./SearchBar";
+import { State } from "../Reducer";
 import { Text } from "office-ui-fabric-react";
-import { getDisplay } from "./Display";
+import { getDisplay } from "../Display";
 import { useSelector } from "react-redux";
 
 const theme = getTheme();

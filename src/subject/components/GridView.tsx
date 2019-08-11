@@ -1,7 +1,7 @@
 import { IRectangle, List, ScrollToMode } from "office-ui-fabric-react";
 import React, { useCallback, useEffect } from "react";
 import { SubjectViewHookProps, useSubjectView } from "./SubjectView";
-import Wrapper, { MIN_COL_WIDTH } from "../../Wrapper";
+import Wrapper, { MIN_COL_WIDTH } from "../../components/Wrapper";
 import { getTheme, mergeStyleSets } from "@uifabric/styling";
 
 import { AllRouteComponentProps } from "../../Routing";

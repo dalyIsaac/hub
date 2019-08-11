@@ -28,7 +28,7 @@ import { Link } from "react-router-dom";
 import SimpleListView from "./SimpleListView";
 import { State } from "../../Reducer";
 import SubjectListItem from "./ListItem/SubjectListItem";
-import TitleInput from "../../TitleInput";
+import TitleInput from "../../components/TitleInput";
 import { deleteSubject } from "../../model/Subject/DeleteSubject";
 import { gotoSubject } from "../../model/Subject/Routing";
 import { removeSubjectFromView } from "../../model/Views/RemoveSubjectFromView";

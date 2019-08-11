@@ -7,7 +7,7 @@ import ListView from "../../subject/components/ListView/ListView";
 import { Location } from "history";
 import { Paths } from "../../Routing";
 import { State } from "../../Reducer";
-import TitleInput from "../../TitleInput";
+import TitleInput from "../../components/TitleInput";
 import { ViewRouteProps } from "../../model/Views/Routing";
 import { getDisplay } from "../../Display";
 import { isUndefined } from "lodash";
