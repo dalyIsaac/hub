@@ -61,28 +61,33 @@ const subjectReducer = (state: State, action: Action): State => ({
   ...produce(
     state,
     (draftState): State => {
-      const { subjects } = draftState;
       switch (action.type) {
         case SET_SUBJECT_NAME:
-          setSubjectNameReducer(subjects, action as SetSubjectNameAction);
+          setSubjectNameReducer(draftState, action as SetSubjectNameAction);
           break;
         case SET_SUBJECT_DESCRIPTION:
           setSubjectDescriptionReducer(
-            subjects,
+            draftState,
             action as SetSubjectDescriptionAction,
           );
           break;
         case COMPLETE_SUBJECT:
-          completeSubjectReducer(subjects, action as CompleteSubjectAction);
+          completeSubjectReducer(draftState, action as CompleteSubjectAction);
           break;
         case UNCOMPLETE_SUBJECT:
-          uncompleteSubjectReducer(subjects, action as UncompleteSubjectAction);
+          uncompleteSubjectReducer(
+            draftState,
+            action as UncompleteSubjectAction,
+          );
           break;
         case DELETE_SUBJECT:
           deleteSubjectReducer(draftState, action as DeleteSubjectAction);
           break;
         case SET_SUBJECT_DUE_DATE:
-          setSubjectDueDateReducer(subjects, action as SetSubjectDueDateAction);
+          setSubjectDueDateReducer(
+            draftState,
+            action as SetSubjectDueDateAction,
+          );
           break;
         case CREATE_SUBJECT:
           createSubjectReducer(draftState, action as CreateSubjectAction<
@@ -91,13 +96,13 @@ const subjectReducer = (state: State, action: Action): State => ({
           break;
         case REMOVE_CHILD_SUBJECT_FROM_SUBJECT_REDUCER:
           removeChildSubjectFromSubjectReducer(
-            subjects,
+            draftState,
             action as RemoveChildSubjectFromSubjectAction,
           );
           break;
         case APPEND_CHILD_SUBJECT_TO_SUBJECT:
           appendChildSubjectToSubjectReducer(
-            subjects,
+            draftState,
             action as AppendChildSubjectToSubjectAction,
           );
           break;

@@ -1,6 +1,7 @@
 import { Subject, SubjectDictState } from "../Subject";
 import { isUndefined } from "lodash";
 import { BaseAction } from "../../Common";
+import { State } from "../../Reducer";
 
 export type SortFieldKey = keyof Omit<Subject, "parents">;
 
@@ -120,6 +121,20 @@ export function sortAllParents(
   for (const id of dict[subjectId].parents) {
     const parent = dict[id].children;
     parent.order = sortItems(dict, parent);
+  }
+}
+
+export function sortAllViews(
+  { views, subjects: { dict } }: State,
+  subjectId: string,
+): void {
+  if (!(subjectId in dict)) {
+    return;
+  }
+
+  for (const id of dict[subjectId].views) {
+    const view = views.dict[id].children;
+    view.order = sortItems(dict, view);
   }
 }
 

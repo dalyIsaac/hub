@@ -1,7 +1,8 @@
-import { SubjectBaseAction, SubjectState } from ".";
+import { SubjectBaseAction } from ".";
 
 import { remove } from "lodash";
-import { sortAllParents } from "../Order";
+import { sortAllParents, sortAllViews } from "../Order";
+import { State } from "../../Reducer";
 
 export const REMOVE_CHILD_SUBJECT_FROM_SUBJECT_REDUCER =
   "REMOVE_CHILD_SUBJECT_FROM_SUBJECT_REDUCER";
@@ -20,10 +21,12 @@ export const removeChildSubjectFromSubject = (
 });
 
 export const removeChildSubjectFromSubjectReducer = (
-  state: SubjectState,
+  state: State,
   { subjectId, parent }: RemoveChildSubjectFromSubjectAction,
 ): void => {
-  remove(state.dict[parent].children.order, (s): boolean => s === subjectId);
-  state.dict[subjectId].parents.delete(parent);
-  sortAllParents(state.dict, subjectId);
+  const { subjects } = state;
+  remove(subjects.dict[parent].children.order, (s): boolean => s === subjectId);
+  subjects.dict[subjectId].parents.delete(parent);
+  sortAllParents(subjects.dict, subjectId);
+  sortAllViews(state, subjectId);
 };

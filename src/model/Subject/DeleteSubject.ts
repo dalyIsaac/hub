@@ -1,7 +1,7 @@
 import { SubjectBaseAction } from ".";
 
 import { remove } from "lodash";
-import { sortAllParents } from "../Order";
+import { sortAllParents, sortAllViews } from "../Order";
 import { State } from "../../Reducer";
 
 export const DELETE_SUBJECT = "DELETE_SUBJECT";
@@ -13,22 +13,20 @@ export const deleteSubject = (subjectId: string): DeleteSubjectAction => ({
   type: DELETE_SUBJECT,
 });
 
-
 export const deleteSubjectReducer = (
-  {subjects, views}: State,
+  state: State,
   { subjectId }: DeleteSubjectAction,
 ): void => {
+  const { subjects, views } = state;
   function deleteId(arr: string[]) {
-    remove(arr, i => i === subjectId);
+    remove(arr, (i) => i === subjectId);
   }
 
   const subject = subjects.dict[subjectId];
 
   // Delete subjectId from its parents' order array
   for (const parentId of subject.parents) {
-    deleteId(
-      subjects.dict[parentId].children.order,
-    );
+    deleteId(subjects.dict[parentId].children.order);
   }
 
   // Delete subjectId from its children parents' set
@@ -38,12 +36,13 @@ export const deleteSubjectReducer = (
 
   // Delete subjectId from the subject list
   deleteId(subjects.order.order);
-  
+
   // Delete subjectId from views
   for (const viewId of subject.views) {
-    deleteId(views.dict[viewId].children.order)
+    deleteId(views.dict[viewId].children.order);
   }
 
   sortAllParents(subjects.dict, subjectId);
+  sortAllViews(state, subjectId);
   delete subjects.dict[subjectId];
 };

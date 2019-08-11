@@ -1,5 +1,6 @@
-import { SubjectState, SubjectBaseAction } from ".";
-import { sortAllParents } from "../Order";
+import { SubjectBaseAction } from ".";
+import { sortAllParents, sortAllViews } from "../Order";
+import { State } from "../../Reducer";
 
 // Set subject due date
 export const SET_SUBJECT_DUE_DATE = "SET_SUBJECT_DUE_DATE";
@@ -18,9 +19,10 @@ export const setSubjectDueDate = (
 });
 
 export const setSubjectDueDateReducer = (
-  state: SubjectState,
+  state: State,
   { subjectId, date }: SetSubjectDueDateAction,
 ): void => {
-  state.dict[subjectId].dueDate = date;
-  sortAllParents(state.dict, subjectId);
+  state.subjects.dict[subjectId].dueDate = date;
+  sortAllParents(state.subjects.dict, subjectId);
+  sortAllViews(state, subjectId);
 };

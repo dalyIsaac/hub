@@ -1,5 +1,6 @@
-import { SubjectState, SubjectBaseAction } from ".";
-import { sortAllParents } from "../Order";
+import { SubjectBaseAction } from ".";
+import { sortAllParents, sortAllViews } from "../Order";
+import { State } from "../../Reducer";
 
 export const SET_SUBJECT_NAME = "SET_SUBJECT_NAME";
 
@@ -17,9 +18,10 @@ export const setSubjectName = (
 });
 
 export const setSubjectNameReducer = (
-  state: SubjectState,
+  state: State,
   { subjectId, name }: SetSubjectNameAction,
 ): void => {
-  state.dict[subjectId].name = name;
-  sortAllParents(state.dict, subjectId);
+  state.subjects.dict[subjectId].name = name;
+  sortAllParents(state.subjects.dict, subjectId);
+  sortAllViews(state, subjectId);
 };

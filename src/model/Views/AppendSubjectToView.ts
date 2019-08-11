@@ -1,6 +1,6 @@
 import { State } from "../../Reducer";
 import { ViewBaseAction } from ".";
-import { sortItems } from "../Order";
+import { sortItems, sortAllViews } from "../Order";
 
 export const APPEND_SUBJECT_TO_VIEW = "APPEND_SUBJECT_TO_VIEW";
 
@@ -18,13 +18,15 @@ export const appendSubjectToView = (
 });
 
 export const appendSubjectToViewReducer = (
-  { subjects, views }: State,
+  state: State,
   { subjectId, viewId }: AppendSubjectToViewAction,
 ): void => {
+  const { subjects, views } = state;
   const children = views.dict[viewId].children;
   children.order.push(subjectId);
   views.dict[viewId].children.order = sortItems(subjects.dict, children);
 
   // Add viewId to the subject's views set
   subjects.dict[subjectId].views.add(viewId);
+  sortAllViews(state, subjectId);
 };

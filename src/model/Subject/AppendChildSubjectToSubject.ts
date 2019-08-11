@@ -1,6 +1,7 @@
-import { SubjectBaseAction, SubjectState } from ".";
+import { SubjectBaseAction } from ".";
 
-import { sortItems } from "../Order";
+import { sortItems, sortAllViews } from "../Order";
+import { State } from "../../Reducer";
 
 export const APPEND_CHILD_SUBJECT_TO_SUBJECT =
   "APPEND_CHILD_SUBJECT_TO_SUBJECT";
@@ -19,11 +20,13 @@ export const appendChildSubjectToSubject = (
 });
 
 export const appendChildSubjectToSubjectReducer = (
-  state: SubjectState,
+  state: State,
   { subjectId, child }: AppendChildSubjectToSubjectAction,
 ): void => {
-  const parentOrder = state.dict[subjectId].children;
+  const { subjects } = state;
+  const parentOrder = subjects.dict[subjectId].children;
   parentOrder.order.push(child);
-  parentOrder.order = sortItems(state.dict, parentOrder);
-  state.dict[child].parents.add(subjectId);
+  parentOrder.order = sortItems(subjects.dict, parentOrder);
+  subjects.dict[child].parents.add(subjectId);
+  sortAllViews(state, subjectId);
 };

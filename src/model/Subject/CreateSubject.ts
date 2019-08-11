@@ -54,10 +54,7 @@ export const createSubjectReducer = (
   state.subjects.dict[subjectId] = subject;
 
   if (parentId !== undefined) {
-    subjectsAppendChildReducer(
-      state.subjects,
-      subjectsAppendChild(parentId, subjectId),
-    );
+    subjectsAppendChildReducer(state, subjectsAppendChild(parentId, subjectId));
   }
   if (viewId !== undefined) {
     appendSubjectToViewReducer(state, appendSubjectToView(viewId, subjectId));
