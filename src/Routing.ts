@@ -1,4 +1,4 @@
-import { SearchRouteProps, searchBase } from "./Search/Routing";
+import { SearchRouteProps, searchBase } from "./model/Search/Routing";
 import { SubjectsRouteProps, subjectBase } from "./model/Subject/Routing";
 import { ViewRouteProps, viewBase } from "./model/Views/Routing";
 

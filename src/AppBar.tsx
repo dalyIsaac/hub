@@ -1,6 +1,6 @@
 import { AllRouteComponentProps, Paths } from "./Routing";
 import React, { useEffect } from "react";
-import { getSearchMatch, searchBase } from "./Search/Routing";
+import { getSearchMatch, searchBase } from "./model/Search/Routing";
 import { getTheme, mergeStyleSets } from "@uifabric/styling";
 import { gotoSubject, subjectBase } from "./model/Subject/Routing";
 

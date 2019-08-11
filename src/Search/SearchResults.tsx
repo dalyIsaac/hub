@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { SearchRouteProps, getSearchMatch } from "./Routing";
+import { SearchRouteProps, getSearchMatch } from "../model/Search/Routing";
 import { RouteComponentProps } from "react-router";
 import { Item, Subject } from "../model/Subject";
 import ListView from "../subject/components/ListView/ListView";

@@ -6,7 +6,11 @@ import {
   mergeStyleSets,
 } from "office-ui-fabric-react";
 import { RouteComponentProps } from "react-router";
-import { gotoSearch, SearchRouteProps, getSearchMatch } from "./Routing";
+import {
+  gotoSearch,
+  SearchRouteProps,
+  getSearchMatch,
+} from "../model/Search/Routing";
 import { Subject } from "../model/Subject";
 
 const styles = mergeStyleSets({
