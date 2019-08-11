@@ -4,8 +4,8 @@ import React, { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import AppendChildren from "../../views/components/AppendChildren";
-import { BUTTON_HEIGHT } from "../../AppCommandBar/Common";
-import SortButton from "../../AppCommandBar/SortButton";
+import { BUTTON_HEIGHT } from "../../components/AppCommandBar/Common";
+import SortButton from "../../components/AppCommandBar/SortButton";
 import { State } from "../../Reducer";
 import { setSeparateComplete } from "../../model/Subject/SetSeparateComplete";
 

@@ -2,8 +2,8 @@ import { APPBAR_HEIGHT, VIEW_TITLE_HEIGHT } from "../../../Common";
 import { AllRouteComponentProps, Paths } from "../../../Routing";
 import { DetailsList, SelectionMode } from "office-ui-fabric-react";
 
-import { APP_COMMAND_BAR_HEIGHT } from "../../../AppCommandBar/Common";
-import AppCommandBar from "../../../AppCommandBar/AppCommandBar";
+import { APP_COMMAND_BAR_HEIGHT } from "../../../components/AppCommandBar/Common";
+import AppCommandBar from "../../../components/AppCommandBar";
 import { GetItemsOptions } from "../../../model/Subject";
 import ListViewContextMenu from "./ListViewContextMenu";
 import ListViewModal from "./ListViewModal";

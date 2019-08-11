@@ -5,7 +5,7 @@ import Wrapper, { MIN_COL_WIDTH } from "../../Wrapper";
 import { getTheme, mergeStyleSets } from "@uifabric/styling";
 
 import { AllRouteComponentProps } from "../../Routing";
-import AppCommandBar from "../../AppCommandBar/AppCommandBar";
+import AppCommandBar from "../../components/AppCommandBar";
 import { Item } from "../../model/Subject";
 import { State } from "../../Reducer";
 import SubjectComponent from "./Subject";

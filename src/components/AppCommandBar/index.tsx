@@ -5,7 +5,7 @@ import {
 } from "office-ui-fabric-react";
 import React, { useCallback } from "react";
 import { RouteComponentProps, withRouter } from "react-router";
-import { getDisplay, updateDisplay } from "../Display";
+import { getDisplay, updateDisplay } from "../../Display";
 
 import { BUTTON_HEIGHT } from "./Common";
 
