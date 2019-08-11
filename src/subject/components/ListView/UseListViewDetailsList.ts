@@ -3,7 +3,7 @@ import { setFieldsArray } from "../../model/SetFieldsArray";
 import { useDispatch } from "react-redux";
 import { setFieldsDesc } from "../../model/SetFieldsDesc";
 import { IColumn } from "office-ui-fabric-react";
-import { SortField, SetSortParameters } from "../../../Order";
+import { SortField, SetSortParameters } from "../../../model/Order";
 import { Item } from "../../model/Subject";
 import { History } from "history";
 import { gotoSubject } from "../../Routing";

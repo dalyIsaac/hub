@@ -8,7 +8,7 @@ import { GetItemsOptions } from "../../model/Subject";
 import ListViewContextMenu from "./ListViewContextMenu";
 import ListViewModal from "./ListViewModal";
 import React from "react";
-import { SortItemsOptions } from "../../../Order";
+import { SortItemsOptions } from "../../../model/Order";
 import { State } from "../../../Reducer";
 import Wrapper from "../../../Wrapper";
 import { useCommandBar } from "../UseCommandBar";

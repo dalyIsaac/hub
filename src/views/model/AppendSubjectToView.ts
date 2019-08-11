@@ -1,6 +1,6 @@
 import { State } from "../../Reducer";
 import { ViewBaseAction } from "./View";
-import { sortItems } from "../../Order";
+import { sortItems } from "../../model/Order";
 
 export const APPEND_SUBJECT_TO_VIEW = "APPEND_SUBJECT_TO_VIEW";
 

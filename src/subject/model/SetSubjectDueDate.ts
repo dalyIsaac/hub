@@ -1,5 +1,5 @@
 import { SubjectState, SubjectBaseAction } from "./Subject";
-import { sortAllParents } from "../../Order";
+import { sortAllParents } from "../../model/Order";
 
 // Set subject due date
 export const SET_SUBJECT_DUE_DATE = "SET_SUBJECT_DUE_DATE";

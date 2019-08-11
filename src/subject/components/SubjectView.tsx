@@ -6,7 +6,7 @@ import {
   SortField,
   SortItemsOptions,
   sortItems,
-} from "../../Order";
+} from "../../model/Order";
 
 import GridView from "./GridView";
 import ListView from "./ListView/ListView";

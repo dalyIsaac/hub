@@ -1,6 +1,6 @@
 import { SubjectBaseAction, SubjectState } from "./Subject";
 
-import { sortItems } from "../../Order";
+import { sortItems } from "../../model/Order";
 
 export const APPEND_CHILD_SUBJECT_TO_SUBJECT =
   "APPEND_CHILD_SUBJECT_TO_SUBJECT";

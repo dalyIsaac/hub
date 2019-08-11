@@ -1,7 +1,7 @@
 import { SubjectBaseAction, SubjectState } from "./Subject";
 
 import { remove } from "lodash";
-import { sortAllParents } from "../../Order";
+import { sortAllParents } from "../../model/Order";
 
 export const REMOVE_CHILD_SUBJECT_FROM_SUBJECT_REDUCER =
   "REMOVE_CHILD_SUBJECT_FROM_SUBJECT_REDUCER";

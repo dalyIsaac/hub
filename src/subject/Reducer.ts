@@ -61,7 +61,7 @@ import {
   getInitialOrder,
   getInitialSortItemsOptions,
   sortItems,
-} from "../Order";
+} from "../model/Order";
 
 import { Action } from "redux";
 import { State } from "../Reducer";

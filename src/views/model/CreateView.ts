@@ -1,5 +1,5 @@
 import { State } from "../../Reducer";
-import { getInitialOrder } from "../../Order";
+import { getInitialOrder } from "../../model/Order";
 import { ViewBaseAction } from "./View";
 import { v4 } from "uuid";
 

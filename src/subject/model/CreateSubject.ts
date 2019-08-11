@@ -9,7 +9,7 @@ import {
 } from "./AppendChildSubjectToSubject";
 
 import { State } from "../../Reducer";
-import { getInitialOrder } from "../../Order";
+import { getInitialOrder } from "../../model/Order";
 import { v4 } from "uuid";
 
 export const CREATE_SUBJECT = "CREATE_SUBJECT";

@@ -1,4 +1,4 @@
-import { OrderState } from "../../Order";
+import { OrderState } from "../../model/Order";
 import { BaseAction } from "../../Common";
 
 export interface View {
