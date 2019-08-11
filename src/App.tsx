@@ -1,14 +1,14 @@
 import { AllPaths, Paths } from "./Routing";
 import { Redirect, Route, Switch } from "react-router";
 
-import AppBar from "./AppBar";
+import AppBar from "./components/AppBar";
 import React from "react";
-import SearchResults from "./Search/SearchResults";
-import SubjectView from "./subject/components/SubjectView";
-import View from "./views/components/View";
-import ViewsNav from "./views/components/ViewsNav";
+import SearchResults from "./components/SearchResults";
+import SubjectView from "./components/SubjectView";
+import View from "./components/View";
+import ViewsNav from "./components/ViewsNav";
 import { mergeStyleSets } from "@uifabric/styling";
-import { subjectBase } from "./subject/Routing";
+import { subjectBase } from "./model/Subject/Routing";
 
 const styles = mergeStyleSets({
   main: {
