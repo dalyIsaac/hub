@@ -9,12 +9,12 @@ import {
   mergeStyleSets,
 } from "office-ui-fabric-react";
 import React, { useCallback, useRef, useState } from "react";
-import { border, gridTemplateColumns } from "./ListItem/ListItemBase";
+import { border, gridTemplateColumns } from "../../subject/components/ListItem/ListItemBase";
 import { useDispatch, useSelector } from "react-redux";
 
-import AppendChildrenListItem from "./ListItem/AppendChildrenListItem";
+import AppendChildrenListItem from "../../subject/components/ListItem/AppendChildrenListItem";
 import { PANEL_HEADER_HEIGHT } from "../../Common";
-import SimpleListView from "./SimpleListView";
+import SimpleListView from "../../subject/components/SimpleListView";
 import { State } from "../../Reducer";
 import { createSubject } from "../../model/Subject/CreateSubject";
 

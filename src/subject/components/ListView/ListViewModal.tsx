@@ -1,7 +1,7 @@
 import React from "react";
 import { Item } from "../../../model/Subject";
 import { Modal, getTheme, mergeStyleSets } from "office-ui-fabric-react";
-import SubjectComponent from "../Subject";
+import SubjectComponent from "../../../components/Subject";
 
 const theme = getTheme();
 const styles = mergeStyleSets({

@@ -2,7 +2,7 @@ import { getTheme, mergeStyleSets } from "office-ui-fabric-react";
 
 import React from "react";
 import { State } from "../Reducer";
-import SubjectComponent from "../subject/components/Subject";
+import SubjectComponent from "./Subject";
 import { useSelector } from "react-redux";
 import useWindowSize from "@rehooks/window-size";
 

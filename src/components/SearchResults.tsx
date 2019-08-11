@@ -3,7 +3,7 @@ import { SearchRouteProps, getSearchMatch } from "../model/Search/Routing";
 import { RouteComponentProps } from "react-router";
 import { Item, Subject } from "../model/Subject";
 import ListView from "../subject/components/ListView/ListView";
-import GridView from "../subject/components/GridView";
+import GridView from "./GridView";
 import { Text } from "office-ui-fabric-react";
 import { options } from "./SearchBar";
 import { useSelector } from "react-redux";

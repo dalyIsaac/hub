@@ -4,7 +4,7 @@ import { Redirect, Route, Switch } from "react-router";
 import AppBar from "./components/AppBar";
 import React from "react";
 import SearchResults from "./components/SearchResults";
-import SubjectView from "./subject/components/SubjectView";
+import SubjectView from "./components/SubjectView";
 import View from "./views/components/View";
 import ViewsNav from "./views/components/ViewsNav";
 import { mergeStyleSets } from "@uifabric/styling";

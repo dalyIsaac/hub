@@ -15,7 +15,7 @@ import {
   completeWithChildrenItem,
   deleteItem,
   uncompleteItem,
-} from "./SubjectButtonsProps";
+} from "../../subject/components/SubjectButtonsProps";
 import {
   completeSubject,
   uncompleteSubject,
@@ -25,10 +25,10 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { Item } from "../../model/Subject";
 import { Link } from "react-router-dom";
-import SimpleListView from "./SimpleListView";
+import SimpleListView from "../../subject/components/SimpleListView";
 import { State } from "../../Reducer";
-import SubjectListItem from "./ListItem/SubjectListItem";
-import TitleInput from "../../components/TitleInput";
+import SubjectListItem from "../../subject/components/ListItem/SubjectListItem";
+import TitleInput from "../TitleInput";
 import { deleteSubject } from "../../model/Subject/DeleteSubject";
 import { gotoSubject } from "../../model/Subject/Routing";
 import { removeSubjectFromView } from "../../model/Views/RemoveSubjectFromView";

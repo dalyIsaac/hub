@@ -1,4 +1,4 @@
-import { GetItemsOptions, Item, getItems } from "../../model/Subject";
+import { GetItemsOptions, Item, getItems } from "../model/Subject";
 import React, { useState } from "react";
 import { Redirect, RouteComponentProps } from "react-router";
 import {
@@ -6,13 +6,13 @@ import {
   SortField,
   SortItemsOptions,
   sortItems,
-} from "../../model/Order";
+} from "../model/Order";
 
 import GridView from "./GridView";
-import ListView from "./ListView/ListView";
-import { State } from "../../Reducer";
-import { SubjectsRouteProps } from "../../model/Subject/Routing";
-import { getDisplay } from "../../Display";
+import ListView from "../subject/components/ListView/ListView";
+import { State } from "../Reducer";
+import { SubjectsRouteProps } from "../model/Subject/Routing";
+import { getDisplay } from "../Display";
 import { isUndefined } from "lodash";
 import { useSelector } from "react-redux";
 

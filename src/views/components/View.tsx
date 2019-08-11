@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Redirect, RouteComponentProps } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 
-import GridView from "../../subject/components/GridView";
+import GridView from "../../components/GridView";
 import ListView from "../../subject/components/ListView/ListView";
 import { Location } from "history";
 import { Paths } from "../../Routing";

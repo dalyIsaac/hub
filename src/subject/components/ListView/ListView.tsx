@@ -11,14 +11,14 @@ import React from "react";
 import { SortItemsOptions } from "../../../model/Order";
 import { State } from "../../../Reducer";
 import Wrapper from "../../../components/Wrapper";
-import { useCommandBar } from "../UseCommandBar";
+import { useCommandBar } from "../../../components/UseCommandBar";
 import { useListViewContextMenu } from "./UseListViewContextMenu";
 import { useListViewDetailsList } from "./UseListViewDetailsList";
 import { useListViewModal } from "./UseListViewModal";
 import { useListViewRender } from "./UseListViewRender";
 import { useListViewScroll } from "./UseListViewScroll";
 import { useSelector } from "react-redux";
-import { useSubjectView } from "../SubjectView";
+import { useSubjectView } from "../../../components/SubjectView";
 import { withRouter } from "react-router-dom";
 
 interface ListViewProps {
