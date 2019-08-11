@@ -4,7 +4,7 @@ import React, { useCallback } from "react";
 import { Item } from "../../model/Subject";
 import { Link } from "react-router-dom";
 import { gotoSubject } from "../../Routing";
-import { removeSubjectFromView } from "../../../views/model/RemoveSubjectFromView";
+import { removeSubjectFromView } from "../../../model/Views/RemoveSubjectFromView";
 import { useDispatch } from "react-redux";
 
 const theme = getTheme();

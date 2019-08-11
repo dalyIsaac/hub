@@ -1,8 +1,8 @@
 import reduceReducers from "reduce-reducers";
 import subjectReducer, { initialSubjectState } from "./subject/Reducer";
 import { SubjectState } from "./subject/model/Subject";
-import { ViewState } from "./views/model/View";
-import viewReducer, { initialViewState } from "./views/Reducer";
+import { ViewState } from "./model/Views";
+import viewReducer, { initialViewState } from "./model/Views/Reducer";
 
 export interface State {
   subjects: SubjectState;

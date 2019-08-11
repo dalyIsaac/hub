@@ -1,5 +1,5 @@
 import { State } from "../../Reducer";
-import { ViewBaseAction } from "./View";
+import { ViewBaseAction } from ".";
 
 export const SET_VIEW_NAME = "SET_VIEW_NAME";
 

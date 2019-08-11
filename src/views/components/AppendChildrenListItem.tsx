@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 
 import { Item } from "../../subject/model/Subject";
 import ListItemBase from "../../subject/components/ListItem/ListItemBase";
-import { appendSubjectToView } from "../model/AppendSubjectToView";
+import { appendSubjectToView } from "../../model/Views/AppendSubjectToView";
 import { isUndefined } from "lodash";
 import { useDispatch } from "react-redux";
 

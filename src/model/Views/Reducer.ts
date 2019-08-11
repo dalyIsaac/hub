@@ -2,26 +2,22 @@ import {
   APPEND_SUBJECT_TO_VIEW,
   AppendSubjectToViewAction,
   appendSubjectToViewReducer,
-} from "./model/AppendSubjectToView";
-import {
-  CREATE_VIEW,
-  CreateViewAction,
-  createViewReducer,
-} from "./model/CreateView";
+} from "./AppendSubjectToView";
+import { CREATE_VIEW, CreateViewAction, createViewReducer } from "./CreateView";
 import {
   REMOVE_SUBJECT_FROM_VIEW,
   RemoveSubjectFromViewAction,
   removeSubjectFromViewReducer,
-} from "./model/RemoveSubjectFromView";
+} from "./RemoveSubjectFromView";
 import {
   SET_VIEW_NAME,
   SetViewNameAction,
   setViewNameReducer,
-} from "./model/SetViewName";
+} from "./SetViewName";
 
 import { Action } from "redux";
-import { State } from "../Reducer";
-import { ViewState } from "./model/View";
+import { State } from "../../Reducer";
+import { ViewState } from ".";
 import produce from "immer";
 
 export const initialViewState = (): ViewState => ({

@@ -17,7 +17,7 @@ import {
 
 import { Item } from "../../model/Subject";
 import { deleteSubject } from "../../model/DeleteSubject";
-import { removeSubjectFromView } from "../../../views/model/RemoveSubjectFromView";
+import { removeSubjectFromView } from "../../../model/Views/RemoveSubjectFromView";
 import { useDispatch } from "react-redux";
 
 export interface ListViewContextMenuProps {

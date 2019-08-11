@@ -8,11 +8,11 @@ import { Location } from "history";
 import { Paths } from "../../Routing";
 import { State } from "../../Reducer";
 import TitleInput from "../../TitleInput";
-import { ViewRouteProps } from "../Routing";
+import { ViewRouteProps } from "../../model/Views/Routing";
 import { getDisplay } from "../../Display";
 import { isUndefined } from "lodash";
 import { mergeStyleSets } from "@uifabric/styling";
-import { setViewName } from "../model/SetViewName";
+import { setViewName } from "../../model/Views/SetViewName";
 
 const styles = mergeStyleSets({
   title: {

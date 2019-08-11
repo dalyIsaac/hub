@@ -1,5 +1,5 @@
 import { State } from "../../Reducer";
-import { ViewBaseAction } from "./View";
+import { ViewBaseAction } from ".";
 import { remove } from "lodash";
 
 export const REMOVE_SUBJECT_FROM_VIEW = "REMOVE_SUBJECT_FROM_VIEW";

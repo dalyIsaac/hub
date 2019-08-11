@@ -1,7 +1,7 @@
 /* eslint @typescript-eslint/explicit-function-return-type: "off" */
 
 import { createTransform } from "redux-persist";
-import { ViewState } from "./View";
+import { ViewState } from ".";
 
 interface PersistSubjectState extends Omit<ViewState, "orderSet"> {}
 

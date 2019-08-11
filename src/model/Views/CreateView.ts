@@ -1,6 +1,6 @@
 import { State } from "../../Reducer";
-import { getInitialOrder } from "../../model/Order";
-import { ViewBaseAction } from "./View";
+import { getInitialOrder } from "../Order";
+import { ViewBaseAction } from ".";
 import { v4 } from "uuid";
 
 export const CREATE_VIEW = "CREATE_VIEW";

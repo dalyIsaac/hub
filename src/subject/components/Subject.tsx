@@ -28,7 +28,7 @@ import SubjectListItem from "./ListItem/SubjectListItem";
 import TitleInput from "../../TitleInput";
 import { deleteSubject } from "../model/DeleteSubject";
 import { gotoSubject } from "../Routing";
-import { removeSubjectFromView } from "../../views/model/RemoveSubjectFromView";
+import { removeSubjectFromView } from "../../model/Views/RemoveSubjectFromView";
 import { setSubjectDescription } from "../model/SetSubjectDescription";
 import { setSubjectDueDate } from "../model/SetSubjectDueDate";
 import { setSubjectName } from "../model/SetSubjectName";

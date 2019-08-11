@@ -2,7 +2,7 @@ import { Subject, SubjectBaseAction, SubjectTypes } from "./Subject";
 import {
   appendSubjectToView,
   appendSubjectToViewReducer,
-} from "../../views/model/AppendSubjectToView";
+} from "../../model/Views/AppendSubjectToView";
 import {
   appendChildSubjectToSubject as subjectsAppendChild,
   appendChildSubjectToSubjectReducer as subjectsAppendChildReducer,
