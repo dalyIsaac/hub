@@ -1,12 +1,12 @@
 import React, { useCallback } from "react";
 
-import { Item } from "../../../model/Subject";
-import ListItemBase from "./ListItemBase";
-import { appendChildSubjectToSubject } from "../../../model/Subject/AppendChildSubjectToSubject";
+import { Item } from "../../model/Subject";
+import ListItemBase from "../ListItem/ListItemBase";
+import { appendSubjectToView } from "../../model/Views/AppendSubjectToView";
 import { isUndefined } from "lodash";
 import { useDispatch } from "react-redux";
 
-function ListItem({ id, parent, subject }: Item): JSX.Element {
+function ListItem({ id, viewId, subject }: Item): JSX.Element {
   const dispatch = useDispatch();
 
   const onChange = useCallback(
@@ -15,12 +15,11 @@ function ListItem({ id, parent, subject }: Item): JSX.Element {
       checked?: boolean,
     ): void => {
       if (checked === true) {
-        dispatch(appendChildSubjectToSubject(parent!, id));
+        dispatch(appendSubjectToView(viewId!, id));
       }
     },
-    [dispatch, id, parent],
+    [dispatch, id, viewId],
   );
-
   return (
     <ListItemBase
       checked={false}
@@ -33,7 +32,7 @@ function ListItem({ id, parent, subject }: Item): JSX.Element {
 export default function AppendChildrenListItem(
   props?: Item,
 ): JSX.Element | undefined {
-  if (!props || isUndefined(props.parent)) {
+  if (!props || isUndefined(props.viewId)) {
     return;
   }
 

@@ -1,10 +1,10 @@
 import { IconButton, getTheme, mergeStyleSets } from "office-ui-fabric-react";
 import React, { useCallback } from "react";
 
-import { Item } from "../../../model/Subject";
+import { Item } from "../../model/Subject";
 import { Link } from "react-router-dom";
-import { gotoSubject } from "../../../model/Subject/Routing";
-import { removeSubjectFromView } from "../../../model/Views/RemoveSubjectFromView";
+import { gotoSubject } from "../../model/Subject/Routing";
+import { removeSubjectFromView } from "../../model/Views/RemoveSubjectFromView";
 import { useDispatch } from "react-redux";
 
 const theme = getTheme();

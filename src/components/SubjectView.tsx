@@ -9,18 +9,27 @@ import {
 } from "../model/Order";
 
 import GridView from "./GridView";
-import ListView from "../subject/components/ListView/ListView";
+import ListView from "./ListView";
 import { State } from "../Reducer";
 import { SubjectsRouteProps } from "../model/Subject/Routing";
 import { getDisplay } from "../Display";
 import { isUndefined } from "lodash";
 import { useSelector } from "react-redux";
 
-export interface SubjectViewHookProps {
-  options?: GetItemsOptions;
-  sortOptions?: SortItemsOptions;
-  order?: string[];
-}
+export const getDiffIndex = (
+  oldOrder: string[],
+  newOrder: string[],
+): number => {
+  for (let i = 0; i < newOrder.length; i++) {
+    const newEl = newOrder[i];
+    const oldEl = oldOrder[i];
+
+    if (newEl !== oldEl) {
+      return i;
+    }
+  }
+  return 0;
+};
 
 export interface UseSubjectView {
   /**
@@ -53,6 +62,12 @@ export interface UseSubjectView {
    * Arguments to be passed to reducers for reordering items.
    */
   reorderParams: SetSortParameters;
+}
+
+export interface SubjectViewHookProps {
+  options?: GetItemsOptions;
+  sortOptions?: SortItemsOptions;
+  order?: string[];
 }
 
 export function useSubjectView({

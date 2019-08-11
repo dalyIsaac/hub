@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 import { IDetailsListProps } from "office-ui-fabric-react";
 import { ListViewContextMenuProps } from "./ListViewContextMenu";
 import { UseListViewModal } from "./UseListViewModal";
-import { Item } from "../../../model/Subject";
+import { Item } from "../../model/Subject";
 
 interface UseListViewContextMenu {
   contextMenuProps: ListViewContextMenuProps | null;

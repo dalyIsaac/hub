@@ -2,12 +2,12 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Redirect, RouteComponentProps } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 
-import GridView from "../../components/GridView";
-import ListView from "../../subject/components/ListView/ListView";
+import GridView from "../GridView";
+import ListView from "../ListView";
 import { Location } from "history";
 import { Paths } from "../../Routing";
 import { State } from "../../Reducer";
-import TitleInput from "../../components/TitleInput";
+import TitleInput from "../TitleInput";
 import { ViewRouteProps } from "../../model/Views/Routing";
 import { getDisplay } from "../../Display";
 import { isUndefined } from "lodash";

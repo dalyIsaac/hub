@@ -13,11 +13,11 @@ import {
 import {
   completeSubject,
   uncompleteSubject,
-} from "../../../model/Subject/CompleteSubject";
+} from "../../model/Subject/CompleteSubject";
 
-import { Item } from "../../../model/Subject";
-import { deleteSubject } from "../../../model/Subject/DeleteSubject";
-import { removeSubjectFromView } from "../../../model/Views/RemoveSubjectFromView";
+import { Item } from "../../model/Subject";
+import { deleteSubject } from "../../model/Subject/DeleteSubject";
+import { removeSubjectFromView } from "../../model/Views/RemoveSubjectFromView";
 import { useDispatch } from "react-redux";
 
 export interface ListViewContextMenuProps {

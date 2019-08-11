@@ -1,4 +1,4 @@
-import { AllParams, Paths } from "../../../Routing";
+import { AllParams, Paths } from "../../Routing";
 import {
   CommandBar,
   INavLink,
@@ -11,11 +11,11 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { RouteComponentProps } from "react-router";
-import { State } from "../../../Reducer";
-import { commandBarStyle } from "../../../components/AppCommandBar";
-import { createView } from "../../../model/Views/CreateView";
-import { gotoView } from "../../../model/Views/Routing";
-import { subjectBase } from "../../../model/Subject/Routing";
+import { State } from "../../Reducer";
+import { commandBarStyle } from "../AppCommandBar";
+import { createView } from "../../model/Views/CreateView";
+import { gotoView } from "../../model/Views/Routing";
+import { subjectBase } from "../../model/Subject/Routing";
 import { useGetCreateButtonItems } from "./UseGetCreateButtonItems";
 
 export const viewsNavWidth = 208;

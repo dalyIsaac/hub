@@ -1,24 +1,24 @@
-import { APPBAR_HEIGHT, VIEW_TITLE_HEIGHT } from "../../../Common";
-import { AllRouteComponentProps, Paths } from "../../../Routing";
+import { APPBAR_HEIGHT, VIEW_TITLE_HEIGHT } from "../../Common";
+import { AllRouteComponentProps, Paths } from "../../Routing";
 import { DetailsList, SelectionMode } from "office-ui-fabric-react";
 
-import { APP_COMMAND_BAR_HEIGHT } from "../../../components/AppCommandBar/Common";
-import AppCommandBar from "../../../components/AppCommandBar";
-import { GetItemsOptions } from "../../../model/Subject";
+import { APP_COMMAND_BAR_HEIGHT } from "../AppCommandBar/Common";
+import AppCommandBar from "../AppCommandBar";
+import { GetItemsOptions } from "../../model/Subject";
 import ListViewContextMenu from "./ListViewContextMenu";
 import ListViewModal from "./ListViewModal";
 import React from "react";
-import { SortItemsOptions } from "../../../model/Order";
-import { State } from "../../../Reducer";
-import Wrapper from "../../../components/Wrapper";
-import { useCommandBar } from "../../../components/UseCommandBar";
+import { SortItemsOptions } from "../../model/Order";
+import { State } from "../../Reducer";
+import Wrapper from "../Wrapper";
+import { useCommandBar } from "../UseCommandBar";
 import { useListViewContextMenu } from "./UseListViewContextMenu";
 import { useListViewDetailsList } from "./UseListViewDetailsList";
 import { useListViewModal } from "./UseListViewModal";
 import { useListViewRender } from "./UseListViewRender";
 import { useListViewScroll } from "./UseListViewScroll";
 import { useSelector } from "react-redux";
-import { useSubjectView } from "../../../components/SubjectView";
+import { useSubjectView } from "../SubjectView";
 import { withRouter } from "react-router-dom";
 
 interface ListViewProps {

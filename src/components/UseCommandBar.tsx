@@ -3,7 +3,7 @@ import { CommandBarButton, Toggle } from "office-ui-fabric-react";
 import React, { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import AppendChildren from "../views/components/AppendChildren";
+import AppendChildren from "./View/AppendChildren";
 import { BUTTON_HEIGHT } from "./AppCommandBar/Common";
 import SortButton from "./AppCommandBar/SortButton";
 import { State } from "../Reducer";

@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import { SearchRouteProps, getSearchMatch } from "../model/Search/Routing";
 import { RouteComponentProps } from "react-router";
 import { Item, Subject } from "../model/Subject";
-import ListView from "../subject/components/ListView/ListView";
+import ListView from "./ListView";
 import GridView from "./GridView";
 import { Text } from "office-ui-fabric-react";
 import { options } from "./SearchBar";

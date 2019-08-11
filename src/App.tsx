@@ -5,8 +5,8 @@ import AppBar from "./components/AppBar";
 import React from "react";
 import SearchResults from "./components/SearchResults";
 import SubjectView from "./components/SubjectView";
-import View from "./views/components/View";
-import ViewsNav from "./views/components/ViewsNav";
+import View from "./components/View";
+import ViewsNav from "./components/ViewsNav";
 import { mergeStyleSets } from "@uifabric/styling";
 import { subjectBase } from "./model/Subject/Routing";
 

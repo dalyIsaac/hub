@@ -1,6 +1,6 @@
 import React from "react";
 import { Panel, IPanelProps } from "office-ui-fabric-react";
-import SimpleListView from "../../subject/components/SimpleListView";
+import SimpleListView from "../SimpleListView";
 import { useSelector } from "react-redux";
 import { State } from "../../Reducer";
 import { PANEL_HEADER_HEIGHT } from "../../Common";

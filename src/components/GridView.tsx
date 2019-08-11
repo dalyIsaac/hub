@@ -1,6 +1,10 @@
 import { IRectangle, List, ScrollToMode } from "office-ui-fabric-react";
 import React, { useCallback, useEffect } from "react";
-import { SubjectViewHookProps, useSubjectView } from "./SubjectView";
+import {
+  SubjectViewHookProps,
+  useSubjectView,
+  getDiffIndex,
+} from "./SubjectView";
 import Wrapper, { MIN_COL_WIDTH } from "./Wrapper";
 import { getTheme, mergeStyleSets } from "@uifabric/styling";
 
@@ -9,7 +13,6 @@ import AppCommandBar from "./AppCommandBar";
 import { Item } from "../model/Subject";
 import { State } from "../Reducer";
 import SubjectComponent from "./Subject";
-import { getDiffIndex } from "../subject/components/View";
 import { useCommandBar } from "./UseCommandBar";
 import { useRef } from "react";
 import { useSelector } from "react-redux";

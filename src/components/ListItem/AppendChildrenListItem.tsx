@@ -1,12 +1,12 @@
 import React, { useCallback } from "react";
 
 import { Item } from "../../model/Subject";
-import ListItemBase from "../../subject/components/ListItem/ListItemBase";
-import { appendSubjectToView } from "../../model/Views/AppendSubjectToView";
+import ListItemBase from "./ListItemBase";
+import { appendChildSubjectToSubject } from "../../model/Subject/AppendChildSubjectToSubject";
 import { isUndefined } from "lodash";
 import { useDispatch } from "react-redux";
 
-function ListItem({ id, viewId, subject }: Item): JSX.Element {
+function ListItem({ id, parent, subject }: Item): JSX.Element {
   const dispatch = useDispatch();
 
   const onChange = useCallback(
@@ -15,11 +15,12 @@ function ListItem({ id, viewId, subject }: Item): JSX.Element {
       checked?: boolean,
     ): void => {
       if (checked === true) {
-        dispatch(appendSubjectToView(viewId!, id));
+        dispatch(appendChildSubjectToSubject(parent!, id));
       }
     },
-    [dispatch, id, viewId],
+    [dispatch, id, parent],
   );
+
   return (
     <ListItemBase
       checked={false}
@@ -32,7 +33,7 @@ function ListItem({ id, viewId, subject }: Item): JSX.Element {
 export default function AppendChildrenListItem(
   props?: Item,
 ): JSX.Element | undefined {
-  if (!props || isUndefined(props.viewId)) {
+  if (!props || isUndefined(props.parent)) {
     return;
   }
 
