@@ -24,4 +24,7 @@ export const appendSubjectToViewReducer = (
   const children = views.dict[viewId].children;
   children.order.push(subjectId);
   views.dict[viewId].children.order = sortItems(subjects.dict, children);
+
+  // Add viewId to the subject's views set
+  subjects.dict[subjectId].views.add(viewId);
 };
