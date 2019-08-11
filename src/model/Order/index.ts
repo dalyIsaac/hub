@@ -1,5 +1,6 @@
 import { Subject, SubjectDictState } from "../Subject";
 import { isUndefined } from "lodash";
+import { BaseAction } from "../../Common";
 
 export type SortFieldKey = keyof Omit<Subject, "parents">;
 
@@ -18,6 +19,11 @@ export interface SortItemsOptions {
 export interface OrderState {
   order: string[];
   options: SortItemsOptions;
+}
+
+export interface OrderBaseAction extends BaseAction {
+  subjectId?: string;
+  viewId?: string;
 }
 
 export function comparator(
@@ -165,6 +171,11 @@ export interface SetSortParameters {
    * When set, it corresponds to the GUID of a subject.
    */
   subjectId?: string;
+
+  /**
+   * When set, it corresponds to the GUI of a view.
+   */
+  viewId?: string;
 
   /**
    * When set to true, the action will affect the `searchSortOptions` attribute

@@ -7,7 +7,8 @@ import AppendChildren from "./View/AppendChildren";
 import { BUTTON_HEIGHT } from "./AppCommandBar/Common";
 import SortButton from "./AppCommandBar/SortButton";
 import { State } from "../Reducer";
-import { setSeparateComplete } from "../model/Subject/SetSeparateComplete";
+import { setSeparateComplete } from "../model/Order/SetSeparateComplete";
+import { SortItemsOptions } from "../model/Order";
 
 const commandBarStyles = { root: { height: BUTTON_HEIGHT } };
 
@@ -23,21 +24,25 @@ export function useCommandBar({
   subjectId,
 }: UseCommandBarOptions) {
   const { viewId } = match.params;
-  const isViews = match.path === Paths.view && viewId;
+  const isViews = match.path === Paths.view && !!viewId;
 
   const dispatch = useDispatch();
-  const subjects = useSelector((state: State) => state.subjects);
+  const { subjects, views } = useSelector((state: State) => state);
 
-  const currentOrder =
-    subjectId && subjectId in subjects.dict
-      ? subjects.dict[subjectId].children.options
-      : subjects.order.options;
+  let currentOrder: SortItemsOptions;
+  if (isViews && viewId! in views.dict) {
+    currentOrder = views.dict[viewId!].children.options;
+  } else if (subjectId && subjectId in subjects.dict) {
+    currentOrder = subjects.dict[subjectId].children.options;
+  } else {
+    currentOrder = subjects.order.options;
+  }
 
   const setSeparateCompleteOnChange = useCallback(
     (e: any, checked?: boolean): void => {
-      dispatch(setSeparateComplete(checked!, { subjectId: subjectId }));
+      dispatch(setSeparateComplete(checked!, { subjectId, viewId }));
     },
-    [dispatch, subjectId],
+    [dispatch, subjectId, viewId],
   );
 
   const items = [];
@@ -74,6 +79,7 @@ export function useCommandBar({
       <SortButton
         key="sort"
         subjectId={subjectId}
+        viewId={viewId}
         fields={currentOrder.fields}
       />,
     );

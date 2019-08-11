@@ -17,8 +17,8 @@ import {
 } from "office-ui-fabric-react";
 import { SortField, SetSortParameters } from "../../model/Order";
 import { useDispatch } from "react-redux";
-import { setFieldsArray } from "../../model/Subject/SetFieldsArray";
-import { setFieldsDesc } from "../../model/Subject/SetFieldsDesc";
+import { setFieldsArray } from "../../model/Order/SetFieldsArray";
+import { setFieldsDesc } from "../../model/Order/SetFieldsDesc";
 import { BUTTON_HEIGHT } from "./Common";
 
 interface SortCalloutProps extends SetSortParameters {
@@ -57,6 +57,7 @@ export default function SortButton({
   subjectId,
   setSearchOptions,
   fields,
+  viewId,
 }: SortCalloutProps): JSX.Element {
   const draggedIndex = useRef(-1);
   const draggedItem = useRef(null);
@@ -93,9 +94,10 @@ export default function SortButton({
       }
 
       items.splice(insertIndex, 0, ...draggedItems);
-      dispatch(setFieldsArray(items, { setSearchOptions, subjectId }));
+
+      dispatch(setFieldsArray(items, { setSearchOptions, subjectId, viewId }));
     },
-    [dispatch, fields, subjectId, setSearchOptions],
+    [dispatch, fields, subjectId, viewId, setSearchOptions],
   );
 
   const canDrop = useCallback(
@@ -155,9 +157,11 @@ export default function SortButton({
 
   const dispatchSetFieldsDesc = useCallback(
     (e: any, checked: boolean, key: string): void => {
-      dispatch(setFieldsDesc(key, checked, { setSearchOptions, subjectId }));
+      dispatch(
+        setFieldsDesc(key, checked, { setSearchOptions, subjectId, viewId }),
+      );
     },
-    [dispatch, subjectId, setSearchOptions],
+    [dispatch, viewId, subjectId, setSearchOptions],
   );
 
   const onRenderGripper = useCallback(

@@ -99,7 +99,7 @@ export function useSubjectView({
   } else if (viewId) {
     componentOrder = views.dict[viewId].children.order;
     sortFields = views.dict[viewId].children.options.fields;
-    reorderParams = {};
+    reorderParams = { viewId };
   } else {
     componentOrder = subjects.order.order;
     sortFields = subjects.order.options.fields;

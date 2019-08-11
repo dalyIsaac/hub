@@ -1,7 +1,7 @@
 import { useCallback } from "react";
-import { setFieldsArray } from "../../model/Subject/SetFieldsArray";
+import { setFieldsArray } from "../../model/Order/SetFieldsArray";
 import { useDispatch } from "react-redux";
-import { setFieldsDesc } from "../../model/Subject/SetFieldsDesc";
+import { setFieldsDesc } from "../../model/Order/SetFieldsDesc";
 import { IColumn } from "office-ui-fabric-react";
 import { SortField, SetSortParameters } from "../../model/Order";
 import { Item } from "../../model/Subject";

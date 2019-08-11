@@ -27,21 +27,6 @@ import {
   removeChildSubjectFromSubjectReducer,
 } from "./RemoveChildSubjectFromSubject";
 import {
-  SET_FIELDS_ARRAY,
-  SetFieldsArrayAction,
-  setFieldsArrayReducer,
-} from "./SetFieldsArray";
-import {
-  SET_FIELDS_DESC,
-  SetFieldsDescAction,
-  setFieldsDescReducer,
-} from "./SetFieldsDesc";
-import {
-  SET_SEPARATE_COMPLETE,
-  SetSeparateCompleteAction,
-  setSeparateCompleteReducer,
-} from "./SetSeparateComplete";
-import {
   SET_SUBJECT_DESCRIPTION,
   SetSubjectDescriptionAction,
   setSubjectDescriptionReducer,
@@ -57,15 +42,10 @@ import {
   setSubjectNameReducer,
 } from "./SetSubjectName";
 import { SubjectState, SubjectTypes } from ".";
-import {
-  getInitialOrder,
-  getInitialSortItemsOptions,
-  sortItems,
-} from "../Order";
+import { getInitialOrder, getInitialSortItemsOptions } from "../Order";
 
 import { Action } from "redux";
 import { State } from "../../Reducer";
-import { isUndefined } from "lodash";
 import produce from "immer";
 
 export const initialSubjectState = (): SubjectState => ({
@@ -121,30 +101,10 @@ const subjectReducer = (state: State, action: Action): State => ({
             action as AppendChildSubjectToSubjectAction,
           );
           break;
-        case SET_FIELDS_ARRAY:
-          setFieldsArrayReducer(subjects, action as SetFieldsArrayAction);
-          break;
-        case SET_FIELDS_DESC:
-          setFieldsDescReducer(subjects, action as SetFieldsDescAction);
-          break;
-        case SET_SEPARATE_COMPLETE:
-          setSeparateCompleteReducer(
-            subjects,
-            action as SetSeparateCompleteAction,
-          );
-          break;
         default:
           break;
       }
 
-      // Prevents redux-persist from being overridden during hydration.
-      if (subjects.order.order.length > 0) {
-        subjects.order.order = sortItems(subjects.dict, subjects.order);
-      }
-      // Adds new `searchSortOptions` if it wasn't already in the state
-      if (isUndefined(subjects.searchSortOptions)) {
-        subjects.searchSortOptions = getInitialSortItemsOptions();
-      }
       return draftState;
     },
   ),
