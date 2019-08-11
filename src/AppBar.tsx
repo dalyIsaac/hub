@@ -6,7 +6,7 @@ import { gotoSubject, subjectBase } from "./model/Subject/Routing";
 
 import { APPBAR_HEIGHT } from "./Common";
 import { Link } from "react-router-dom";
-import SearchBar from "./Search/SearchBar";
+import SearchBar from "./components/SearchBar";
 import { State } from "./Reducer";
 import { Text } from "office-ui-fabric-react";
 import { getDisplay } from "./Display";

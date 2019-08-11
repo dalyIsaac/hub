@@ -3,7 +3,7 @@ import { Redirect, Route, Switch } from "react-router";
 
 import AppBar from "./AppBar";
 import React from "react";
-import SearchResults from "./Search/SearchResults";
+import SearchResults from "./components/SearchResults";
 import SubjectView from "./subject/components/SubjectView";
 import View from "./views/components/View";
 import ViewsNav from "./views/components/ViewsNav";
