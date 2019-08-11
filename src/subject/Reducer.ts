@@ -99,7 +99,7 @@ const subjectReducer = (state: State, action: Action): State => ({
           uncompleteSubjectReducer(subjects, action as UncompleteSubjectAction);
           break;
         case DELETE_SUBJECT:
-          deleteSubjectReducer(subjects, action as DeleteSubjectAction);
+          deleteSubjectReducer(draftState, action as DeleteSubjectAction);
           break;
         case SET_SUBJECT_DUE_DATE:
           setSubjectDueDateReducer(subjects, action as SetSubjectDueDateAction);
