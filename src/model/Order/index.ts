@@ -47,6 +47,9 @@ export function comparator(
         a = a.size;
         b = b.size;
       }
+    } else if (typeof a === "string" && typeof b === "string") {
+      a = a.toLowerCase();
+      b = b.toLowerCase();
     }
 
     const aDefined = !isUndefined(a);
