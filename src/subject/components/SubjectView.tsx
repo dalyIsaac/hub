@@ -1,4 +1,4 @@
-import { GetItemsOptions, Item, getItems } from "../model/Subject";
+import { GetItemsOptions, Item, getItems } from "../../model/Subject";
 import React, { useState } from "react";
 import { Redirect, RouteComponentProps } from "react-router";
 import {
@@ -11,7 +11,7 @@ import {
 import GridView from "./GridView";
 import ListView from "./ListView/ListView";
 import { State } from "../../Reducer";
-import { SubjectsRouteProps } from "../Routing";
+import { SubjectsRouteProps } from "../../model/Subject/Routing";
 import { getDisplay } from "../../Display";
 import { isUndefined } from "lodash";
 import { useSelector } from "react-redux";

@@ -2,7 +2,7 @@ import {
   APPEND_CHILD_SUBJECT_TO_SUBJECT,
   AppendChildSubjectToSubjectAction,
   appendChildSubjectToSubjectReducer,
-} from "./model/AppendChildSubjectToSubject";
+} from "./AppendChildSubjectToSubject";
 import {
   COMPLETE_SUBJECT,
   CompleteSubjectAction,
@@ -10,61 +10,61 @@ import {
   UncompleteSubjectAction,
   completeSubjectReducer,
   uncompleteSubjectReducer,
-} from "./model/CompleteSubject";
+} from "./CompleteSubject";
 import {
   CREATE_SUBJECT,
   CreateSubjectAction,
   createSubjectReducer,
-} from "./model/CreateSubject";
+} from "./CreateSubject";
 import {
   DELETE_SUBJECT,
   DeleteSubjectAction,
   deleteSubjectReducer,
-} from "./model/DeleteSubject";
+} from "./DeleteSubject";
 import {
   REMOVE_CHILD_SUBJECT_FROM_SUBJECT_REDUCER,
   RemoveChildSubjectFromSubjectAction,
   removeChildSubjectFromSubjectReducer,
-} from "./model/RemoveChildSubjectFromSubject";
+} from "./RemoveChildSubjectFromSubject";
 import {
   SET_FIELDS_ARRAY,
   SetFieldsArrayAction,
   setFieldsArrayReducer,
-} from "./model/SetFieldsArray";
+} from "./SetFieldsArray";
 import {
   SET_FIELDS_DESC,
   SetFieldsDescAction,
   setFieldsDescReducer,
-} from "./model/SetFieldsDesc";
+} from "./SetFieldsDesc";
 import {
   SET_SEPARATE_COMPLETE,
   SetSeparateCompleteAction,
   setSeparateCompleteReducer,
-} from "./model/SetSeparateComplete";
+} from "./SetSeparateComplete";
 import {
   SET_SUBJECT_DESCRIPTION,
   SetSubjectDescriptionAction,
   setSubjectDescriptionReducer,
-} from "./model/SetSubjectDescription";
+} from "./SetSubjectDescription";
 import {
   SET_SUBJECT_DUE_DATE,
   SetSubjectDueDateAction,
   setSubjectDueDateReducer,
-} from "./model/SetSubjectDueDate";
+} from "./SetSubjectDueDate";
 import {
   SET_SUBJECT_NAME,
   SetSubjectNameAction,
   setSubjectNameReducer,
-} from "./model/SetSubjectName";
-import { SubjectState, SubjectTypes } from "./model/Subject";
+} from "./SetSubjectName";
+import { SubjectState, SubjectTypes } from ".";
 import {
   getInitialOrder,
   getInitialSortItemsOptions,
   sortItems,
-} from "../model/Order";
+} from "../Order";
 
 import { Action } from "redux";
-import { State } from "../Reducer";
+import { State } from "../../Reducer";
 import { isUndefined } from "lodash";
 import produce from "immer";
 

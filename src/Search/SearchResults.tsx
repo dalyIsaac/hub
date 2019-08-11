@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { SearchRouteProps, getSearchMatch } from "./Routing";
 import { RouteComponentProps } from "react-router";
-import { Item, Subject } from "../subject/model/Subject";
+import { Item, Subject } from "../model/Subject";
 import ListView from "../subject/components/ListView/ListView";
 import GridView from "../subject/components/GridView";
 import { Text } from "office-ui-fabric-react";

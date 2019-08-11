@@ -7,7 +7,7 @@ import AppendChildren from "../../views/components/AppendChildren";
 import { BUTTON_HEIGHT } from "../../AppCommandBar/Common";
 import SortButton from "../../AppCommandBar/SortButton";
 import { State } from "../../Reducer";
-import { setSeparateComplete } from "../model/SetSeparateComplete";
+import { setSeparateComplete } from "../../model/Subject/SetSeparateComplete";
 
 const commandBarStyles = { root: { height: BUTTON_HEIGHT } };
 

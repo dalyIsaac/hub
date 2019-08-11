@@ -10,17 +10,17 @@ import {
 import {
   completeSubject,
   uncompleteSubject,
-} from "../../model/CompleteSubject";
+} from "../../../model/Subject/CompleteSubject";
 
-import { Item } from "../../model/Subject";
+import { Item } from "../../../model/Subject";
 import { Link } from "react-router-dom";
 import ListItemBase from "./ListItemBase";
-import { deleteSubject } from "../../model/DeleteSubject";
-import { gotoSubject } from "../../Routing";
+import { deleteSubject } from "../../../model/Subject/DeleteSubject";
+import { gotoSubject } from "../../../model/Subject/Routing";
 import { isUndefined } from "lodash";
 import { mergeStyleSets } from "@uifabric/styling";
-import { removeChildSubjectFromSubject } from "../../model/RemoveChildSubjectFromSubject";
-import { setSubjectName } from "../../model/SetSubjectName";
+import { removeChildSubjectFromSubject } from "../../../model/Subject/RemoveChildSubjectFromSubject";
+import { setSubjectName } from "../../../model/Subject/SetSubjectName";
 import { useDispatch } from "react-redux";
 
 const styles = mergeStyleSets({

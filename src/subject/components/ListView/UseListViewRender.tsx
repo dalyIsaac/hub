@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { Item, Subject } from "../../model/Subject";
+import { Item, Subject } from "../../../model/Subject";
 import { IColumn } from "office-ui-fabric-react";
 import ListViewButtons from "./ListViewButtons";
 import { SortField, SortFieldKey } from "../../../model/Order";

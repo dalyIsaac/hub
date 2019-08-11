@@ -1,5 +1,5 @@
 import { match as Match } from "react-router";
-import { Subject } from "../subject/model/Subject";
+import { Subject } from "../model/Subject";
 
 export interface SearchRouteProps {
   param: string;

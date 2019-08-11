@@ -1,4 +1,4 @@
-import { Subject, SubjectDictState } from "../../subject/model/Subject";
+import { Subject, SubjectDictState } from "../Subject";
 import { isUndefined } from "lodash";
 
 export type SortFieldKey = keyof Omit<Subject, "parents">;

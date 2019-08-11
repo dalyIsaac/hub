@@ -1,6 +1,6 @@
 import { BaseAction } from "../../Common";
-import { SubjectState } from "./Subject";
-import { sortItems, SetSortParameters } from "../../model/Order";
+import { SubjectState } from ".";
+import { sortItems, SetSortParameters } from "../Order";
 
 export const SET_SEPARATE_COMPLETE = "SET_SEPARATE_COMPLETE";
 

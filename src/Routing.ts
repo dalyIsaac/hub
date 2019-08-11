@@ -1,5 +1,5 @@
 import { SearchRouteProps, searchBase } from "./Search/Routing";
-import { SubjectsRouteProps, subjectBase } from "./subject/Routing";
+import { SubjectsRouteProps, subjectBase } from "./model/Subject/Routing";
 import { ViewRouteProps, viewBase } from "./model/Views/Routing";
 
 import { RouteComponentProps } from "react-router";

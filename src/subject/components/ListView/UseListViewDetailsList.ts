@@ -1,12 +1,12 @@
 import { useCallback } from "react";
-import { setFieldsArray } from "../../model/SetFieldsArray";
+import { setFieldsArray } from "../../../model/Subject/SetFieldsArray";
 import { useDispatch } from "react-redux";
-import { setFieldsDesc } from "../../model/SetFieldsDesc";
+import { setFieldsDesc } from "../../../model/Subject/SetFieldsDesc";
 import { IColumn } from "office-ui-fabric-react";
 import { SortField, SetSortParameters } from "../../../model/Order";
-import { Item } from "../../model/Subject";
+import { Item } from "../../../model/Subject";
 import { History } from "history";
-import { gotoSubject } from "../../Routing";
+import { gotoSubject } from "../../../model/Subject/Routing";
 
 interface UseListViewDetailsList {
   history: History;

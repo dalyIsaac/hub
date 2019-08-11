@@ -1,5 +1,5 @@
-import { SubjectState, SubjectBaseAction } from "./Subject";
-import { sortAllParents } from "../../model/Order";
+import { SubjectState, SubjectBaseAction } from ".";
+import { sortAllParents } from "../Order";
 
 export const SET_SUBJECT_NAME = "SET_SUBJECT_NAME";
 

@@ -2,7 +2,7 @@ import { IDetailsList } from "office-ui-fabric-react";
 import { useRef, useEffect } from "react";
 import { getDiffIndex } from "../View";
 import { UseSubjectView } from "../SubjectView";
-import { SubjectState } from "../../model/Subject";
+import { SubjectState } from "../../../model/Subject";
 
 interface UseListViewScroll {
   currentOrder: string[];

@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { List, Text } from "office-ui-fabric-react";
 import { mergeStyleSets } from "@uifabric/styling";
 import { State } from "../../Reducer";
-import { getItems, Item } from "../model/Subject";
+import { getItems, Item } from "../../model/Subject";
 
 interface ListViewProps {
   parentId?: string;

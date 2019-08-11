@@ -17,8 +17,8 @@ import {
 } from "office-ui-fabric-react";
 import { SortField, SetSortParameters } from "../model/Order";
 import { useDispatch } from "react-redux";
-import { setFieldsArray } from "../subject/model/SetFieldsArray";
-import { setFieldsDesc } from "../subject/model/SetFieldsDesc";
+import { setFieldsArray } from "../model/Subject/SetFieldsArray";
+import { setFieldsDesc } from "../model/Subject/SetFieldsDesc";
 import { BUTTON_HEIGHT } from "./Common";
 
 interface SortCalloutProps extends SetSortParameters {

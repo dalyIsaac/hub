@@ -13,10 +13,10 @@ import {
 import {
   completeSubject,
   uncompleteSubject,
-} from "../../model/CompleteSubject";
+} from "../../../model/Subject/CompleteSubject";
 
-import { Item } from "../../model/Subject";
-import { deleteSubject } from "../../model/DeleteSubject";
+import { Item } from "../../../model/Subject";
+import { deleteSubject } from "../../../model/Subject/DeleteSubject";
 import { removeSubjectFromView } from "../../../model/Views/RemoveSubjectFromView";
 import { useDispatch } from "react-redux";
 

@@ -2,7 +2,7 @@ import { AllRouteComponentProps, Paths } from "./Routing";
 import React, { useEffect } from "react";
 import { getSearchMatch, searchBase } from "./Search/Routing";
 import { getTheme, mergeStyleSets } from "@uifabric/styling";
-import { gotoSubject, subjectBase } from "./subject/Routing";
+import { gotoSubject, subjectBase } from "./model/Subject/Routing";
 
 import { APPBAR_HEIGHT } from "./Common";
 import { Link } from "react-router-dom";

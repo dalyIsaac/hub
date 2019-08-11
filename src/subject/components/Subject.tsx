@@ -16,22 +16,25 @@ import {
   deleteItem,
   uncompleteItem,
 } from "./SubjectButtonsProps";
-import { completeSubject, uncompleteSubject } from "../model/CompleteSubject";
+import {
+  completeSubject,
+  uncompleteSubject,
+} from "../../model/Subject/CompleteSubject";
 import { getTheme, mergeStyleSets } from "@uifabric/styling";
 import { useDispatch, useSelector } from "react-redux";
 
-import { Item } from "../model/Subject";
+import { Item } from "../../model/Subject";
 import { Link } from "react-router-dom";
 import SimpleListView from "./SimpleListView";
 import { State } from "../../Reducer";
 import SubjectListItem from "./ListItem/SubjectListItem";
 import TitleInput from "../../TitleInput";
-import { deleteSubject } from "../model/DeleteSubject";
-import { gotoSubject } from "../Routing";
+import { deleteSubject } from "../../model/Subject/DeleteSubject";
+import { gotoSubject } from "../../model/Subject/Routing";
 import { removeSubjectFromView } from "../../model/Views/RemoveSubjectFromView";
-import { setSubjectDescription } from "../model/SetSubjectDescription";
-import { setSubjectDueDate } from "../model/SetSubjectDueDate";
-import { setSubjectName } from "../model/SetSubjectName";
+import { setSubjectDescription } from "../../model/Subject/SetSubjectDescription";
+import { setSubjectDueDate } from "../../model/Subject/SetSubjectDueDate";
+import { setSubjectName } from "../../model/Subject/SetSubjectName";
 
 interface SubjectProps {
   item: Item;

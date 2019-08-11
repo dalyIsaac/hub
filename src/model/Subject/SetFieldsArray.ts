@@ -1,5 +1,5 @@
-import { SortField, sortItems, SetSortParameters } from "../../model/Order";
-import { SubjectState } from "./Subject";
+import { SortField, sortItems, SetSortParameters } from "../Order";
+import { SubjectState } from ".";
 import { BaseAction } from "../../Common";
 
 export const SET_FIELDS_ARRAY = "SET_FIELDS_ARRAY";

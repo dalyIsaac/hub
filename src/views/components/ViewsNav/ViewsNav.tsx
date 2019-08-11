@@ -15,7 +15,7 @@ import { State } from "../../../Reducer";
 import { commandBarStyle } from "../../../AppCommandBar/AppCommandBar";
 import { createView } from "../../../model/Views/CreateView";
 import { gotoView } from "../../../model/Views/Routing";
-import { subjectBase } from "../../../subject/Routing";
+import { subjectBase } from "../../../model/Subject/Routing";
 import { useGetCreateButtonItems } from "./UseGetCreateButtonItems";
 
 export const viewsNavWidth = 208;

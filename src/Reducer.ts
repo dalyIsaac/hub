@@ -1,6 +1,6 @@
 import reduceReducers from "reduce-reducers";
-import subjectReducer, { initialSubjectState } from "./subject/Reducer";
-import { SubjectState } from "./subject/model/Subject";
+import subjectReducer, { initialSubjectState } from "./model/Subject/Reducer";
+import { SubjectState } from "./model/Subject";
 import { ViewState } from "./model/Views";
 import viewReducer, { initialViewState } from "./model/Views/Reducer";
 

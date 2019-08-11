@@ -4,7 +4,7 @@ import { DetailsList, SelectionMode } from "office-ui-fabric-react";
 
 import { APP_COMMAND_BAR_HEIGHT } from "../../../AppCommandBar/Common";
 import AppCommandBar from "../../../AppCommandBar/AppCommandBar";
-import { GetItemsOptions } from "../../model/Subject";
+import { GetItemsOptions } from "../../../model/Subject";
 import ListViewContextMenu from "./ListViewContextMenu";
 import ListViewModal from "./ListViewModal";
 import React from "react";

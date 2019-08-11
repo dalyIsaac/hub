@@ -1,8 +1,8 @@
 import React, { useCallback } from "react";
 
-import { Item } from "../../model/Subject";
+import { Item } from "../../../model/Subject";
 import ListItemBase from "./ListItemBase";
-import { appendChildSubjectToSubject } from "../../model/AppendChildSubjectToSubject";
+import { appendChildSubjectToSubject } from "../../../model/Subject/AppendChildSubjectToSubject";
 import { isUndefined } from "lodash";
 import { useDispatch } from "react-redux";
 

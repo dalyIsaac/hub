@@ -1,15 +1,15 @@
-import { Subject, SubjectBaseAction, SubjectTypes } from "./Subject";
+import { Subject, SubjectBaseAction, SubjectTypes } from ".";
 import {
   appendSubjectToView,
   appendSubjectToViewReducer,
-} from "../../model/Views/AppendSubjectToView";
+} from "../Views/AppendSubjectToView";
 import {
   appendChildSubjectToSubject as subjectsAppendChild,
   appendChildSubjectToSubjectReducer as subjectsAppendChildReducer,
 } from "./AppendChildSubjectToSubject";
 
 import { State } from "../../Reducer";
-import { getInitialOrder } from "../../model/Order";
+import { getInitialOrder } from "../Order";
 import { v4 } from "uuid";
 
 export const CREATE_SUBJECT = "CREATE_SUBJECT";

@@ -16,7 +16,7 @@ import AppendChildrenListItem from "./ListItem/AppendChildrenListItem";
 import { PANEL_HEADER_HEIGHT } from "../../Common";
 import SimpleListView from "./SimpleListView";
 import { State } from "../../Reducer";
-import { createSubject } from "../model/CreateSubject";
+import { createSubject } from "../../model/Subject/CreateSubject";
 
 export const AppendChildrenHeight = 32;
 

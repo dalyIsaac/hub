@@ -1,5 +1,5 @@
-import { SubjectBaseAction, SubjectState, SubjectDictState } from "./Subject";
-import { sortAllParents } from "../../model/Order";
+import { SubjectBaseAction, SubjectState, SubjectDictState } from ".";
+import { sortAllParents } from "../Order";
 
 // Complete subject
 export const COMPLETE_SUBJECT = "COMPLETE_SUBJECT";

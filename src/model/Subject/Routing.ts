@@ -1,5 +1,5 @@
 import qs from "query-string";
-import { DisplayOptions } from "../Display";
+import { DisplayOptions } from "../../Display";
 
 export interface SubjectsRouteProps {
   parentId?: string;

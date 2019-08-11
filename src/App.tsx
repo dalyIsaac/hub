@@ -8,7 +8,7 @@ import SubjectView from "./subject/components/SubjectView";
 import View from "./views/components/View";
 import ViewsNav from "./views/components/ViewsNav";
 import { mergeStyleSets } from "@uifabric/styling";
-import { subjectBase } from "./subject/Routing";
+import { subjectBase } from "./model/Subject/Routing";
 
 const styles = mergeStyleSets({
   main: {

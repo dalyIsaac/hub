@@ -6,7 +6,7 @@ import { getTheme, mergeStyleSets } from "@uifabric/styling";
 
 import { AllRouteComponentProps } from "../../Routing";
 import AppCommandBar from "../../AppCommandBar/AppCommandBar";
-import { Item } from "../model/Subject";
+import { Item } from "../../model/Subject";
 import { State } from "../../Reducer";
 import SubjectComponent from "./Subject";
 import { getDiffIndex } from "./View";

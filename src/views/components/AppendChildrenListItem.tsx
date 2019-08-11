@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 
-import { Item } from "../../subject/model/Subject";
+import { Item } from "../../model/Subject";
 import ListItemBase from "../../subject/components/ListItem/ListItemBase";
 import { appendSubjectToView } from "../../model/Views/AppendSubjectToView";
 import { isUndefined } from "lodash";

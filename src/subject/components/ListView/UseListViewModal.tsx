@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { Item, SubjectState } from "../../model/Subject";
+import { Item, SubjectState } from "../../../model/Subject";
 
 export interface UseListViewModal {
   modalItem: Item | null;

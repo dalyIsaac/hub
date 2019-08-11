@@ -1,6 +1,6 @@
 import { BaseAction } from "../../Common";
 import { isUndefined } from "lodash";
-import { OrderState, SortItemsOptions } from "../../model/Order";
+import { OrderState, SortItemsOptions } from "../Order";
 
 export type BaseSubject = "BaseSubject";
 

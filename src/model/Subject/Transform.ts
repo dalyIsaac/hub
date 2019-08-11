@@ -1,5 +1,5 @@
 import { createTransform } from "redux-persist";
-import { Subject, SubjectState, SubjectDictState } from "./Subject";
+import { Subject, SubjectState, SubjectDictState } from ".";
 
 interface PersistSubject
   extends Omit<
