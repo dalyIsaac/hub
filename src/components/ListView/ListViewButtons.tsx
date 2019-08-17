@@ -79,7 +79,7 @@ export default function ListViewButtons({
         title={editLabel}
         ariaLabel={editLabel}
       />
-      <Link to={gotoSubject("list", item.id)}>
+      <Link to={gotoSubject(item.id)}>
         <IconButton
           styles={{ root: { width: "" } }}
           className={styles.rowButton}

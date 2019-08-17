@@ -329,7 +329,7 @@ export default function SubjectComponent({
         {header}
         {showOpenButton ? (
           <Link
-            to={gotoSubject("grid", id)}
+            to={gotoSubject(id)}
             className={styles.headerLink}
             tabIndex={-1}
           >

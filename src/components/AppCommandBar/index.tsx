@@ -4,10 +4,11 @@ import {
   mergeStyleSets,
 } from "office-ui-fabric-react";
 import React, { useCallback } from "react";
-import { RouteComponentProps, withRouter } from "react-router";
-import { getDisplay, updateDisplay } from "../../Display";
 
 import { BUTTON_HEIGHT } from "./Common";
+import { State } from "../../Reducer";
+import { useSelector, useDispatch } from "react-redux";
+import { setDisplay } from "../../model/Display/SetDisplay";
 
 const theme = getTheme();
 
@@ -49,17 +50,13 @@ interface AppCommandBarProps {
   farItems?: JSX.Element[];
 }
 
-export default withRouter(function AppCommandBar({
-  items,
-  farItems,
-  location,
-  history,
-}: AppCommandBarProps & RouteComponentProps) {
-  const display = getDisplay(location);
+export default function AppCommandBar({ items, farItems }: AppCommandBarProps) {
+  const { display } = useSelector((state: State) => state.display);
+  const dispatch = useDispatch();
 
   const toggleView = useCallback((): void => {
-    history.push(updateDisplay(location, display === "grid" ? "list" : "grid"));
-  }, [display, history, location]);
+    dispatch(setDisplay(display === "grid" ? "list" : "grid"));
+  }, [display, dispatch]);
 
   return (
     <div className={styles.wrapper}>
@@ -99,4 +96,4 @@ export default withRouter(function AppCommandBar({
       </div>
     </div>
   );
-});
+}

@@ -1,13 +1,10 @@
-import qs from "query-string";
-import { DisplayOptions } from "../../Display";
-
 export interface SubjectsRouteProps {
   parentId?: string;
 }
 
 export const subjectBase = "/subjects";
 
-export const gotoSubject = (display: DisplayOptions, id?: string): string => {
+export const gotoSubject = (id?: string): string => {
   const url = id ? id : "";
-  return `${subjectBase}/${url}?${qs.stringify({ display })}`;
+  return `${subjectBase}/${url}`;
 };
