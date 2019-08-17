@@ -50,7 +50,7 @@ export function useListViewDetailsList({
 
   const onItemInvoked = useCallback(
     (item: Item): void => {
-      history.push(gotoSubject("list", item.id));
+      history.push(gotoSubject(item.id));
     },
     [history],
   );

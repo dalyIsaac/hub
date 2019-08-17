@@ -9,7 +9,6 @@ import { Link } from "react-router-dom";
 import SearchBar from "./SearchBar";
 import { State } from "../Reducer";
 import { Text } from "office-ui-fabric-react";
-import { getDisplay } from "../Display";
 import { useSelector } from "react-redux";
 
 const theme = getTheme();
@@ -41,8 +40,6 @@ const styles = mergeStyleSets({
 });
 
 export default function AppBar(props: AllRouteComponentProps): JSX.Element {
-  const display = getDisplay(props.location);
-
   const { match } = props;
   const { parentId, viewId } = match.params;
 
@@ -94,7 +91,7 @@ export default function AppBar(props: AllRouteComponentProps): JSX.Element {
 
   return (
     <div className={styles.appBar}>
-      <Link to={gotoSubject(display)} className={styles.link}>
+      <Link to={gotoSubject()} className={styles.link}>
         <Text className={styles.title} variant="xLarge">
           hub
         </Text>

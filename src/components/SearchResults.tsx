@@ -8,7 +8,6 @@ import { Text } from "office-ui-fabric-react";
 import { options } from "./SearchBar";
 import { useSelector } from "react-redux";
 import { State } from "../Reducer";
-import { getDisplay } from "../Display";
 
 const searchParams = new Set(
   options.reduce(
@@ -22,13 +21,12 @@ const searchParams = new Set(
 
 export default function SearchResults({
   match,
-  location,
 }: RouteComponentProps<SearchRouteProps>): JSX.Element {
-  const display = getDisplay(location);
   const [param, query] = getSearchMatch(match);
-  const { dict, searchSortOptions } = useSelector(
-    (state: State) => state.subjects,
-  );
+  const {
+    display: { display },
+    subjects: { dict, searchSortOptions },
+  } = useSelector((state: State) => state);
 
   const condition = useCallback(
     (i: Item): boolean => {

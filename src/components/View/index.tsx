@@ -9,7 +9,6 @@ import { Paths } from "../../Routing";
 import { State } from "../../Reducer";
 import TitleInput from "../TitleInput";
 import { ViewRouteProps } from "../../model/Views/Routing";
-import { getDisplay } from "../../Display";
 import { isUndefined } from "lodash";
 import { mergeStyleSets } from "@uifabric/styling";
 import { setViewName } from "../../model/Views/SetViewName";
@@ -32,8 +31,11 @@ interface ViewProps {
   viewId: string;
 }
 
-function ViewComponent({ location, viewId }: ViewProps): JSX.Element {
-  const { views } = useSelector((state: State) => state);
+function ViewComponent({ viewId }: ViewProps): JSX.Element {
+  const {
+    display: { display },
+    views,
+  } = useSelector((state: State) => state);
   const dispatch = useDispatch();
 
   const view =
@@ -55,8 +57,6 @@ function ViewComponent({ location, viewId }: ViewProps): JSX.Element {
     },
     [],
   );
-
-  const display = getDisplay(location);
 
   const options = { viewId };
   const title = (

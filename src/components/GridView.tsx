@@ -57,8 +57,6 @@ interface GridViewProps extends SubjectViewHookProps {
 
 function GridView({
   title,
-  history: _history,
-  location: _location,
   match,
   showCloseButton,
   ...props

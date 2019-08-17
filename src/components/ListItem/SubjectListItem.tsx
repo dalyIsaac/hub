@@ -118,7 +118,7 @@ function ListItem({ id, parent, subject }: Item): JSX.Element {
 
   const buttonLabel = "Open " + subject.name;
   const button = (
-    <Link to={gotoSubject("grid", id)} tabIndex={-1}>
+    <Link to={gotoSubject(id)} tabIndex={-1}>
       <IconButton
         className={styles.open}
         iconProps={{ iconName: "OpenFile" }}

@@ -12,7 +12,6 @@ import GridView from "./GridView";
 import ListView from "./ListView";
 import { State } from "../Reducer";
 import { SubjectsRouteProps } from "../model/Subject/Routing";
-import { getDisplay } from "../Display";
 import { isUndefined } from "lodash";
 import { useSelector } from "react-redux";
 
@@ -120,12 +119,12 @@ export function useSubjectView({
 
 export default function SubjectView({
   match,
-  location,
 }: RouteComponentProps<SubjectsRouteProps>): JSX.Element {
   const { parentId } = match.params;
-  const display = getDisplay(location);
-
-  const { dict } = useSelector((state: State) => state.subjects);
+  const {
+    display: { display },
+    subjects: { dict },
+  } = useSelector((state: State) => state);
 
   if (!isUndefined(parentId) && !(parentId in dict)) {
     return <Redirect to="/" />;
