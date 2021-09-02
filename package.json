@@ -6,7 +6,7 @@
   "dependencies": {
     "@rehooks/window-size": "^1.0.2",
     "@uifabric/fluent-theme": "^7.1.0",
-    "immer": "^8.0.1",
+    "immer": "^9.0.6",
     "lodash": "^4.17.15",
     "office-ui-fabric-react": "^7.22.1",
     "react": "^16.9.0",
